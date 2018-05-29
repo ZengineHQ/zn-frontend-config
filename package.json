@@ -1,9 +1,30 @@
 {
-  "name": "guidestar",
-  "version": "1.0.0",
-  "description": "Frontend component",
-  "private": true,
-  "dependencies": {},
-  "devDependencies": {},
-  "scripts": {}
+	"name": "zn-frontend-multi-config",
+	"version": "1.0.0",
+	"description": "Helper library for working with multiple configurations in Zengine frontend plugins.",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"concat": "mkdir -p dist && concat -o dist/zn-frontend-multi-config.js src/znFrontendMultiConfig.module.js src/znFrontendMultiConfig.service.js src/znFrontendMultiConfig.controller.js",
+		"minify": "uglifyjs -o dist/zn-frontend-multi-config.min.js dist/zn-frontend-multi-config.js",
+		"build": "npm run concat && npm run minify"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Wizehive/zn-frontend-multi-config.git"
+	},
+	"keywords": [
+		"zn-plugin",
+		"zn-frontend"
+	],
+	"author": "Alex Weber <alex.weber@wizehive.com",
+	"private": true,
+	"bugs": {
+		"url": "https://github.com/Wizehive/zn-frontend-multi-config/issues"
+	},
+	"homepage": "https://github.com/Wizehive/zn-frontend-multi-config#readme",
+	"devDependencies": {
+		"concat": "^1.0.3",
+		"uglify-js": "^3.3.27"
+	}
 }
