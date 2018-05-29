@@ -1,0 +1,9 @@
+backend/**/dist*
+backend/**/config.json
+maya.json
+maya_build/
+npm-debug.log
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+/nbproject/private/

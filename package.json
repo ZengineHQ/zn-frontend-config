@@ -1,0 +1,9 @@
+{
+  "name": "guidestar",
+  "version": "1.0.0",
+  "description": "Frontend component",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {}
+}
