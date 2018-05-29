@@ -1,7 +1,4 @@
-backend/**/dist*
-backend/**/config.json
-maya.json
-maya_build/
+dist
 npm-debug.log
 *.sublime-project
 *.sublime-workspace
