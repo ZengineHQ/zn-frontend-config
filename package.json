@@ -2,12 +2,8 @@
 	"name": "zn-frontend-multi-config",
 	"version": "1.0.0",
 	"description": "Helper library for working with multiple configurations in Zengine frontend plugins.",
-	"main": "index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
-		"concat": "mkdir -p dist && concat -o dist/zn-frontend-multi-config.js src/znFrontendMultiConfig.module.js src/znFrontendMultiConfig.service.js src/znFrontendMultiConfig.controller.js",
-		"minify": "uglifyjs -o dist/zn-frontend-multi-config.min.js dist/zn-frontend-multi-config.js",
-		"build": "npm run concat && npm run minify"
+		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"repository": {
 		"type": "git",
@@ -22,9 +18,4 @@
 	"bugs": {
 		"url": "https://github.com/Wizehive/zn-frontend-multi-config/issues"
 	},
-	"homepage": "https://github.com/Wizehive/zn-frontend-multi-config#readme",
-	"devDependencies": {
-		"concat": "^1.0.3",
-		"uglify-js": "^3.3.27"
-	}
-}
+	"homepage": "https://github.com/Wizehive/zn-frontend-multi-config#readme"
