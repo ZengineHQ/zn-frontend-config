@@ -37,6 +37,10 @@
 					<button type="button" class="btn btn-warning pull-right" ng-click="onDiscardChanges()" ng-show="wgnConfigForm.$dirty">
 						<i class="icon-cancel"></i> Discard changes
 					</button>
+
+					<button type="button" class="btn btn-primary pull-right" ng-click="onDiscardChanges()" ng-hide="wgnConfigForm.$dirty">
+						<i class="icon-cancel"></i> Close
+					</button>
 				</div>
 
 				<div class="control-group multi-config-name">
