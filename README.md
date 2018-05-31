@@ -89,8 +89,8 @@ Finally, create a new template to hold your actual form inputs.
       <div class="controls">
         <select class="form-control"
             ng-options="form.id as form.name for form in workspaceForms"
-            ng-model="editingConfig.targetFormId"
-            ng-change="onSelectForm(editingConfig.targetFormId)">
+            ng-model="editing.config.targetFormId"
+            ng-change="onSelectForm(editing.config.targetFormId)">
         </select>
 
         <span class="danger">required</span>
@@ -104,7 +104,7 @@ Finally, create a new template to hold your actual form inputs.
 
 **Important**
 - This secondary template must be called `wgn-config-form` (_unless you are using tabs - see below_)
-- Notice that in the second template for your config fields, your `ng-model` will always point to the `editingConfig` object
+- Notice that in the second template for your config fields, your `ng-model` will always point to the `editing.config` object
 - Don't add a new controller to this template, you should use your settings controller as the scope is shared
 
 ### Boom!
