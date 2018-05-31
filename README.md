@@ -153,18 +153,18 @@ Then in your backend service:
 var configId = eventData.request.query.config;
 
 if (!configId){
-	eventData.response.status(403).send('Config id required');
+  eventData.response.status(403).send('Config id required');
 }
 
 // Vanilla (boo)
 firebase().child(workspaceId).child('settings').child(configId).once('value', function(snapshot) {
-	settings = snapshot.val();
-	console.log('settings', settings);
+  settings = snapshot.val();
+  console.log('settings', settings);
 });
 
 // Using zn-backend-firebase (awesome)
 var zbf = require('zn-backend-firebase');
 zbf.load([workspaceId, 'settings', configId]).then(function (settings) {
-	console.log('settings', settings);
+  console.log('settings', settings);
 });
 ```
