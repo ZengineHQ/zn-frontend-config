@@ -24,22 +24,22 @@ First, load the multiple configurations in your settings controller:
 
 ```js
 plugin.controller('wgnSettingsCtrl', ['$scope', '$routeParams', 'wgnMultiConfigSrv', function ($scope, multiConfigs, $routeParams) {
-	// This should be standard issue for controllers that load settings.
-	$scope.loading = true;
+  // This should be standard issue for controllers that load settings.
+  $scope.loading = true;
 	
-	// No need to pollute the scope with this.
-	var workspaceId = $routeParams.workspace_id;
+  // No need to pollute the scope with this.
+  var workspaceId = $routeParams.workspace_id;
 	
-	// Load configuration from Firebase.
-	multiConfigs.load(workspaceId).then(function (configs) {
-		$scope.configs = configs;
-		$scope.loading = false;
-	});
+  // Load configuration from Firebase.
+  multiConfigs.load(workspaceId).then(function (configs) {
+    $scope.configs = configs;
+    $scope.loading = false;
+  });
 	
-	// For advanced usage you can also listen for certain multi config events (see next section).
-	$scope.$on('wgnMultiConfigEdit', function (ev, config) {
-		console.log('this is the config being edited', config);
-	});
+  // For advanced usage you can also listen for certain multi config events (see next section).
+  $scope.$on('wgnMultiConfigEdit', function (ev, config) {
+    console.log('this is the config being edited', config);
+  });
 }]);
 ```
 
@@ -54,15 +54,16 @@ Then, include the directive in your settings template:
 <!--This is the main template for our settings controller above-->
 <script type="text/ng-template" id="wgn-settings">
 
-	<div>
-		<div class="section">
-			<h2><i class="icon-platypus"></i> My Plugin's Settings</h2>
-		</div>
+  <div>
+    <div class="section">
+      <h2><i class="icon-platypus"></i> My Plugin's Settings</h2>
+    </div>
 
-		<span ng-show="loading" class="throbber"></span>
+    <!-- This should be standard issue for templates that depend on settings. -->
+    <span ng-show="loading" class="throbber"></span>
 
-		<wgn-multi-config ng-if="!loading"></wgn-multi-config>
-	</div>
+    <wgn-multi-config ng-if="!loading"></wgn-multi-config>
+  </div>
 
 </script>
 ```
@@ -72,22 +73,24 @@ Finally, create a new template to hold your actual form inputs.
 ```html
 <!--This is an additional template containing our configuration's actual fields-->
 <script type="text/ng-template" id="wgn-config-form">
-	<div>
-		<div class="control-group">
-			<label class="form-label">Target Form</label>
 
-			<div class="controls">
-				<select class="form-control"
-						ng-options="form.id as form.name for form in workspaceForms"
-						ng-model="editingConfig.targetFormId"
-						ng-change="onSelectForm(editingConfig.targetFormId)">
-				</select>
+  <div>
+    <div class="control-group">
+      <label class="form-label">Target Form</label>
 
-				<span class="danger">required</span>
-				<span class="help-block">The form which contains the data to check.</span>
-			</div>
-		</div>
-	</div>
+      <div class="controls">
+        <select class="form-control"
+            ng-options="form.id as form.name for form in workspaceForms"
+            ng-model="editingConfig.targetFormId"
+            ng-change="onSelectForm(editingConfig.targetFormId)">
+        </select>
+
+        <span class="danger">required</span>
+        <span class="help-block">The form which contains the data to check.</span>
+      </div>
+    </div>
+  </div>
+
 </script>
 ```
 
