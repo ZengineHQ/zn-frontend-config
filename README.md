@@ -112,7 +112,7 @@ The following events are emitted at various stages of the multi config workflow 
 
 ## Tabbed Configurations
 
-Finally, this directive also has helpers for working with multiple configuration pages separated by tabs. In order to leverage this functionality add the following to your controller:
+But wait, there's more! This directive also has a helper for working with multiple configuration pages separated by tabs. In order to leverage this functionality add the following to your settings controller:
 
 ```js
 $scope.tabs = [
@@ -127,7 +127,7 @@ $scope.tabs = [
 ];
 ``` 
 
-Now, instead of using the one `wgn-config-form` template as described above, create a specific template for each tab, prefixing the name with the tab slug as follows:
+Now, instead of using the one `wgn-config-form` template as previously described, you should create a specific template for each tab, prefixing the name with the tab slug as follows:
 
 ```html
 <script type="text/ng-template" id="wgn-config-form-target">
