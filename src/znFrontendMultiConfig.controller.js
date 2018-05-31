@@ -1,38 +1,19 @@
-plugin.controller('wgnMultiSettingsCtrl', ['$scope', '$routeParams', '$q', 'znModal', 'znMessage', 'wgnMultiConfigSrv',
-	function ($scope, $routeParams, $q, znModal, znMessage, multiConfigService) {
+plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znModal', 'znMessage', 'wgnMultiConfigSrv',
+	function ($scope, $q, $routeParams, znModal, znMessage, multiConfigService) {
 
 		// Convenience.
 		var workspaceId = $routeParams.workspace_id;
 
 		/**
-		 * Whether the plugins is loading or not, displays a throbber.
-		 *
-		 * @type {boolean}
-		 */
-		$scope.loading = true;
-
-		/**
-		 * Configurations loaded from Firebase.
-		 *
-		 * @type {Array<Object>}
-		 */
-		$scope.configs = [];
-
-		/**
-		 * The current config being created/edited or false if none.
-		 *
-		 * @type {Object|boolean}
-		 */
-		$scope.editingConfig = false;
-
-		/**
 		 * Creates a new configuration.
 		 */
-		$scope.doNewConfig = function () {
+		$scope.onNewConfig = function () {
 			var promise = $scope.editingConfig ? $scope.onDiscardChanges() : $q.when();
 
 			return promise.then(function () {
+				doResetTab();
 				$scope.editingConfig = {};
+				$scope.$emit('wgnMultiConfigAdd');
 			});
 		};
 
@@ -41,15 +22,60 @@ plugin.controller('wgnMultiSettingsCtrl', ['$scope', '$routeParams', '$q', 'znMo
 		 *
 		 * @param {string} id The config id.
 		 */
-		$scope.doEditConfig = function (id) {
+		$scope.onEditConfig = function (id) {
 			var promise = $scope.editingConfig ? $scope.onDiscardChanges() : $q.when();
 
 			return promise.then(function () {
+				doResetTab();
 				$scope.editingConfig = angular.copy($scope.configs.filter(function (config) {
 					return config.$id === id;
 				})[0]);
 
-				$scope.$emit('zpMultiSettingsEdit', id);
+				$scope.$emit('wgnMultiConfigEdit', $scope.editingConfig);
+			});
+		};
+
+		/**
+		 * Deletes an existing configuration.
+		 */
+		$scope.onDeleteConfig = function () {
+			znModal({
+				title: 'Are you sure?',
+				template: '<p>Are you sure you want to delete the <strong>' + $scope.editingConfig.name + '</strong> configuration?</p><p>This action is irreversible.</p>',
+				classes: '',
+				closeButton: false,
+				btns: {
+					'No': {
+						primary: true,
+						action: function () {
+						}
+					},
+					'Yes': {
+						danger: true,
+						action: function () {
+							return multiConfigService.deleteConfig(workspaceId, $scope.editingConfig, $scope.configs).then(function () {
+								$scope.$emit('wgnMultiConfigDelete', $scope.editingConfig);
+								doDiscardChanges();
+								znMessage('The configuration has been deleted!', 'info');
+							}).catch(function (err) {
+								znMessage(err, 'error');
+							});
+						}
+					}
+				}
+			});
+		};
+
+		/**
+		 * Saves the current configuration.
+		 *
+		 * @return {Promise}
+		 */
+		$scope.onSaveConfig = function () {
+			return multiConfigService.save(workspaceId, $scope.configs, $scope.editingConfig).then(function () {
+				$scope.$emit('wgnMultiConfigSave', $scope.editingConfig);
+				doDiscardChanges();
+				znMessage('Configuration saved!', 'saved');
 			});
 		};
 
@@ -62,7 +88,7 @@ plugin.controller('wgnMultiSettingsCtrl', ['$scope', '$routeParams', '$q', 'znMo
 			var def = $q.defer();
 
 			// Only prompt if form has been changed.
-			if (!$scope.zpMultiSettingsForm.$dirty) {
+			if (!$scope.wgnConfigForm.$dirty) {
 				doDiscardChanges();
 				return $q.when(true);
 			}
@@ -93,61 +119,27 @@ plugin.controller('wgnMultiSettingsCtrl', ['$scope', '$routeParams', '$q', 'znMo
 		};
 
 		/**
-		 * Deletes an existing configuration.
+		 * Triggered by clicking a tab.
+		 *
+		 * @param {string} slug
 		 */
-		$scope.onDeleteConfig = function () {
-			znModal({
-				title: 'Are you sure?',
-				template: '<p>Are you sure you want to delete the <strong>' + $scope.editingConfig.name + '</strong> configuration?</p><p>This action is irreversible.</p>',
-				classes: '',
-				closeButton: false,
-				btns: {
-					'No': {
-						primary: true,
-						action: function () {
-						}
-					},
-					'Yes': {
-						danger: true,
-						action: function () {
-							return multiConfigService.deleteConfig(workspaceId, $scope.editingConfig, $scope.configs).then(function () {
-								doDiscardChanges();
-								znMessage('The configuration has been deleted!', 'info');
-							});
-						}
-					}
-				}
-			});
+		$scope.onSelectTab = function (slug) {
+			$scope.view = slug;
 		};
 
-		// Init plugins.
-		init().then(function () {
-			$scope.loading = false;
-		});
-
 		/**
-		 * Saves the current configuration.
-		 *
-		 * @param {Object} config
-		 *
-		 * @return {Promise}
+		 * Centralize discarding config changes to avoid duplicating logic.
 		 */
-		function doSaveConfig (config) {
-			return multiConfigService.save(workspaceId, $scope.configs, config).then(function () {
-				doDiscardChanges();
-			});
-		}
-
 		function doDiscardChanges () {
 			$scope.editingConfig = false;
-			$scope.$emit('zpMultiSettingsDiscard');
+			$scope.wgnConfigForm.$setPristine();
+			doResetTab();
+			$scope.$emit('wgnMultiConfigDiscard');
 		}
 
-		function init () {
-			// Load settings.
-			return multiConfigService.load(workspaceId).then(function (settings) {
-				$scope.configs = settings;
-				$scope.$emit('zpMultiSettingsInit');
-			});
+		function doResetTab () {
+			if ($scope.tabs) {
+				$scope.view = $scope.tabs[0].slug;
+			}
 		}
 	}]);

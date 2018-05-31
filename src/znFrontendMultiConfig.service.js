@@ -93,6 +93,11 @@ plugin.service('wgnMultiConfigSrv', ['$q', '$firebase', 'znData',
 		 */
 		srv.deleteConfig = function (workspaceId, config, settings) {
 			var index = settings.$indexFor(config.$id);
+
+			if (index === -1) {
+				return $q.reject('Inexistent config');
+			}
+
 			return settings.$remove(index);
 		};
 
