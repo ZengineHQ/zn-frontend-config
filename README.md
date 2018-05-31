@@ -18,7 +18,7 @@ It's important that this gets installed under the `src` directory, alongside you
 With the module available in the src folder it's now just a matter of building some boilerplate code to leverage it.
 
 
-#### Controller
+### Controller
 
 First, load the multiple configurations in your settings controller:
 
@@ -43,12 +43,12 @@ plugin.controller('wgnSettingsCtrl', ['$scope', '$routeParams', 'wgnMultiConfigS
 }]);
 ```
 
-*Important*
+**Important**
 - You must store the loaded config in a `$scope` variable called `configs`.
 
-#### Views
+### Views
 
-Then, include the directive in your settings template and also create a new template to hold your actual form inputs.
+Then, include the directive in your settings template:
 
 ```html
 <!--This is the main template for our settings controller above-->
@@ -65,7 +65,11 @@ Then, include the directive in your settings template and also create a new temp
 	</div>
 
 </script>
+```
 
+Finally, create a new template to hold your actual form inputs.
+
+```html
 <!--This is an additional template containing our configuration's actual fields-->
 <script type="text/ng-template" id="wgn-config-form">
 	<div>
@@ -87,12 +91,12 @@ Then, include the directive in your settings template and also create a new temp
 </script>
 ```
 
-*Important*
+**Important**
 - This secondary template must be called `wgn-config-form` (_unless you are using tabs - see below_)
 - Notice that in the second template for your config fields, your `ng-model` will always point to the `editingConfig` object.
 - Don't add a new controller to this template, simply use the main settings one by accessing it's scope directly.
 
-Boom!
+### Boom!
 
 We're done, that's it! The directive will take care of the rest!
 
