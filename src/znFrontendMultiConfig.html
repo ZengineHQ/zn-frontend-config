@@ -4,13 +4,13 @@
 		<div class="section">
 			<div class="multi-config-label">Configurations</div>
 
-			<div ng-show="!configs.length && !editingConfig" class="alert alert-info" role="alert">
+			<div ng-show="!configs.length && !editing.config" class="alert alert-info" role="alert">
 				You haven't created any configurations yet!
 			</div>
 
 			<div ng-show="configs.length">
 				<ul class="multi-config-list nav nav-pills">
-					<li ng-repeat="config in configs" ng-class="{active: editingConfig.$id === config.$id}">
+					<li ng-repeat="config in configs" ng-class="{active: editing.config.$id === config.$id}">
 						<a ng-click="onEditConfig(config.$id)" href="javascript:">
 							{{ config.name }}
 						</a>
@@ -23,14 +23,14 @@
 			</button>
 		</div>
 
-		<div class="section" ng-show="editingConfig">
+		<div class="section" ng-show="editing.config">
 			<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" novalidate>
 				<div class="form-actions">
 					<button type="submit" class="btn btn-primary pull-right" ng-disabled="wgnConfigForm.$invalid">
 						<i class="icon-ok"></i> Save configuration
 					</button>
 
-					<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()" ng-show="editingConfig.$id">
+					<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()" ng-show="editing.config.$id">
 						<i class="icon-trash"></i> Delete configuration
 					</button>
 
@@ -44,7 +44,7 @@
 
 					<div class="controls">
 						<input type="text" class="form-control" name="configName"
-							   ng-model="editingConfig.name" wgn-validator-config-name>
+							   ng-model="editing.config.name" wgn-validator-config-name>
 
 						<span class="danger">required</span>
 
@@ -56,7 +56,7 @@
 					</div>
 				</div>
 
-				<div ng-if="editingConfig.name && !wgnConfigForm.$error.configName">
+				<div ng-if="editing.config.name && !wgnConfigForm.$error.configName">
 					<div ng-if="!tabs" ng-include="'wgn-config-form'"></div>
 
 					<ul class="nav nav-tabs" ng-if="tabs">

@@ -14,7 +14,7 @@ plugin.directive('wgnValidatorConfigName', [function () {
 		restrict: 'A',
 		link: function (scope, element, attrs, ctrl) {
 			ctrl.$parsers.push(function (viewVal) {
-				var ourId = scope.editingConfig.$id || false;
+				var ourId = scope.editing.config.$id || false;
 				var valid = true;
 
 				scope.configs.forEach(function (config) {

@@ -29,6 +29,13 @@ plugin.controller('wgnSettingsCtrl', ['$scope', '$routeParams', 'wgnMultiConfigS
 	
   // No need to pollute the scope with this.
   var workspaceId = $routeParams.workspace_id;
+  
+  /**
+   * The current config being created/edited or false if none.
+   *
+   * @type {Object|boolean}
+   */
+  $scope.editing = { config: false };
 	
   // Load configuration from Firebase.
   multiConfigs.load(workspaceId).then(function (configs) {
@@ -44,7 +51,8 @@ plugin.controller('wgnSettingsCtrl', ['$scope', '$routeParams', 'wgnMultiConfigS
 ```
 
 **Important**
-- You must store the loaded config in a `$scope` variable called `configs`.
+- You must initialize this variable exactly: `$scope.editing = { config: false };`
+- You must store the loaded config in a `$scope.configs`
 
 ### Views
 
@@ -96,8 +104,8 @@ Finally, create a new template to hold your actual form inputs.
 
 **Important**
 - This secondary template must be called `wgn-config-form` (_unless you are using tabs - see below_)
-- Notice that in the second template for your config fields, your `ng-model` will always point to the `editingConfig` object.
-- Don't add a new controller to this template, simply use the main settings one by accessing it's scope directly.
+- Notice that in the second template for your config fields, your `ng-model` will always point to the `editingConfig` object
+- Don't add a new controller to this template, you should use your settings controller as the scope is shared
 
 ### Boom!
 
