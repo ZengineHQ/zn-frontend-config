@@ -1,0 +1,96 @@
+<script type="text/ng-template" id="wgn-multi-config">
+
+	<div>
+		<div class="section">
+			<h2><i class="icon-{{ settings.icon }}"></i> {{ settings.title }}</h2>
+		</div>
+
+		<span ng-show="loading" class="throbber"></span>
+
+		<div class="multi-config-container" ng-hide="loading">
+			<div class="section" ng-show="settings.multi">
+				<div class="multi-config-label">Configurations</div>
+
+				<div ng-show="!configs.length && !editing.config" class="alert alert-info" role="alert">
+					You haven't created any configurations yet!
+				</div>
+
+				<div ng-show="configs.length">
+					<ul class="multi-config-list nav nav-pills">
+						<li ng-repeat="config in configs" ng-class="{active: editing.config.$id === config.$id}">
+							<a ng-click="onEditConfig(config.$id)" href="javascript:">
+								{{ config.name }}
+							</a>
+						</li>
+					</ul>
+				</div>
+
+				<button ng-click="onNewConfig()" type="button" class="btn btn-success create-config-button">
+					<i class="icon-magic"></i> Create Configuration
+				</button>
+			</div>
+
+			<div class="section" ng-show="editing.config">
+				<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" novalidate>
+					<div class="form-actions">
+						<button type="submit" class="btn btn-primary pull-right" ng-disabled="wgnConfigForm.$invalid">
+							<i class="icon-ok"></i> Save configuration
+						</button>
+
+						<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()"
+								ng-show="settings.multi && editing.config.$id">
+							<i class="icon-trash"></i> Delete configuration
+						</button>
+
+						<button type="button" class="btn btn-warning pull-right" ng-click="onDiscardChanges()"
+								ng-show="settings.multi && wgnConfigForm.$dirty">
+							<i class="icon-cancel"></i> Discard changes
+						</button>
+
+						<button type="button" class="btn btn-default pull-right" ng-click="onDiscardChanges()"
+								ng-hide="!settings.multi || wgnConfigForm.$dirty">
+							<i class="icon-cancel"></i> Close
+						</button>
+					</div>
+
+					<div class="control-group multi-config-name" ng-show="settings.multi">
+						<label class="form-label config-title">Config name</label>
+
+						<div class="controls">
+							<input type="text" class="form-control" name="configName"
+								   ng-model="editing.config.name" wgn-validator-config-name>
+
+							<span class="danger">required</span>
+
+							<span class="help-block">Specify a unique name for this configuration.</span>
+
+							<span class="help-block danger" ng-show="wgnConfigForm.$error.configName">
+                        	The config name must be unique
+                    	</span>
+						</div>
+					</div>
+
+					<div ng-if="!settings.multi || (settings.multi && editing.config.name && !wgnConfigForm.$error.configName)">
+						<div ng-if="settings.pages.length === 1">
+							<wgn-multi-config-page specs="settings.pages[0]"></wgn-multi-config-page>
+						</div>
+
+						<div ng-if="settings.pages.length > 1">
+							<ul class="nav nav-tabs">
+								<li role="presentation" ng-repeat="page in settings.pages" ng-class="{active: view === page.id}">
+									<a href="javascript:" ng-click="onSelectPage(page.id)">{{ page.name }}</a>
+								</li>
+							</ul>
+
+							<div class="panel panel-default" ng-repeat="page in settings.pages" ng-show="view === page.id">
+								<div class="panel-body">
+									<wgn-multi-config-page specs="page"></wgn-multi-config-page>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</script>

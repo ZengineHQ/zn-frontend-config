@@ -1,8 +1,6 @@
 # zn-frontend-multi-config
 
-> Helper module for implementing multiple configurations.
-
-This is partly a magical directive and partly a convention over configuration guideline, read on. 
+> Helper module for implementing settings forms. Contains a form-builder, support for multiple settings sections separated by tabs and also for multiple configurations.   
 
 ## Installation
 
@@ -15,141 +13,184 @@ It's important that this gets installed under the `src` directory, alongside you
 
 ## Usage
 
-With the module available in the src folder it's now just a matter of building some boilerplate code to leverage it.
+With the module available in the src folder it's now just a matter of defining your settings fields.
 
+### View
+
+Add the directive to you settings page template; 
+
+```html
+<script type="text/ng-template" id="wgn-settings">
+
+	<wgn-multi-config settings="configSettings"></wgn-multi-config>
+
+</script>
+
+```
 
 ### Controller
 
-First, load the multiple configurations in your settings controller:
+Then, build out and add `configSettings` to your scope:
 
 ```js
-plugin.controller('wgnSettingsCtrl', ['$scope', '$routeParams', 'wgnMultiConfigSrv', function ($scope, multiConfigs, $routeParams) {
-  // This should be standard issue for controllers that load settings.
-  $scope.loading = true;
+plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
+  // Define plugin settings (see "Settings" section)
+  $scope.configSettings = {
+    title: 'My Awesome Plugin Settings',
+    icon: 'platypus',
+    multi: true,
+    disable: true,
+    pages: [
+      {
+      	id: 'target',
+      	name: 'Target Form',
+      	fields: [],
+      },
+      {
+      	id: 'logging',
+      	name: 'Logging Form',
+      	fields: []
+      }
+    ]    
+  };
 	
-  // No need to pollute the scope with this.
-  var workspaceId = $routeParams.workspace_id;
-  
-  /**
-   * The current config being created/edited or false if none.
-   *
-   * @type {Object|boolean}
-   */
-  $scope.editing = { config: false };
-	
-  // Load configuration from Firebase.
-  multiConfigs.load(workspaceId).then(function (configs) {
-    $scope.configs = configs;
-    $scope.loading = false;
-  });
-	
-  // For advanced usage you can also listen for certain multi config events (see next section).
+  // For advanced usage you can also listen for certain multi config events (see "Events" section).
   $scope.$on('wgnMultiConfigEdit', function (ev, config) {
     console.log('this is the config being edited', config);
   });
 }]);
 ```
 
-**Important**
-- You must initialize this variable exactly: `$scope.editing = { config: false };`
-- You must store the loaded config in a `$scope.configs`
-
-### Views
-
-Then, include the directive in your settings template:
-
-```html
-<!--This is the main template for our settings controller above-->
-<script type="text/ng-template" id="wgn-settings">
-
-  <div>
-    <div class="section">
-      <h2><i class="icon-platypus"></i> My Plugin's Settings</h2>
-    </div>
-
-    <!-- This should be standard issue for templates that depend on settings. -->
-    <span ng-show="loading" class="throbber"></span>
-
-    <wgn-multi-config ng-if="!loading"></wgn-multi-config>
-  </div>
-
-</script>
-```
-
-Finally, create a new template to hold your actual form inputs.
-
-```html
-<!--This is an additional template containing our configuration's actual fields-->
-<script type="text/ng-template" id="wgn-config-form">
-
-  <div>
-    <div class="control-group">
-      <label class="form-label">Target Form</label>
-
-      <div class="controls">
-        <select class="form-control"
-            ng-options="form.id as form.name for form in workspaceForms"
-            ng-model="editing.config.targetFormId"
-            ng-change="onSelectForm(editing.config.targetFormId)">
-        </select>
-
-        <span class="danger">required</span>
-        <span class="help-block">The form which contains the data to check.</span>
-      </div>
-    </div>
-  </div>
-
-</script>
-```
-
-**Important**
-- This secondary template must be called `wgn-config-form` (_unless you are using tabs - see below_)
-- Notice that in the second template for your config fields, your `ng-model` will always point to the `editing.config` object
-- Don't add a new controller to this template, you should use your settings controller as the scope is shared
-
 ### Boom!
 
 We're done, that's it! The directive will take care of the rest!
+
+## Settings Options
+
+The following settings are supported:
+
+- **title**: The heading that will be displayed at the top of the page
+- **icon**: Optional. An icon to display by the heading
+- **multi**: One of `true` to support multiple configurations or `false` to have a single configuration. Defaults to `false`
+- **disable**: One of `true` to allow disabling the configuration (ie: to prevent webhooks running) or `false` for configurations to be always on. Defaults to `false`
+- **pages**: An array of `settings pages` (see next section)
+
+### Settings Pages
+
+A `settings page` is what will actually hold the fields for your settings.
+
+You may define as many as you want but _must_ have at least one!
+
+In the event that there are multiple settings pages, they will be navigatable using tabs.
+
+You should define an array of `fields` for each page (see next section)
+
+### Settings Fields
+
+A `field` is a simple object describing what the field should be:
+
+```js
+[
+  {
+    id: 'targetFormId',
+    name: 'Target Form',
+    help: 'The form which contains the data to check.',
+    required: true,
+    type: 'form'
+  },
+  {
+    id: 'targetFieldId',
+    name: 'Target Field',
+    help: 'The field which contains the specific data to check.',
+    required: true,
+    type: 'field',
+    belongsTo: 'targetFormId',
+    restrict: 'text-input'
+  }
+]
+```
+
+There are many different field types and some may have specific settings but all fields share the following base settings:
+
+- **id**: A unique slug identifier. This will be used as the key in firebase to store the value
+- **name**: The field name. This will be used as the field label
+- **help**: Optional. Help text to display below the field
+- **required**: One of `true` to make the field required or `false` to make it optional. Defaults to `false`.
+- **type**: The `field type` (see next section)
+
+### Field Types
+
+The following field types are available:
+
+#### form
+
+A `form` field is a dropdown input that allows you to pick one of the forms in the given workspace.
+
+#### field
+
+A `field` field is a special dropdown input that allows you to pick a field from a certain form, optionally limiting to a certain field type.
+It has the following extra settings:
+
+- **belongsTo**: The field id for the `form` input this should display fields from
+- **restrict**: Whether to restrict to a certain Zengine field type. Possible options are: `text-input`, `date-picker`, `linked`, etc.
+
+#### text
+
+A simple text input. It has the following extra setting:
+
+- **placeholder**: Optional. Some content to display when the input is blank.
+
+#### number
+
+A simple numeric input. It has the following extra setting:
+
+- **placeholder**: Optional. Some content to display when the input is blank.
+
+#### textarea
+
+A muli-line text input.
+
+#### select
+
+A dropdown input. It has the following extra setting:
+
+- **options**: An array of Objects containing an option definition:
+
+```js
+[
+  {
+    value: 'off',
+    label: 'Off'
+  },
+  {
+    value: 'on',
+    label: 'On'
+  }
+]
+```
+
+#### markdown
+
+A special field that lets you display any arbitrary markup. Note: This field doesn't share any base settings and instead has just one:
+
+- **value**: A string with any valid HTML
+
+### Configuration Examples
+
+See here for additional configuration examples.
 
 ## Multi Config Events
 
 The following events are emitted at various stages of the multi config workflow and can be used to achieve deeper customization for more complex forms.
 
+- `wgnMultiConfigInit` when all firebase data has been loaded and the plugin has initialized.
 - `wgnMultiConfigAdd` when a new configuration is being created, receives no params. This is useful if you need to perform some first-time setup for new configurations.
 - `wgnMultiConfigSave` when configuration is saved, receives the config as a param. This is useful if you need to perform tasks once a config is successfully saved, such as enable a webhook.
 - `wgnMultiConfigEdit` when a configuration is selected for editing, receives the config as a param. This is useful if you need to load additional data such as fields for a selected form in the config.
 - `wgnMultiConfigDiscard` when changes are being discarded for the config being edited, receives no params. This is useful if you need to perform additional cleanup or perform any extra action such as going to a default tab.
 - `wgnMultiConfigDelete` when a configuration is deleted, receives the config as a param. This is useful to do some additional cleanup such as delete a webhook.
-
-## Tabbed Configurations
-
-But wait, there's more! This directive also has a helper for working with multiple configuration pages separated by tabs. In order to leverage this functionality add the following to your settings controller:
-
-```js
-$scope.tabs = [
-	{
-		slug: 'target',
-		label: 'Target Form'
-	},
-	{
-		slug: 'logging',
-		label: 'Logging Form'
-	}
-];
-``` 
-
-Now, instead of using the one `wgn-config-form` template as previously described, you should create a specific template for each tab, prefixing the name with the tab slug as follows:
-
-```html
-<script type="text/ng-template" id="wgn-config-form-target">
-	// AWESOME TARGET TAB FIELDS HERE
-</script>
-
-<script type="text/ng-template" id="wgn-config-form-logging">
-	// AWESOME LOGGING TAB FIELDS HERE
-</script>
-
-```
+- `wgnMultiConfigEnable` when a configuration is enabled.
+- `wgnMultiConfigDisable` when a configuration is disabled.
 
 ## Backend Services
 

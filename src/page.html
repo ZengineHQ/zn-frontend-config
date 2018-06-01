@@ -1,0 +1,71 @@
+<script type="text/ng-template" id="wgn-multi-config-page">
+	<div class="control-group" ng-repeat="field in specs.fields">
+		<!--Special markup field-->
+		<div ng-if="field.type === 'markup'" ng-bind-html="field.value"></div>
+
+		<div ng-if="field.type !== 'markup'">
+			<label class="form-label">{{ field.name }}</label>
+
+			<div class="controls">
+				<!--Form selection element-->
+				<select class="form-control"
+						ng-show="field.type === 'form'"
+						ng-options="form.id as form.name for form in getForms(field.id)"
+						ng-model="editing.config[field.id]"
+						ng-change="onSelectForm(field.id, specs)"
+						ng-init="initFormField(field.id, specs)"
+						ng-required="field.required">
+					<option value=""></option>
+				</select>
+
+				<!--Field selection element-->
+				<select class="form-control"
+						ng-show="field.type === 'field' && field.belongsTo"
+						ng-model="editing.config[field.id]"
+						ng-options="field.id as field.name for field in getFields(field, specs)"
+						ng-required="field.required">
+					<option value=""></option>
+				</select>
+
+				<!--Simple text field-->
+				<input type="text" class="form-control"
+					   ng-show="field.type === 'text'"
+					   ng-model="editing.config[field.id]"
+					   ng-required="field.required"
+					   placeholder="field.placeholder"
+				>
+
+				<!--Number field-->
+				<input type="number" class="form-control"
+					   ng-show="field.type === 'number'"
+					   ng-model="editing.config[field.id]"
+					   ng-required="field.required"
+					   placeholder="field.placeholder"
+				>
+
+				<!--Textarea field-->
+				<textarea class="form-control"
+						  ng-show="field.type === 'textarea'"
+						  ng-model="editing.config[field.id]"
+						  ng-required="field.required"
+				></textarea>
+
+				<!--Dropdown field-->
+				<select class="form-control"
+						ng-show="field.type === 'select'"
+						ng-model="editing.config[field.id]"
+						ng-required="field.required">
+					<option ng-repeat="opt in field.options" value="opt.value">
+						{{ opt.label }}
+					</option>
+				</select>
+
+				<!--@TODO other field types as needed-->
+
+				<!--Common elements-->
+				<span ng-if="field.required" class="danger">required</span>
+				<span ng-if="field.help" class="help-block">{{ field.help }}</span>
+			</div>
+		</div>
+	</div>
+</script>
