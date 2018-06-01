@@ -234,8 +234,9 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				return [];
 			}
 
-			// Filter values used in other fields.
 			var filterFields = [];
+
+			// Filter values used in other fields.
 			formDef.fields.forEach(function (field) {
 				if (field.id !== fieldDef.id && $scope.editing.config && field.id in $scope.editing.config && $scope.editing.config[field.id]) {
 					filterFields.push($scope.editing.config[field.id]);
@@ -272,6 +273,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {Object} formDef The form this field belongs to.
 		 */
 		function loadFields (formId, formDef) {
+			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
 			formDef.fields.forEach(function (field) {
 				if (field.restrict && fieldTypes.indexOf(field.restrict) === -1) {
