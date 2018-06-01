@@ -1,3 +1,4 @@
+// This is an example settings controller containing a lot of options.
 plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
 
 	/**
@@ -6,7 +7,7 @@ plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
 	 * @type {Object}
 	 */
 	$scope.configSettings = {
-		title: 'Guidestar Charity Check Settings',
+		title: 'My Awesome Settings',
 		icon: 'star',
 		multi: true,
 		pages: [
@@ -15,19 +16,19 @@ plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
 				name: 'Target Form',
 				fields: [
 					{
-						id: 'targetFormId',
+						id: 'formTarget',
 						name: 'Target Form',
 						help: 'The form which contains the data to check.',
 						required: true,
 						type: 'form'
 					},
 					{
-						id: 'targetFieldId',
+						id: 'fieldTargetId',
 						name: 'Target Field',
 						help: 'The field which contains the specific data to check.',
 						required: true,
 						type: 'field',
-						belongsTo: 'targetFormId',
+						belongsTo: 'formTarget',
 						restrict: 'text-input'
 					}
 				]
@@ -37,64 +38,64 @@ plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
 				name: 'Logging Form',
 				fields: [
 					{
-						id: 'loggingFormId',
+						id: 'formLogging',
 						name: 'Logging Form',
 						help: 'The form to log results to.',
 						required: true,
 						type: 'form'
 					},
 					{
-						id: 'loggingFieldEin',
+						id: 'fieldLoggingId',
 						name: 'Target Field',
 						help: 'The field to log the lookup target to.',
 						required: true,
 						type: 'field',
-						belongsTo: 'loggingFormId',
+						belongsTo: 'formLogging',
 						restrict: 'linked'
 					},
 					{
-						id: 'loggingFieldRulingDate',
+						id: 'fieldLoggingRulingDate',
 						name: 'Ruling Date Field',
 						help: 'The field to log the ruling date to.',
 						required: true,
 						type: 'field',
-						belongsTo: 'loggingFormId',
+						belongsTo: 'formLogging',
 						restrict: 'date-picker'
 					},
 					{
-						id: 'loggingFieldPub78',
+						id: 'fieldLoggingPub78',
 						name: 'Pub 78 Field',
 						help: 'The field to log the pub 78 value to.',
 						required: true,
 						type: 'field',
-						belongsTo: 'loggingFormId',
+						belongsTo: 'formLogging',
 						restrict: 'text-input'
 					},
 					{
-						id: 'loggingFieldLookupDate',
+						id: 'fieldLoggingLookupDate',
 						name: 'Lookup Date Field',
 						help: 'The field to log the lookup date to.',
 						required: true,
 						type: 'field',
-						belongsTo: 'loggingFormId',
+						belongsTo: 'formLogging',
 						restrict: 'date-picker'
 					},
 					{
-						id: 'loggingFieldSubsectionDesc',
+						id: 'fieldLoggingSubsectionDesc',
 						name: 'Subsection Description Field',
 						help: 'The field to log the subsection description to.',
 						required: true,
 						type: 'field',
-						belongsTo: 'loggingFormId',
+						belongsTo: 'formLogging',
 						restrict: 'text-area'
 					},
 					{
-						id: 'loggingField509a',
+						id: 'fieldLogging509a',
 						name: '509a Status Field',
 						help: 'The field to log the 509a status to.',
 						required: true,
 						type: 'field',
-						belongsTo: 'loggingFormId',
+						belongsTo: 'formLogging',
 						restrict: 'text-input'
 					}
 				]
