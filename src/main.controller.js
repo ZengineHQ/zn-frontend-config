@@ -102,8 +102,11 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 			return promise.then(function () {
 				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
-				doDiscardChanges();
 				znMessage('Configuration saved!', 'saved');
+
+				if ($scope.settings.multi) {
+					doDiscardChanges();
+				}
 			});
 		};
 
@@ -249,12 +252,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Centralize discarding config changes to avoid duplicating logic.
 		 */
 		function doDiscardChanges () {
-			if ($scope.settings.multi) {
-				$scope.editing.config = false;
-				$scope.wgnConfigForm.$setPristine();
-				doResetTab();
-				$scope.$emit('wgnMultiConfigDiscard');
-			}
+			$scope.editing.config = false;
+			$scope.wgnConfigForm.$setPristine();
+			doResetTab();
+			$scope.$emit('wgnMultiConfigDiscard');
 		}
 
 		/**
