@@ -4,6 +4,7 @@
 	"description": "Helper library for working with multiple configurations in Zengine frontend plugins.",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "jshint --config .jshintrc ./src || true",
 		"release": "standard-version"
 	},
 	"repository": {
