@@ -122,13 +122,13 @@ There are many different field types and some may have specific settings but all
 
 The following field types are available:
 
-- [form](####form)
+- [form](#form)
 - [field](#field)
-- text
-- number
-- textarea
-- select
-- markup
+- [text](#text)
+- [number](#number)
+- [textarea](#textarea)
+- [select](#select)
+- [markup](#markup)
 
 #### form
 
