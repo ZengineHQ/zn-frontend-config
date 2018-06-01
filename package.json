@@ -5,6 +5,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"lint": "jshint --config .jshintrc ./src || true",
+		"build": "node-sass src/plugin.scss src/plugin.css",
 		"release": "jshint --config .jshintrc ./src && standard-version"
 	},
 	"repository": {
@@ -23,6 +24,7 @@
 	"homepage": "https://github.com/Wizehive/zn-frontend-multi-config#readme",
 	"devDependencies": {
 		"jshint": "^2.9.5",
+		"node-sass": "^4.9.0",
 		"standard-version": "^4.4.0"
 	}
 }

@@ -1,65 +1,45 @@
-.multi-config-container .nav-pills>li>a {
-	height: auto;
-	padding: 10px;
-}
-
-.multi-config-container .section {
-	background: #fff;
-	padding: 18px;
-	border-radius: 8px;
-	margin: 18px 0;
-}
+.multi-config-container .btn.btn-warning {
+  background-color: #ec971f;
+  border-color: #d58512;
+  color: white; }
 
 .multi-config-container .danger {
-	font-size: 10px;
-	margin-left: 12px;
-}
-
-.multi-config-container .form-control {
-	max-width: 300px;
-}
-
-.multi-config-container .help-block {
-	margin-top: .5em;
-}
-
-.multi-config-container .btn.btn-warning {
-	background-color: #ec971f;
-	border-color: #d58512;
-	color: white;
-}
-
-.multi-config-label {
-	font-weight: 600;
-	margin-bottom: 1em;
-}
-
-.multi-config-list {
-	margin: 1em 0;
-}
-
-.multi-config-name {
-	box-shadow: #666 0 2px 2px -2px;
-	position: relative;
-	top: -30px;
-}
-
-.multi-config-name label {
-	font-weight: 600;
-}
+  font-size: 10px;
+  margin-left: 12px; }
 
 .multi-config-container .form-actions {
-	position: relative;
-	z-index: 99;
-}
+  position: relative;
+  z-index: 99; }
 
-.multi-config-container .btn-lg {
-	padding: 10px 16px;
-	font-size: 18px;
-	line-height: 1.33;
-	border-radius: 6px;
-}
+.multi-config-container .form-control {
+  max-width: 300px; }
+
+.multi-config-container .help-block {
+  margin-top: .5em; }
+
+.multi-config-container .nav-pills > li > a {
+  height: auto;
+  padding: 10px; }
+
+.multi-config-container .section {
+  background: #fff;
+  padding: 18px;
+  border-radius: 8px;
+  margin: 18px 0; }
+
+.multi-config-label {
+  font-weight: 600;
+  margin-bottom: 1em; }
+
+.multi-config-list {
+  margin: 1em 0; }
+
+.multi-config-name {
+  box-shadow: #666 0 2px 2px -2px;
+  position: relative;
+  top: -30px; }
+  .multi-config-name label {
+    font-weight: 600; }
 
 .create-config-button {
-	margin-top: 1em;
-}
+  margin-top: 1em; }
