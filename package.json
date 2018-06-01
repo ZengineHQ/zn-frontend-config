@@ -1,27 +1,27 @@
 {
-  "name": "zn-frontend-multi-config",
-  "version": "1.1.0",
-  "description": "Helper library for working with multiple configurations in Zengine frontend plugins.",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "standard-version"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Wizehive/zn-frontend-multi-config.git"
-  },
-  "keywords": [
-    "zn-plugin",
-    "zn-frontend"
-  ],
-  "author": "Alex Weber <alex.weber@wizehive.com",
-  "private": true,
-  "bugs": {
-    "url": "https://github.com/Wizehive/zn-frontend-multi-config/issues"
-  },
-  "homepage": "https://github.com/Wizehive/zn-frontend-multi-config#readme",
-  "devDependencies": {
-    "jshint": "^2.9.5",
-    "standard-version": "^4.4.0"
-  }
+	"name": "zn-frontend-multi-config",
+	"version": "1.1.0",
+	"description": "Helper library for working with multiple configurations in Zengine frontend plugins.",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"release": "standard-version"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Wizehive/zn-frontend-multi-config.git"
+	},
+	"keywords": [
+		"zn-plugin",
+		"zn-frontend"
+	],
+	"author": "Alex Weber <alex.weber@wizehive.com",
+	"private": true,
+	"bugs": {
+		"url": "https://github.com/Wizehive/zn-frontend-multi-config/issues"
+	},
+	"homepage": "https://github.com/Wizehive/zn-frontend-multi-config#readme",
+	"devDependencies": {
+		"jshint": "^2.9.5",
+		"standard-version": "^4.4.0"
+	}
 }
