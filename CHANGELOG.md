@@ -20,3 +20,8 @@ All notable changes to this project will be documented in this file. See [standa
 * implement form builder functionality ([490e32a](https://github.com/Wizehive/zn-frontend-multi-config/commit/490e32a))
 * initial tentative implementation ([73da44b](https://github.com/Wizehive/zn-frontend-multi-config/commit/73da44b))
 * initial working implementation ([70495be](https://github.com/Wizehive/zn-frontend-multi-config/commit/70495be))
+
+<a name="1.0.0"></a>
+# 1.0.0 (2018-06-01)
+
+Initial release!
