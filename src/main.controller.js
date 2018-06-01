@@ -311,7 +311,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					$scope.editing.config = $scope.configs;
 				}
 
-				$scope.$emit('wgnMultiConfigInit');
+				$scope.$emit('wgnMultiConfigInit', $scope.configs);
 			}).then(function () {
 				// Load available forms.
 				return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200 });
