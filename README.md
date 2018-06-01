@@ -123,14 +123,18 @@ There are many different field types and some may have specific settings but all
 The following field types are available:
 
 - [form](####form)
-- field
+- [field](#field)
 - text
+- number
+- textarea
+- select
+- markup
 
-####form
+#### form
 
 A `form` field is a dropdown input that allows you to pick one of the forms in the given workspace.
 
-####field
+#### field
 
 A `field` field is a special dropdown input that allows you to pick a field from a certain form, optionally limiting to a certain field type.
 It has the following extra settings:
@@ -138,23 +142,23 @@ It has the following extra settings:
 - **belongsTo**: The field id for the `form` input this should display fields from
 - **restrict**: Whether to restrict to a certain Zengine field type. Possible options are: `text-input`, `date-picker`, `linked`, etc.
 
-####text
+#### text
 
 A simple text input. It has the following extra setting:
 
 - **placeholder**: Optional. Some content to display when the input is blank.
 
-####number
+#### number
 
 A simple numeric input. It has the following extra setting:
 
 - **placeholder**: Optional. Some content to display when the input is blank.
 
-####textarea
+#### textarea
 
 A muli-line text input.
 
-####select
+#### select
 
 A dropdown input. It has the following extra setting:
 
@@ -173,7 +177,7 @@ A dropdown input. It has the following extra setting:
 ]
 ```
 
-####markdown
+#### markup
 
 A special field that lets you display any arbitrary markup. Note: This field doesn't share any base settings and instead has just one:
 
