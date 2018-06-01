@@ -55,7 +55,6 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				})[0];
 
 				$scope.wgnConfigForm.$setPristine();
-
 				$scope.$emit('wgnMultiConfigEdit', $scope.editing.config);
 			});
 		};
