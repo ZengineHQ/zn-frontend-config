@@ -45,7 +45,7 @@
 	margin: 1em 0;
 
 	a.disabled {
-		text-decoration: line-through;
+		pointer-events: auto;
 	}
 }
 
