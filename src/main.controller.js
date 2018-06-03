@@ -33,7 +33,9 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 			return promise.then(function () {
 				doResetTab();
-				$scope.editing.config = {};
+				$scope.editing.config = {
+					enabled: false
+				};
 				$scope.wgnConfigForm.$setPristine();
 				$scope.$emit('wgnMultiConfigAdd');
 			});
@@ -92,21 +94,39 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 		/**
 		 * Saves the current configuration.
-		 *
-		 * @return {Promise}
 		 */
 		$scope.onSaveConfig = function () {
-			var promise = $scope.settings.multi
-				? multiConfigService.save(workspaceId, $scope.configs, $scope.editing.config)
-				: multiConfigService.saveSingle(workspaceId, $scope.editing.config);
-
-			return promise.then(function () {
+			return doSaveConfig().then(function () {
 				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
 				znMessage('Configuration saved!', 'saved');
 
 				if ($scope.settings.multi) {
 					doDiscardChanges();
 				}
+			});
+		};
+
+		/**
+		 * Disables the current configuration.
+		 */
+		$scope.onDisableConfig = function () {
+			$scope.editing.config = false;
+
+			return doSaveConfig().then(function () {
+				$scope.$emit('wgnMultiConfigDisable', $scope.editing.config);
+				znMessage('Configuration disabled!', 'saved');
+			});
+		};
+
+		/**
+		 * Enables the current configuration.
+		 */
+		$scope.onEnableConfig = function () {
+			$scope.editing.config = true;
+
+			return doSaveConfig().then(function () {
+				$scope.$emit('wgnMultiConfigEnable', $scope.editing.config);
+				znMessage('Configuration enabled!', 'saved');
 			});
 		};
 

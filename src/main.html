@@ -18,7 +18,7 @@
 				<div ng-show="configs.length">
 					<ul class="multi-config-list nav nav-pills">
 						<li ng-repeat="config in configs" ng-class="{active: editing.config.$id === config.$id}">
-							<a ng-click="onEditConfig(config.$id)" href="javascript:">
+							<a ng-click="onEditConfig(config.$id)" href="javascript:" ng-class="{disabled: !config.enabled}">
 								{{ config.name }}
 							</a>
 						</li>
@@ -40,6 +40,18 @@
 						<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()"
 								ng-show="settings.multi && editing.config.$id">
 							<i class="icon-trash"></i> Delete configuration
+						</button>
+
+						<button type="button" class="btn btn-success pull-right" ng-click="onEnableConfig()"
+								ng-show="settings.multi && editing.config.$id && !config.enabled"
+								ng-disabled="wgnConfigForm.$invalid">
+							<i class="icon-toggle-on"></i> Enable configuration
+						</button>
+
+						<button type="button" class="btn btn-warning pull-right" ng-click="onDisableConfig()"
+								ng-show="settings.multi && editing.config.$id && config.enabled"
+								ng-disabled="wgnConfigForm.$invalid">
+							<i class="icon-toggle-off"></i> Disable configuration
 						</button>
 
 						<button type="button" class="btn btn-warning pull-right" ng-click="onDiscardChanges()"

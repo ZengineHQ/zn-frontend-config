@@ -43,6 +43,10 @@
 
 .multi-config-list {
 	margin: 1em 0;
+
+	a.disabled {
+		text-decoration: line-through;
+	}
 }
 
 .multi-config-name {
