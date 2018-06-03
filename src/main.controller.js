@@ -6,9 +6,6 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		var _forms = [];
 		var _fields = {};
 
-		// For jshint.
-		var doDiscardChanges, doResetTab, loadFields, init;
-
 		/**
 		 * Whether the plugins is loading or not, displays a throbber.
 		 *
@@ -99,7 +96,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @return {Promise}
 		 */
 		$scope.onSaveConfig = function () {
-			var promise = $scope.settings.multi ? multiConfigService.save(workspaceId, $scope.configs, $scope.editing.config)
+			var promise = $scope.settings.multi
+				? multiConfigService.save(workspaceId, $scope.configs, $scope.editing.config)
 				: multiConfigService.saveSingle(workspaceId, $scope.editing.config);
 
 			return promise.then(function () {
@@ -246,27 +244,27 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			});
 
 			var formId = $scope.editing.config[fieldDef.belongsTo];
-			return formId in _fields ? _fields[formId].filter(function (field) {
-				return !fieldDef.restrict || field.type === fieldDef.restrict && filterFields.indexOf(field.id) === -1;
+			return (formId in _fields) ? _fields[formId].filter(function (field) {
+				return !fieldDef.restrict || (field.type === fieldDef.restrict && filterFields.indexOf(field.id) === -1);
 			}) : [];
 		};
 
 		/**
 		 * Centralize discarding config changes to avoid duplicating logic.
 		 */
-		doDiscardChanges = function () {
+		function doDiscardChanges () {
 			$scope.editing.config = false;
 			$scope.wgnConfigForm.$setPristine();
 			doResetTab();
 			$scope.$emit('wgnMultiConfigDiscard');
-		};
+		}
 
 		/**
 		 * Switches to the first tab.
 		 */
-		doResetTab = function () {
+		function doResetTab () {
 			$scope.view = $scope.settings.pages[0].id;
-		};
+		}
 
 		/**
 		 * Loads field data for the given form.
@@ -274,7 +272,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {number} formId The actual form id.
 		 * @param {Object} formDef The form this field belongs to.
 		 */
-		loadFields = function (formId, formDef) {
+		function loadFields (formId, formDef) {
 			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
 			formDef.fields.forEach(function (field) {
@@ -300,12 +298,12 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			}).catch(function (err) {
 				znMessage(err, 'error');
 			});
-		};
+		}
 
 		/**
 		 * Bootstraps plugin.
 		 */
-		init = function () {
+		function init () {
 			doResetTab();
 
 			// Load settings.
@@ -323,5 +321,5 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			}).then(function (forms) {
 				_forms = forms;
 			});
-		};
+		}
 	}]);
