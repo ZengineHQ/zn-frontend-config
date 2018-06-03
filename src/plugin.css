@@ -33,6 +33,8 @@
 
 .multi-config-list {
   margin: 1em 0; }
+  .multi-config-list a.disabled {
+    pointer-events: auto; }
 
 .multi-config-name {
   box-shadow: #666 0 2px 2px -2px;
