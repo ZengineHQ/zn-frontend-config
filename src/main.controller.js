@@ -326,13 +326,9 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @return {Promise}
 		 */
 		function doSaveConfig () {
-			var promise = $scope.settings.multi
-				? multiConfigService.save(workspaceId, $scope.configs, $scope.editing.config)
-				: multiConfigService.saveSingle(workspaceId, $scope.editing.config);
-
-			return promise.then(function () {
-
-			});
+			return $scope.settings.multi ?
+				multiConfigService.save(workspaceId, $scope.configs, $scope.editing.config) :
+				multiConfigService.saveSingle(workspaceId, $scope.editing.config);
 		}
 
 		function doValidateSettings(settings) {
