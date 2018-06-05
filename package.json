@@ -1,5 +1,5 @@
 {
-  "name": "zn-frontend-multi-config",
+  "name": "@zenginehq/frontend-multi-config",
   "version": "2.1.0",
   "description": "Helper library for working with multiple configurations in Zengine frontend plugins.",
   "scripts": {
@@ -10,18 +10,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Wizehive/zn-frontend-multi-config.git"
+    "url": "git+https://github.com/ZengineHQ/zn-frontend-multi-config.git"
   },
   "keywords": [
     "zn-plugin",
     "zn-frontend"
   ],
   "author": "Alex Weber <alex.weber@wizehive.com",
-  "private": true,
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Wizehive/zn-frontend-multi-config/issues"
+    "url": "https://github.com/ZengineHQ/zn-frontend-multi-config/issues"
   },
-  "homepage": "https://github.com/Wizehive/zn-frontend-multi-config#readme",
+  "homepage": "https://github.com/ZengineHQ/zn-frontend-multi-config#readme",
   "devDependencies": {
     "jshint": "^2.9.5",
     "node-sass": "^4.9.0",
