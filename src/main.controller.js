@@ -264,8 +264,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			});
 
 			var formId = $scope.editing.config[fieldDef.belongsTo];
-			return (formId in _fields) ? _fields[formId].filter(function (field) {
-				return !fieldDef.restrict || (field.type === fieldDef.restrict && filterFields.indexOf(field.id) === -1);
+			return formId in _fields ? _fields[formId].filter(function (field) {
+				return !fieldDef.restrict || field.type === fieldDef.restrict && filterFields.indexOf(field.id) === -1;
 			}) : [];
 		};
 
