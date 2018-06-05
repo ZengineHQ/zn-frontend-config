@@ -6,7 +6,7 @@
 
 ```shell
 # Run this from your frontend plugin's root diretory.
-npm install git+ssh://git@github.com/WizeHive/zn-frontend-multi-config --save --prefix ./src
+npm install @zenginehq/frontend-multi-config --save --prefix ./src
 ```
 
 It's important that this gets installed under the `src` directory, alongside your plugin's other code if not Maya won't build it properly.
