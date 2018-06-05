@@ -1,9 +1,12 @@
 {
 	"name": "zn-frontend-multi-config",
-	"version": "1.0.0",
+	"version": "2.0.0",
 	"description": "Helper library for working with multiple configurations in Zengine frontend plugins.",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "jshint --config .jshintrc ./src || true",
+		"build": "node-sass src/plugin.scss src/plugin.css",
+		"release": "jshint --config .jshintrc ./src && standard-version"
 	},
 	"repository": {
 		"type": "git",
@@ -18,5 +21,10 @@
 	"bugs": {
 		"url": "https://github.com/Wizehive/zn-frontend-multi-config/issues"
 	},
-	"homepage": "https://github.com/Wizehive/zn-frontend-multi-config#readme"
+	"homepage": "https://github.com/Wizehive/zn-frontend-multi-config#readme",
+	"devDependencies": {
+		"jshint": "^2.9.5",
+		"node-sass": "^4.9.0",
+		"standard-version": "^4.4.0"
+	}
 }

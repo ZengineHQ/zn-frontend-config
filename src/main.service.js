@@ -29,18 +29,35 @@ plugin.service('wgnMultiConfigSrv', ['$q', '$firebase', 'znData', function ($q, 
 	 *
 	 * @param {Object} plugin The plugins data.
 	 * @param {number} workspaceId The workspace id.
+	 * @param {boolean} multi Whether this plugin supports multiple configurations.
 	 *
 	 * @return {Promise<Object>} Plugin settings.
 	 */
-	var connect = function (plugin, workspaceId) {
+	var connect = function (plugin, workspaceId, multi) {
+		multi = multi || false;
+
 		var q = $q.defer();
-		var ref = new Firebase(plugin.firebaseUrl + workspaceId + '/settings');
+		var path = '';
+
+		// Sanity.
+		if (plugin.firebaseUrl.substring(plugin.firebaseUrl.length - 1, plugin.firebaseUrl.length) !== '/') {
+			path += '/';
+		}
+
+		path += workspaceId;
+
+		if (multi) {
+			path += '/settings';
+		}
+
+		var ref = new Firebase(plugin.firebaseUrl + path);
 
 		ref.auth(plugin.firebaseAuthToken, function (err) {
 			if (err) {
 				q.reject(err);
 			}
-			var sync = $firebase(ref).$asArray();
+			var $ref = $firebase(ref);
+			var sync = multi ? $ref.$asArray() : $ref.$asObject();
 			sync.$loaded().then(function (settings) {
 				q.resolve(settings);
 			});
@@ -53,32 +70,45 @@ plugin.service('wgnMultiConfigSrv', ['$q', '$firebase', 'znData', function ($q, 
 	 * Connects to Firebase and retrieves plugins settings for this workspace.
 	 *
 	 * @param {number} workspaceId The workspace id.
+	 * @param {boolean} multi Whether this plugin supports multiple configurations.
 	 *
 	 * @return {Promise<Object>} Plugin settings.
 	 */
-	srv.load = function (workspaceId) {
+	srv.load = function (workspaceId, multi) {
 		return loadPlugin().then(function (plugin) {
-			return connect(plugin, workspaceId);
+			return connect(plugin, workspaceId, multi);
 		});
 	};
 
 	/**
-	 * Saves plugins settings for this workspace.
+	 * Saves a multi config plugin configuration.
 	 *
 	 * @param {number} workspaceId
-	 * @param {Object} settings
-	 * @param {Object} config
+	 * @param {Object} $ref A Firebase reference.
+	 * @param {Object} config The configuration object to save.
 	 *
 	 * @return {Promise<*>}
 	 */
-	srv.save = function (workspaceId, settings, config) {
+	srv.save = function (workspaceId, $ref, config) {
 		if (config.$id) {
-			var index = settings.$indexFor(config.$id);
-			settings[index] = config;
-			return settings.$save(index);
+			var index = $ref.$indexFor(config.$id);
+			$ref[index] = config;
+			return $ref.$save(index);
 		}
 
-		return settings.$add(config);
+		return $ref.$add(config);
+	};
+
+	/**
+	 * Saves a single config plugin configuration.
+	 *
+	 * @param {number} workspaceId
+	 * @param {Object} $ref A Firebase reference.
+	 *
+	 * @return {Promise<Object>}
+	 */
+	srv.saveSingle = function (workspaceId, $ref) {
+		return $ref.$save();
 	};
 
 	/**
@@ -86,18 +116,18 @@ plugin.service('wgnMultiConfigSrv', ['$q', '$firebase', 'znData', function ($q, 
 	 *
 	 * @param {number} workspaceId
 	 * @param {Object} config
-	 * @param {Object} settings
+	 * @param {Object} $ref A Firebase reference.
 	 *
 	 * @return {Promise<*>}
 	 */
-	srv.deleteConfig = function (workspaceId, config, settings) {
-		var index = settings.$indexFor(config.$id);
+	srv.deleteConfig = function (workspaceId, config, $ref) {
+		var index = $ref.$indexFor(config.$id);
 
 		if (index === -1) {
 			return $q.reject('Inexistent config');
 		}
 
-		return settings.$remove(index);
+		return $ref.$remove(index);
 	};
 
 	return srv;

@@ -1,0 +1,64 @@
+.multi-config-container {
+	.btn.btn-warning {
+		background-color: #ec971f;
+		border-color: #d58512;
+		color: white;
+	}
+
+	.danger {
+		font-size: 10px;
+		margin-left: 12px;
+	}
+
+	.form-actions {
+		position: relative;
+		z-index: 99;
+	}
+
+	.form-control {
+		max-width: 300px;
+	}
+
+	.help-block {
+		margin-top: .5em;
+	}
+
+	.nav-pills>li>a {
+		height: auto;
+		padding: 10px;
+	}
+
+	.section {
+		background: #fff;
+		padding: 18px;
+		border-radius: 8px;
+		margin: 18px 0;
+	}
+}
+
+.multi-config-label {
+	font-weight: 600;
+	margin-bottom: 1em;
+}
+
+.multi-config-list {
+	margin: 1em 0;
+
+	a.disabled {
+		pointer-events: auto;
+	}
+}
+
+.multi-config-name {
+	box-shadow: #666 0 2px 2px -2px;
+	position: relative;
+	top: -30px;
+
+	label {
+		font-weight: 600;
+	}
+}
+
+.create-config-button {
+	margin-top: 1em;
+}

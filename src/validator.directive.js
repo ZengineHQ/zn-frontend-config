@@ -1,13 +1,3 @@
-plugin.directive('wgnMultiConfig', [function () {
-	return {
-		scope: false,
-		controller: 'wgnMultiConfigCtrl',
-		templateUrl: 'wgn-multi-config',
-		restrict: 'E',
-		replace: true
-	};
-}]);
-
 plugin.directive('wgnValidatorConfigName', [function () {
 	return {
 		require: 'ngModel',
