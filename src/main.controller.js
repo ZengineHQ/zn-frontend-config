@@ -7,14 +7,14 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		var _fields = {};
 
 		/**
-		 * Whether the plugins is loading or not, displays a throbber.
+		 * Whether the plugin is loading or not, displays a throbber.
 		 *
 		 * @type {boolean}
 		 */
 		$scope.loading = true;
 
 		/**
-		 * The current config being created/edited or false if none.
+		 * The current config being created/edited, or false if none.
 		 *
 		 * @type {Object|boolean}
 		 */
