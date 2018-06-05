@@ -331,7 +331,13 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				multiConfigService.saveSingle(workspaceId, $scope.editing.config);
 		}
 
+		/**
+		 * Validates multi config settings.
+		 *
+		 * @param {Object} settings
+		 */
 		function doValidateSettings(settings) {
+			// @TODO implement this
 			console.warn('settings', settings);
 		}
 
