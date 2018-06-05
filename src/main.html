@@ -33,7 +33,7 @@
 			<div class="section" ng-show="editing.config">
 				<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" novalidate>
 					<div class="form-actions">
-						<button type="submit" class="btn btn-primary pull-right" ng-disabled="wgnConfigForm.$invalid">
+						<button type="submit" class="btn btn-primary pull-right" ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid">
 							<i class="icon-ok"></i> Save configuration
 						</button>
 
