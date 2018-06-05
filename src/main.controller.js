@@ -321,9 +321,29 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		}
 
 		/**
+		 * Helper to actually save changes to firebase.
+		 *
+		 * @return {Promise}
+		 */
+		function doSaveConfig () {
+			var promise = $scope.settings.multi
+				? multiConfigService.save(workspaceId, $scope.configs, $scope.editing.config)
+				: multiConfigService.saveSingle(workspaceId, $scope.editing.config);
+
+			return promise.then(function () {
+
+			});
+		}
+
+		function doValidateSettings(settings) {
+			console.warn('settings', settings);
+		}
+
+		/**
 		 * Bootstraps plugin.
 		 */
 		function init () {
+			doValidateSettings($scope.settings);
 			doResetTab();
 
 			// Load settings.
