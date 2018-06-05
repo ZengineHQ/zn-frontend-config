@@ -110,7 +110,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Disables the current configuration.
 		 */
 		$scope.onDisableConfig = function () {
-			$scope.editing.config = false;
+			$scope.editing.config['enabled'] = false;
 
 			return doSaveConfig().then(function () {
 				$scope.$emit('wgnMultiConfigDisable', $scope.editing.config);
@@ -122,7 +122,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Enables the current configuration.
 		 */
 		$scope.onEnableConfig = function () {
-			$scope.editing.config = true;
+			$scope.editing.config['enabled'] = true;
 
 			return doSaveConfig().then(function () {
 				$scope.$emit('wgnMultiConfigEnable', $scope.editing.config);
