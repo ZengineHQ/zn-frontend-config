@@ -2,6 +2,10 @@
 
 	<div>
 		<div class="section">
+			<button ng-click="onNewConfig()" type="button" class="btn btn-success create-config-button">
+				<i class="icon-plus"></i> Create Configuration
+			</button>
+
 			<h2><i class="icon-{{ settings.icon }}"></i> {{ settings.title }}</h2>
 
 			<p>{{ settings.help }}</p>
@@ -26,10 +30,6 @@
 						</li>
 					</ul>
 				</div>
-
-				<button ng-click="onNewConfig()" type="button" class="btn btn-success create-config-button">
-					<i class="icon-magic"></i> Create Configuration
-				</button>
 			</div>
 
 			<div class="section" ng-show="editing.config">
