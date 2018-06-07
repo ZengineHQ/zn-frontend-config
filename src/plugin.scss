@@ -17,6 +17,12 @@
 		z-index: 99;
 	}
 
+	.fixed-actions {
+		position: fixed;
+		right: 9em;
+		bottom: 1em;
+	}
+
 	.form-control {
 		max-width: 300px;
 	}
