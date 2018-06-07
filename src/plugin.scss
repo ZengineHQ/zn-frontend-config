@@ -13,11 +13,13 @@
 	}
 
 	.form-actions {
+		float: right;
 		position: relative;
 		z-index: 99;
 	}
 
 	.fixed-actions {
+		float: none;
 		position: fixed;
 		right: 9em;
 		bottom: 1em;
@@ -95,9 +97,6 @@
 }
 
 .multi-config-name {
-	margin-bottom: -10px;
-	position: relative;
-	top: -26px;
 
 	label {
 		font-weight: 300;
