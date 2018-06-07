@@ -45,6 +45,13 @@
 	text-transform: uppercase;
 }
 
+.multi-config-intro {
+	font-size: 1.2em;
+	font-weight: 200;
+	line-height: 1.5;
+	width: 80%;
+}
+
 .multi-config-list {
 	margin: 2em 0 1em 0;
 
@@ -82,11 +89,13 @@
 }
 
 .multi-config-name {
+	margin-bottom: -10px;
 	position: relative;
-	top: -30px;
+	top: -26px;
 
 	label {
-		font-weight: 600;
+		font-weight: 300;
+		margin-bottom: 1em;
 	}
 }
 
@@ -101,6 +110,6 @@
 	color: #eee;
 	float: right;
 	font-size: 1.3em;
-	margin-top: 1em;
+	margin-top: 1.6em;
 	padding: .4em .6em;
 }

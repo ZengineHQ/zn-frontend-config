@@ -8,7 +8,7 @@
 
 			<h2><i class="icon-{{ settings.icon }}"></i> {{ settings.title }}</h2>
 
-			<p>{{ settings.help }}</p>
+			<p class="multi-config-intro">{{ settings.help }}</p>
 		</div>
 
 		<span ng-show="loading" class="throbber"></span>
@@ -66,7 +66,7 @@
 					</div>
 
 					<div class="control-group multi-config-name" ng-show="settings.multi">
-						<label class="form-label config-title">Config name</label>
+						<label class="form-label config-title">Configuration Name</label>
 
 						<div class="controls">
 							<input type="text" class="form-control" name="configName"
