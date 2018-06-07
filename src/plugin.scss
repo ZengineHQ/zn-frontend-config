@@ -50,9 +50,10 @@
 
 	li {
 		border: 1px solid #dedede;
+		cursor: pointer;
 		display: inline-block;
 		margin: 0 .5em;
-		padding: 3em 0 5em 0;
+		padding: 2.5em 0 7em 0;
 		position: relative;
 		text-align: center;
 	}
@@ -63,7 +64,7 @@
 	}
 
 	.config-status {
-		padding: 0.5em 0;
+		padding: 0.6em 0;
 		position: absolute;
 		bottom: 0;
 		width: 100%;
