@@ -39,7 +39,7 @@ plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
     title: 'My Awesome Plugin Settings',
     icon: 'platypus',
     multi: true,
-    disable: true,
+    toggle: true,
     pages: [
       {
       	id: 'target',
@@ -72,7 +72,7 @@ The following settings are supported:
 - **title**: The heading that will be displayed at the top of the page
 - **icon**: Optional. An icon to display by the heading
 - **multi**: One of `true` to support multiple configurations or `false` to have a single configuration. Defaults to `false`
-- **disable**: One of `true` to allow disabling the configuration (ie: to prevent webhooks running) or `false` for configurations to be always on. Defaults to `false`
+- **toggle**: One of `true` to allow enabling and disabling a configuration (ie: to prevent webhooks running) or `false` for configurations to be always on. Defaults to `false`
 - **pages**: An array of `settings pages` (see next section)
 
 ### Settings Pages
