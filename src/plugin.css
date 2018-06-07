@@ -1,47 +1,70 @@
-.multi-config-container .btn.btn-warning {
-  background-color: #ec971f;
-  border-color: #d58512;
-  color: white; }
-
-.multi-config-container .danger {
-  font-size: 10px;
-  margin-left: 12px; }
-
-.multi-config-container .form-actions {
-  position: relative;
-  z-index: 99; }
-
-.multi-config-container .form-control {
-  max-width: 300px; }
-
-.multi-config-container .help-block {
-  margin-top: .5em; }
-
-.multi-config-container .nav-pills > li > a {
-  height: auto;
-  padding: 10px; }
-
-.multi-config-container .section {
-  background: #fff;
-  padding: 18px;
-  border-radius: 8px;
-  margin: 18px 0; }
+.multi-config-container {
+  margin-top: 2em; }
+  .multi-config-container .btn.btn-warning {
+    background-color: #ec971f;
+    border-color: #d58512;
+    color: white; }
+  .multi-config-container .danger {
+    font-size: 10px;
+    margin-left: 12px; }
+  .multi-config-container .form-actions {
+    position: relative;
+    z-index: 99; }
+  .multi-config-container .form-control {
+    max-width: 300px; }
+  .multi-config-container .help-block {
+    margin-top: .5em; }
+  .multi-config-container .nav-pills > li > a {
+    height: auto;
+    padding: 10px; }
+  .multi-config-container .section {
+    background: #fff;
+    border: 1px solid #dedede;
+    padding: 18px;
+    border-radius: 3px;
+    margin: 18px 0; }
 
 .multi-config-label {
   font-weight: 600;
-  margin-bottom: 1em; }
+  margin-bottom: 1em;
+  text-transform: uppercase; }
 
 .multi-config-list {
-  margin: 1em 0; }
-  .multi-config-list a.disabled {
-    pointer-events: auto; }
+  margin: 2em 0 1em 0; }
+  .multi-config-list li {
+    border: 1px solid #dedede;
+    display: inline-block;
+    margin: 0 .5em;
+    padding: 3em 0 5em 0;
+    position: relative;
+    text-align: center; }
+  .multi-config-list .config-name {
+    font-size: 1.2em;
+    padding: 0 4em; }
+  .multi-config-list .config-status {
+    padding: 0.5em 0;
+    position: absolute;
+    bottom: 0;
+    width: 100%; }
+    .multi-config-list .config-status.bg-warning {
+      background-color: #ff9900;
+      color: white; }
 
 .multi-config-name {
-  box-shadow: #666 0 2px 2px -2px;
   position: relative;
   top: -30px; }
   .multi-config-name label {
     font-weight: 600; }
 
+.multi-config-empty {
+  font-size: 1.3em;
+  font-weight: 400;
+  padding: 5em 2em;
+  text-align: center; }
+
 .create-config-button {
-  margin-top: 1em; }
+  color: #eee;
+  float: right;
+  font-size: 1.3em;
+  margin-top: 1em;
+  padding: .4em .6em; }
