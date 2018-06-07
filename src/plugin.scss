@@ -1,4 +1,6 @@
 .multi-config-container {
+	margin-top: 2em;
+
 	.btn.btn-warning {
 		background-color: #ec971f;
 		border-color: #d58512;
@@ -39,6 +41,7 @@
 .multi-config-label {
 	font-weight: 600;
 	margin-bottom: 1em;
+	text-transform: uppercase;
 }
 
 .multi-config-list {
