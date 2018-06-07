@@ -13,8 +13,8 @@
 
 		<span ng-show="loading" class="throbber"></span>
 
-		<div class="multi-config-container" ng-hide="loading || editing.config">
-			<div class="section" ng-show="settings.multi">
+		<div class="multi-config-container" ng-hide="loading">
+			<div class="section" ng-show="!editing.config && settings.multi">
 				<div class="multi-config-label">Configurations</div>
 
 				<p ng-show="!configs.length" class="multi-config-empty">
@@ -23,11 +23,22 @@
 				</p>
 
 				<div ng-show="configs.length">
-					<ul class="multi-config-list nav nav-pills">
-						<li ng-repeat="config in configs" ng-class="{active: editing.config.$id === config.$id}">
-							<a ng-click="onEditConfig(config.$id)" href="javascript:" ng-class="{disabled: !config.enabled}">
+					<ul class="multi-config-list">
+						<li ng-repeat="config in configs" ng-click="onEditConfig(config.$id)">
+							<div class="config-name">
 								{{ config.name }}
-							</a>
+							</div>
+							<div class="config-status" ng-if="settings.toggle" ng-class="{'bg-success': config.enabled, 'bg-warning': !config.enabled}">
+								<span ng-hide="config.enabled">
+									<i class="icon-toggle-off"></i>
+									Disabled
+								</span>
+
+								<span ng-show="config.enabled">
+									<i class="icon-toggle-on"></i>
+									Enabled
+								</span>
+							</div>
 						</li>
 					</ul>
 				</div>

@@ -32,8 +32,9 @@
 
 	.section {
 		background: #fff;
+		border: 1px solid #dedede;
 		padding: 18px;
-		border-radius: 8px;
+		border-radius: 3px;
 		margin: 18px 0;
 	}
 }
@@ -45,15 +46,36 @@
 }
 
 .multi-config-list {
-	margin: 1em 0;
+	margin: 2em 0 1em 0;
 
-	a.disabled {
-		pointer-events: auto;
+	li {
+		border: 1px solid #dedede;
+		display: inline-block;
+		margin: 0 .5em;
+		padding: 3em 0 5em 0;
+		position: relative;
+		text-align: center;
+	}
+
+	.config-name {
+		font-size: 1.2em;
+		padding: 0 4em;
+	}
+
+	.config-status {
+		padding: 0.5em 0;
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+
+		&.bg-warning {
+			background-color: #ff9900;
+			color: white;
+		}
 	}
 }
 
 .multi-config-name {
-	box-shadow: #666 0 2px 2px -2px;
 	position: relative;
 	top: -30px;
 
