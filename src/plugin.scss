@@ -52,7 +52,7 @@
 		border: 1px solid #dedede;
 		cursor: pointer;
 		display: inline-block;
-		margin: 0 .5em;
+		margin: 0 2.5em 0 0;
 		padding: 2.5em 0 7em 0;
 		position: relative;
 		text-align: center;
@@ -68,6 +68,11 @@
 		position: absolute;
 		bottom: 0;
 		width: 100%;
+
+		&.bg-success {
+			background-color: #4cae4c;
+			color: white;
+		}
 
 		&.bg-warning {
 			background-color: #ff9900;
