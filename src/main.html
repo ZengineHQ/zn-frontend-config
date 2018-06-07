@@ -13,13 +13,14 @@
 
 		<span ng-show="loading" class="throbber"></span>
 
-		<div class="multi-config-container" ng-hide="loading">
+		<div class="multi-config-container" ng-hide="loading || editing.config">
 			<div class="section" ng-show="settings.multi">
 				<div class="multi-config-label">Configurations</div>
 
-				<div ng-show="!configs.length && !editing.config" class="alert alert-info" role="alert">
-					You haven't created any configurations yet!
-				</div>
+				<p ng-show="!configs.length" class="multi-config-empty">
+					You don't have any configurations yet.
+					<a href="javascript:" ng-click="onNewConfig()">Let's create one!</a>
+				</p>
 
 				<div ng-show="configs.length">
 					<ul class="multi-config-list nav nav-pills">
