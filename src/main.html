@@ -47,36 +47,21 @@
 			<div class="section" ng-show="editing.config">
 				<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" novalidate>
 					<div class="form-actions">
-						<button type="submit" class="btn btn-primary pull-right"
-								ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid">
-							<i class="icon-ok"></i> Save configuration
-						</button>
-
 						<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()"
 								ng-show="settings.multi && editing.config.$id">
-							<i class="icon-trash"></i> Delete configuration
+							<i class="icon-trash"></i> Delete
 						</button>
 
 						<button type="button" class="btn btn-success pull-right" ng-click="onEnableConfig()"
 								ng-show="settings.toggle && editing.config.$id && !editing.config.enabled"
 								ng-disabled="wgnConfigForm.$invalid">
-							<i class="icon-toggle-on"></i> Enable configuration
+							<i class="icon-toggle-on"></i> Enable
 						</button>
 
 						<button type="button" class="btn btn-warning pull-right" ng-click="onDisableConfig()"
 								ng-show="settings.toggle && editing.config.$id && editing.config.enabled"
 								ng-disabled="wgnConfigForm.$invalid">
-							<i class="icon-toggle-off"></i> Disable configuration
-						</button>
-
-						<button type="button" class="btn btn-warning pull-right" ng-click="onDiscardChanges()"
-								ng-show="settings.multi && wgnConfigForm.$dirty">
-							<i class="icon-cancel"></i> Discard changes
-						</button>
-
-						<button type="button" class="btn btn-default pull-right" ng-click="onDiscardChanges()"
-								ng-hide="!settings.multi || wgnConfigForm.$dirty">
-							<i class="icon-cancel"></i> Close
+							<i class="icon-toggle-off"></i> Disable
 						</button>
 					</div>
 
@@ -115,6 +100,18 @@
 								</div>
 							</div>
 						</div>
+					</div>
+
+					<div class="form-actions">
+						<button type="button" class="btn btn-warning pull-right" ng-click="onDiscardChanges()"
+								ng-show="wgnConfigForm.$dirty">
+							Close
+						</button>
+
+						<button type="submit" class="btn btn-primary pull-right"
+								ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid">
+							Save configuration
+						</button>
 					</div>
 				</form>
 			</div>
