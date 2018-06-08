@@ -2,72 +2,71 @@
 
 	<div>
 		<div class="section">
+			<button ng-click="onNewConfig()" type="button" class="btn btn-success create-config-button" ng-hide="loading">
+				<i class="icon-plus"></i> Create Configuration
+			</button>
+
 			<h2><i class="icon-{{ settings.icon }}"></i> {{ settings.title }}</h2>
+
+			<p class="multi-config-intro">{{ settings.help }}</p>
 		</div>
 
 		<span ng-show="loading" class="throbber"></span>
 
 		<div class="multi-config-container" ng-hide="loading">
-			<div class="section" ng-show="settings.multi">
+			<div class="section" ng-show="!editing.config && settings.multi">
 				<div class="multi-config-label">Configurations</div>
 
-				<div ng-show="!configs.length && !editing.config" class="alert alert-info" role="alert">
-					You haven't created any configurations yet!
-				</div>
+				<p ng-show="!configs.length" class="multi-config-empty">
+					You don't have any configurations yet.
+					<a href="javascript:" ng-click="onNewConfig()">Let's create one!</a>
+				</p>
 
 				<div ng-show="configs.length">
-					<ul class="multi-config-list nav nav-pills">
-						<li ng-repeat="config in configs" ng-class="{active: editing.config.$id === config.$id}">
-							<a ng-click="onEditConfig(config.$id)" href="javascript:" ng-class="{disabled: !config.enabled}">
+					<ul class="multi-config-list">
+						<li ng-repeat="config in configs" ng-click="onEditConfig(config.$id)">
+							<div class="config-name">
 								{{ config.name }}
-							</a>
+							</div>
+							<div class="config-status" ng-if="settings.toggle" ng-class="{'bg-success': config.enabled, 'bg-warning': !config.enabled}">
+								<span ng-hide="config.enabled">
+									<i class="icon-toggle-off"></i>
+									Disabled
+								</span>
+
+								<span ng-show="config.enabled">
+									<i class="icon-toggle-on"></i>
+									Enabled
+								</span>
+							</div>
 						</li>
 					</ul>
 				</div>
-
-				<button ng-click="onNewConfig()" type="button" class="btn btn-success create-config-button">
-					<i class="icon-magic"></i> Create Configuration
-				</button>
 			</div>
 
 			<div class="section" ng-show="editing.config">
 				<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" novalidate>
 					<div class="form-actions">
-						<button type="submit" class="btn btn-primary pull-right"
-								ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid">
-							<i class="icon-ok"></i> Save configuration
-						</button>
-
-						<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()"
-								ng-show="settings.multi && editing.config.$id">
-							<i class="icon-trash"></i> Delete configuration
-						</button>
-
 						<button type="button" class="btn btn-success pull-right" ng-click="onEnableConfig()"
 								ng-show="settings.toggle && editing.config.$id && !editing.config.enabled"
 								ng-disabled="wgnConfigForm.$invalid">
-							<i class="icon-toggle-on"></i> Enable configuration
+							<i class="icon-toggle-on"></i> Enable
 						</button>
 
 						<button type="button" class="btn btn-warning pull-right" ng-click="onDisableConfig()"
 								ng-show="settings.toggle && editing.config.$id && editing.config.enabled"
 								ng-disabled="wgnConfigForm.$invalid">
-							<i class="icon-toggle-off"></i> Disable configuration
+							<i class="icon-toggle-off"></i> Disable
 						</button>
 
-						<button type="button" class="btn btn-warning pull-right" ng-click="onDiscardChanges()"
-								ng-show="settings.multi && wgnConfigForm.$dirty">
-							<i class="icon-cancel"></i> Discard changes
-						</button>
-
-						<button type="button" class="btn btn-default pull-right" ng-click="onDiscardChanges()"
-								ng-hide="!settings.multi || wgnConfigForm.$dirty">
-							<i class="icon-cancel"></i> Close
+						<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()"
+								ng-show="settings.multi && editing.config.$id">
+							<i class="icon-trash"></i> Delete
 						</button>
 					</div>
 
 					<div class="control-group multi-config-name" ng-show="settings.multi">
-						<label class="form-label config-title">Config name</label>
+						<label class="form-label config-title">Configuration Name</label>
 
 						<div class="controls">
 							<input type="text" class="form-control" name="configName"
@@ -101,6 +100,18 @@
 								</div>
 							</div>
 						</div>
+					</div>
+
+					<div class="form-actions fixed-actions">
+						<button type="submit" class="btn btn-primary pull-right"
+								ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid">
+							Save configuration
+						</button>
+
+						<button type="button" class="btn pull-right" ng-click="onDiscardChanges()"
+								ng-show="settings.multi || wgnConfigForm.$dirty">
+							Cancel
+						</button>
 					</div>
 				</form>
 			</div>

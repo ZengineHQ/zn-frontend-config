@@ -1,4 +1,6 @@
 .multi-config-container {
+	margin-top: 2em;
+
 	.btn.btn-warning {
 		background-color: #ec971f;
 		border-color: #d58512;
@@ -11,8 +13,16 @@
 	}
 
 	.form-actions {
+		float: right;
 		position: relative;
 		z-index: 99;
+	}
+
+	.fixed-actions {
+		float: none;
+		position: fixed;
+		right: 9em;
+		bottom: 1em;
 	}
 
 	.form-control {
@@ -23,15 +33,16 @@
 		margin-top: .5em;
 	}
 
-	.nav-pills>li>a {
+	.nav-pills > li > a {
 		height: auto;
 		padding: 10px;
 	}
 
 	.section {
 		background: #fff;
+		border: 1px solid #dedede;
 		padding: 18px;
-		border-radius: 8px;
+		border-radius: 3px;
 		margin: 18px 0;
 	}
 }
@@ -39,26 +50,76 @@
 .multi-config-label {
 	font-weight: 600;
 	margin-bottom: 1em;
+	text-transform: uppercase;
+}
+
+.multi-config-intro {
+	font-size: 1em;
+	font-weight: 200;
+	line-height: 1.5;
+	width: 70%;
 }
 
 .multi-config-list {
-	margin: 1em 0;
+	margin: 2em 0 1em 0;
 
-	a.disabled {
-		pointer-events: auto;
+	li {
+		border: 1px solid #dedede;
+		cursor: pointer;
+		display: inline-block;
+		height: 14em;
+		margin: 0 2.5em 0 0;
+		padding: 2.5em 0 7em 0;
+		position: relative;
+		text-align: center;
+		width: 15em;
+
+		&:hover {
+			box-shadow: 0 0 3px -1px #000;
+		}
+	}
+
+	.config-name {
+		font-size: 1.2em;
+	}
+
+	.config-status {
+		padding: 0.6em 0;
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+
+		&.bg-success {
+			background-color: #4cae4c;
+			color: white;
+		}
+
+		&.bg-warning {
+			background-color: #ff9900;
+			color: white;
+		}
 	}
 }
 
 .multi-config-name {
-	box-shadow: #666 0 2px 2px -2px;
-	position: relative;
-	top: -30px;
 
 	label {
-		font-weight: 600;
+		font-weight: 300;
+		margin-bottom: 1em;
 	}
 }
 
+.multi-config-empty {
+	font-size: 1.3em;
+	font-weight: 400;
+	padding: 5em 2em;
+	text-align: center;
+}
+
 .create-config-button {
-	margin-top: 1em;
+	color: #eee;
+	float: right;
+	font-size: 1.3em;
+	margin-top: 1.6em;
+	padding: .4em .6em;
 }

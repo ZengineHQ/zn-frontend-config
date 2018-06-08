@@ -337,8 +337,28 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {Object} settings
 		 */
 		function doValidateSettings(settings) {
-			// @TODO implement this
-			console.warn('settings', settings);
+			// Check for required settings.
+			var required = ['title', 'pages'];
+			var keys = Object.keys(settings);
+
+			angular.forEach(required, function (option) {
+				if (keys.indexOf(option) === -1) {
+					throw new Error('Invalid multi config settings! Missing: ' + option);
+				}
+			});
+
+			// Make sure we have at least one page.
+			if (!Array.isArray(settings.pages) || !settings.pages.length) {
+				throw new Error('Multi config settings must have at least one page');
+			}
+
+			// Add some default settings we don't want to be empty.
+			if (!settings.icon) {
+				settings.icon = 'zengine';
+			}
+			if (!settings.help) {
+				settings.help = 'This is some instructional text decribing what this plugin is and how to use it.';
+			}
 		}
 
 		/**

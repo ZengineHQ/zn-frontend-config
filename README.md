@@ -38,6 +38,7 @@ plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
   $scope.configSettings = {
     title: 'My Awesome Plugin Settings',
     icon: 'platypus',
+    help: 'This is some instructional text explaining what these settings do. I am concise, yet informative.',
     multi: true,
     toggle: true,
     pages: [
@@ -69,10 +70,11 @@ We're done, that's it! The directive will take care of the rest!
 
 The following settings are supported:
 
-- **title**: The heading that will be displayed at the top of the page
-- **icon**: Optional. An icon to display by the heading
-- **multi**: One of `true` to support multiple configurations or `false` to have a single configuration. Defaults to `false`
-- **toggle**: One of `true` to allow enabling and disabling a configuration (ie: to prevent webhooks running) or `false` for configurations to be always on. Defaults to `false`
+- **title**: A heading that will be displayed at the top of the page
+- **icon**: Optional. An icon to display next to heading
+- **help**: Optional. Help text that will be displayed below the heading
+- **multi**: Optional. One of `true` to support multiple configurations or `false` to have a single configuration. Defaults to `false`
+- **toggle**: Optional. One of `true` to allow enabling and disabling a configuration (ie: to prevent webhooks running) or `false` for configurations to be always on. Defaults to `false`
 - **pages**: An array of `settings pages` (see next section)
 
 ### Settings Pages
