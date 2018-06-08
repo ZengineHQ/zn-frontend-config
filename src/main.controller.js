@@ -98,11 +98,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onSaveConfig = function () {
 			return doSaveConfig().then(function () {
 				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
+				$scope.wgnConfigForm.$setPristine();
 				znMessage('Configuration saved!', 'saved');
-
-				if ($scope.settings.multi) {
-					doDiscardChanges();
-				}
 			});
 		};
 
