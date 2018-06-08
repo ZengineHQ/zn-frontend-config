@@ -13,28 +13,20 @@ It's important that this gets inside under the `src` directory, alongside your p
 
 ## Usage
 
-With the module available in the src folder it's now just a matter of defining your settings fields.
-
-### View
-
 Add the directive to you settings page template; 
 
 ```html
 <script type="text/ng-template" id="wgn-settings">
-
 	<wgn-multi-config settings="configSettings"></wgn-multi-config>
-
 </script>
 
 ```
 
-### Controller
-
-Then, build out and add `configSettings` to your scope:
+Then, build out and add `configSettings` to your controller's scope:
 
 ```js
 plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
-  // Define plugin settings (see "Settings" section)
+  // Define plugin settings (see "Settings" section below)
   $scope.configSettings = {
     title: 'My Awesome Plugin Settings',
     icon: 'icon-emo-sunglasses',
@@ -64,11 +56,11 @@ plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
 
 ### Boom!
 
-We're done, that's it! The directive will take care of the rest!
+We're done, that's it! Give it some settings and the directive will take care of the rest!
 
-## Settings Options
+## Settings
 
-The following settings are supported:
+The following options are supported:
 
 - **title**: A heading that will be displayed at the top of the page
 - **icon**: Optional. An icon to display next to heading
