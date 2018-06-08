@@ -354,10 +354,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 			// Add some default settings we don't want to be empty.
 			if (!settings.icon) {
-				settings.icon = 'zengine';
+				settings.icon = 'icon-puzzle';
 			}
 			if (!settings.help) {
-				settings.help = 'This is some instructional text decribing what this plugin is and how to use it.';
+				settings.help = 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.';
 			}
 		}
 
