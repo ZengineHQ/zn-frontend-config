@@ -47,11 +47,6 @@
 			<div class="section" ng-show="editing.config">
 				<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" novalidate>
 					<div class="form-actions">
-						<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()"
-								ng-show="settings.multi && editing.config.$id">
-							<i class="icon-trash"></i> Delete
-						</button>
-
 						<button type="button" class="btn btn-success pull-right" ng-click="onEnableConfig()"
 								ng-show="settings.toggle && editing.config.$id && !editing.config.enabled"
 								ng-disabled="wgnConfigForm.$invalid">
@@ -62,6 +57,11 @@
 								ng-show="settings.toggle && editing.config.$id && editing.config.enabled"
 								ng-disabled="wgnConfigForm.$invalid">
 							<i class="icon-toggle-off"></i> Disable
+						</button>
+
+						<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()"
+								ng-show="settings.multi && editing.config.$id">
+							<i class="icon-trash"></i> Delete
 						</button>
 					</div>
 
@@ -110,7 +110,7 @@
 
 						<button type="button" class="btn pull-right" ng-click="onDiscardChanges()"
 								ng-show="settings.multi || wgnConfigForm.$dirty">
-							Close
+							Cancel
 						</button>
 					</div>
 				</form>

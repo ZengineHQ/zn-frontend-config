@@ -54,10 +54,10 @@
 }
 
 .multi-config-intro {
-	font-size: 1.2em;
+	font-size: 1em;
 	font-weight: 200;
 	line-height: 1.5;
-	width: 80%;
+	width: 70%;
 }
 
 .multi-config-list {
@@ -67,15 +67,20 @@
 		border: 1px solid #dedede;
 		cursor: pointer;
 		display: inline-block;
+		height: 14em;
 		margin: 0 2.5em 0 0;
 		padding: 2.5em 0 7em 0;
 		position: relative;
 		text-align: center;
+		width: 15em;
+
+		&:hover {
+			box-shadow: 0 0 3px -1px #000;
+		}
 	}
 
 	.config-name {
 		font-size: 1.2em;
-		padding: 0 4em;
 	}
 
 	.config-status {
