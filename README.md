@@ -37,7 +37,7 @@ plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
   // Define plugin settings (see "Settings" section)
   $scope.configSettings = {
     title: 'My Awesome Plugin Settings',
-    icon: 'platypus',
+    icon: 'icon-emo-sunglasses',
     help: 'This is some instructional text explaining what these settings do. I am concise, yet informative.',
     multi: true,
     toggle: true,
