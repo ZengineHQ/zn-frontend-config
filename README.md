@@ -85,7 +85,19 @@ You may define as many as you want but _must_ have at least one!
 
 In the event that there are multiple settings pages, they will be navigatable using tabs.
 
-You should define an array of `fields` for each page (see next section)
+```js
+{
+	id: 'firstpage',
+	name: 'First Page',
+	fields: []
+}
+```
+
+The following properties are supported:
+
+- **id**: A slug
+- **name**: The title to be displayed on the tab if there are more than one page
+- **fields**: An array of `settings fields` for each page (see next section)
 
 ### Settings Fields
 
