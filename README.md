@@ -5,11 +5,11 @@
 ## Installation
 
 ```shell
-# Run this from your frontend plugin's root diretory.
-npm install @zenginehq/frontend-multi-config --save --prefix ./src
+# Run this from your frontend plugin's src diretory.
+npm i @zenginehq/frontend-multi-config --save
 ```
 
-It's important that this gets installed under the `src` directory, alongside your plugin's other code if not Maya won't build it properly.
+It's important that this gets inside under the `src` directory, alongside your plugin's other code if not Maya won't build it properly.
 
 ## Usage
 
