@@ -1,5 +1,5 @@
 <script type="text/ng-template" id="wgn-multi-config-page">
-	<div class="control-group" ng-repeat="field in specs.fields">
+	<div class="form-group" ng-repeat="field in specs.fields">
 		<!--Special markup field-->
 		<div ng-if="field.type === 'markup'" ng-bind-html="field.value"></div>
 
