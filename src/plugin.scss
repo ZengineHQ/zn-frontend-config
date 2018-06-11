@@ -10,6 +10,12 @@
 	.danger {
 		font-size: 10px;
 		margin-left: 12px;
+
+		&.help-block {
+			font-size: .85em;
+			font-weight: 500;
+			margin-left: .3em;
+		}
 	}
 
 	.form-actions {
