@@ -39,6 +39,9 @@
 									Enabled
 								</span>
 							</div>
+							<div class="config-status bg-success" ng-if="!settings.toggle">
+								<span>Enabled</span>
+							</div>
 						</li>
 					</ul>
 				</div>
@@ -112,6 +115,10 @@
 								ng-show="settings.multi || wgnConfigForm.$dirty">
 							Cancel
 						</button>
+
+						<div class="required-fields pull-right" ng-show="wgnConfigForm.$error.required">
+							Please fill all required fields
+						</div>
 					</div>
 				</form>
 			</div>

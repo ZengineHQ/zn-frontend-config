@@ -14,7 +14,8 @@
 		"fail": true,
 		"angular": true,
 		"plugin": true,
-		"Firebase": true
+		"Firebase": true,
+		"moment": true
 	},
 	"latedef": false,
 	"maxcomplexity": 5,

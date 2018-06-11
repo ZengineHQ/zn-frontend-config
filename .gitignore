@@ -4,3 +4,4 @@ npm-debug.log
 *.sublime-workspace
 .DS_Store
 /nbproject/private/
+node_modules

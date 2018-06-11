@@ -13,31 +13,23 @@ It's important that this gets inside under the `src` directory, alongside your p
 
 ## Usage
 
-With the module available in the src folder it's now just a matter of defining your settings fields.
-
-### View
-
 Add the directive to you settings page template; 
 
 ```html
 <script type="text/ng-template" id="wgn-settings">
-
 	<wgn-multi-config settings="configSettings"></wgn-multi-config>
-
 </script>
 
 ```
 
-### Controller
-
-Then, build out and add `configSettings` to your scope:
+Then, build out and add `configSettings` to your controller's scope:
 
 ```js
 plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
-  // Define plugin settings (see "Settings" section)
+  // Define plugin settings (see "Settings" section below)
   $scope.configSettings = {
     title: 'My Awesome Plugin Settings',
-    icon: 'platypus',
+    icon: 'icon-emo-sunglasses',
     help: 'This is some instructional text explaining what these settings do. I am concise, yet informative.',
     multi: true,
     toggle: true,
@@ -64,11 +56,11 @@ plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
 
 ### Boom!
 
-We're done, that's it! The directive will take care of the rest!
+We're done, that's it! Give it some settings and the directive will take care of the rest!
 
-## Settings Options
+## Settings
 
-The following settings are supported:
+The following options are supported:
 
 - **title**: A heading that will be displayed at the top of the page
 - **icon**: Optional. An icon to display next to heading
@@ -85,7 +77,19 @@ You may define as many as you want but _must_ have at least one!
 
 In the event that there are multiple settings pages, they will be navigatable using tabs.
 
-You should define an array of `fields` for each page (see next section)
+```js
+{
+	id: 'firstpage',
+	name: 'First Page',
+	fields: []
+}
+```
+
+The following properties are supported:
+
+- **id**: A slug
+- **name**: The title to be displayed on the tab if there are more than one page
+- **fields**: An array of `settings fields` for each page (see next section)
 
 ### Settings Fields
 

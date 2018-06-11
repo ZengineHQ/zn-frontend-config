@@ -1,3 +1,16 @@
+$color-error: #a94442;
+$color-success: #3c763d;
+
+@mixin field-state($color) {
+	.form-label {
+		color: $color;
+	}
+	.form-control {
+		border-color: $color;
+		box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+	}
+}
+
 .multi-config-container {
 	margin-top: 2em;
 
@@ -10,6 +23,12 @@
 	.danger {
 		font-size: 10px;
 		margin-left: 12px;
+
+		&.help-block {
+			font-size: .85em;
+			font-weight: 500;
+			margin-left: .3em;
+		}
 	}
 
 	.form-actions {
@@ -45,6 +64,22 @@
 		border-radius: 3px;
 		margin: 18px 0;
 	}
+
+	.required-fields {
+		font-size: 1.2em;
+		padding: 8px 12px;
+		line-height: normal;
+	}
+
+	ng-form.ng-dirty {
+		&.ng-invalid {
+			@include field-state($color-error);
+		}
+
+		&.ng-valid {
+			@include field-state($color-success);
+		}
+	}
 }
 
 .multi-config-label {
@@ -57,6 +92,7 @@
 	font-size: 1em;
 	font-weight: 200;
 	line-height: 1.5;
+	padding-left: .35em;
 	width: 70%;
 }
 
@@ -68,9 +104,10 @@
 		cursor: pointer;
 		display: inline-block;
 		height: 14em;
-		margin: 0 2.5em 0 0;
-		padding: 2.5em 0 7em 0;
+		margin: 0 2.5em 2.5em 0;
+		padding: 2.5em 0 0 0;
 		position: relative;
+		overflow: hidden;
 		text-align: center;
 		width: 15em;
 

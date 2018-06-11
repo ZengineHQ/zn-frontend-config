@@ -98,11 +98,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onSaveConfig = function () {
 			return doSaveConfig().then(function () {
 				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
+				$scope.wgnConfigForm.$setPristine();
 				znMessage('Configuration saved!', 'saved');
-
-				if ($scope.settings.multi) {
-					doDiscardChanges();
-				}
 			});
 		};
 
@@ -225,8 +222,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 			var filterForms = [];
 
-			$scope.settings.pages.forEach(function (page) {
-				page.fields.forEach(function (field) {
+			angular.forEach($scope.settings.pages, function (page) {
+				angular.forEach(page.fields, function (field) {
 					if (field.type === 'form' && field.id !== fieldId) {
 						if (field.id in $scope.editing.config && $scope.editing.config[field.id]) {
 							filterForms.push($scope.editing.config[field.id]);
@@ -257,7 +254,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var filterFields = [];
 
 			// Filter values used in other fields.
-			formDef.fields.forEach(function (field) {
+			angular.forEach(formDef.fields, function (field) {
 				if (field.id !== fieldDef.id && $scope.editing.config && field.id in $scope.editing.config && $scope.editing.config[field.id]) {
 					filterFields.push($scope.editing.config[field.id]);
 				}
@@ -295,7 +292,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		function loadFields (formId, formDef) {
 			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
-			formDef.fields.forEach(function (field) {
+
+			angular.forEach(formDef.fields, function (field) {
 				if (field.restrict && fieldTypes.indexOf(field.restrict) === -1) {
 					fieldTypes.push(field.restrict);
 				}
@@ -337,28 +335,92 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {Object} settings
 		 */
 		function doValidateSettings(settings) {
-			// Check for required settings.
-			var required = ['title', 'pages'];
-			var keys = Object.keys(settings);
-
-			angular.forEach(required, function (option) {
-				if (keys.indexOf(option) === -1) {
-					throw new Error('Invalid multi config settings! Missing: ' + option);
-				}
-			});
+			// Check for required top level settings.
+			var pluginKeys = Object.keys(settings);
+			doValidateSettingsRequired(['title', 'pages'], pluginKeys, 'plugin');
 
 			// Make sure we have at least one page.
 			if (!Array.isArray(settings.pages) || !settings.pages.length) {
-				throw new Error('Multi config settings must have at least one page');
+				throw new Error('Invalid multi config settings! At least one page must be defined.');
 			}
 
-			// Add some default settings we don't want to be empty.
+			// Ensure no top level options exist other than the allowed ones.
+			var allowedPluginKeys = ['title', 'icon', 'help', 'multi', 'toggle', 'pages'];
+			doValidateSettingsAllowed(allowedPluginKeys, Object.keys(settings), 'page');
+
+			// Check page level settings.
+			var allowedPageKeys = ['id', 'name', 'fields'];
+			var allowedFieldKeys = ['id', 'name', 'required', 'help', 'type', 'belongsTo', 'restrict', 'placeholder'];
+
+			angular.forEach(settings.pages, function (page) {
+				// Check for required page settings.
+				var pageKeys = Object.keys(page);
+				doValidateSettingsRequired(['fields'], pageKeys, 'page');
+
+				if (settings.pages.length > 1) {
+					doValidateSettingsRequired(['id', 'name'], pageKeys, 'page');
+				}
+
+				// Make sure we have at least one field.
+				if (!Array.isArray(page.fields) || !page.fields) {
+					throw new Error('Invalid multi config settings! At least one field must be defined for page ' + page.id);
+				}
+
+				// Ensure no options exist other than the allowed ones.
+				doValidateSettingsAllowed(allowedPageKeys, pageKeys, 'page');
+
+				// Check field level settings.
+				angular.forEach(settings.pages.fields, function (field) {
+					// Check for required field settings.
+					var fieldKeys = Object.keys(field);
+					doValidateSettingsRequired(['id', 'name', 'type'], fieldKeys, 'field');
+
+					// Ensure no options exist other than the allowed ones.
+					doValidateSettingsAllowed(allowedFieldKeys, fieldKeys, 'field');
+				});
+			});
+
+			// Finally, add some default settings we don't want to be empty.
 			if (!settings.icon) {
-				settings.icon = 'zengine';
+				settings.icon = 'icon-puzzle';
 			}
 			if (!settings.help) {
-				settings.help = 'This is some instructional text decribing what this plugin is and how to use it.';
+				settings.help = 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.';
 			}
+		}
+
+		/**
+		 * Validates required settings exist.
+		 *
+		 * @param {Array<string>} required The required keys.
+		 * @param {Array<string>} keys The keys to check.
+		 * @param {string} level The hierarchical level of the settings we're checking.
+		 *
+		 * @throws Error
+		 */
+		function doValidateSettingsRequired(required, keys, level) {
+			angular.forEach(required, function (option) {
+				if (keys.indexOf(option) === -1) {
+					throw new Error('Invalid multi config settings! Missing: "' + option + '" for ' + level);
+				}
+			});
+		}
+
+		/**
+		 * Validates only allowed settings exist.
+		 *
+		 * @param {Array<string>} allowed The allowed keys.
+		 * @param {Array<string>} keys The keys to check.
+		 * @param {string} level The hierarchical level of the settings we're checking.
+		 *
+		 * @throws Error
+		 */
+		function doValidateSettingsAllowed(allowed, keys, level) {
+			angular.forEach(keys, function (key) {
+				if (allowed.indexOf(key) === -1) {
+					throw new Error('Invalud multi config settings! Option "' + key + '" not allowed for ' + level);
+				}
+			});
 		}
 
 		/**
