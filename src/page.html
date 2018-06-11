@@ -8,7 +8,7 @@
 
 			<div class="controls">
 				<!--Form selection element-->
-				<select class="form-control"
+				<select class="form-control" name="{{ field.id }}"
 						ng-show="field.type === 'form'"
 						ng-options="form.id as form.name for form in getForms(field.id)"
 						ng-model="editing.config[field.id]"
@@ -19,7 +19,7 @@
 				</select>
 
 				<!--Field selection element-->
-				<select class="form-control"
+				<select class="form-control" name="{{ field.id }}"
 						ng-show="field.type === 'field' && field.belongsTo"
 						ng-model="editing.config[field.id]"
 						ng-options="field.id as field.name for field in getFields(field, specs)"
@@ -28,7 +28,7 @@
 				</select>
 
 				<!--Simple text field-->
-				<input type="text" class="form-control"
+				<input type="text" class="form-control" name="{{ field.id }}"
 					   ng-show="field.type === 'text'"
 					   ng-model="editing.config[field.id]"
 					   ng-required="field.required"
@@ -36,7 +36,7 @@
 				>
 
 				<!--Number field-->
-				<input type="number" class="form-control"
+				<input type="number" class="form-control" name="{{ field.id }}"
 					   ng-show="field.type === 'number'"
 					   ng-model="editing.config[field.id]"
 					   ng-required="field.required"
@@ -44,14 +44,14 @@
 				>
 
 				<!--Textarea field-->
-				<textarea class="form-control"
+				<textarea class="form-control" name="{{ field.id }}"
 						  ng-show="field.type === 'textarea'"
 						  ng-model="editing.config[field.id]"
 						  ng-required="field.required"
 				></textarea>
 
 				<!--Dropdown field-->
-				<select class="form-control"
+				<select class="form-control" name="{{ field.id }}"
 						ng-show="field.type === 'select'"
 						ng-model="editing.config[field.id]"
 						ng-required="field.required">
@@ -63,8 +63,9 @@
 				<!--@TODO other field types as needed-->
 
 				<!--Common elements-->
-				<span ng-if="field.required" class="danger">required</span>
-				<span ng-if="field.help" class="help-block">{{ field.help }}</span>
+				<span ng-show="field.required" class="danger">required</span>
+				<span ng-shpw="field.help" class="help-block">{{ field.help }}</span>
+
 			</div>
 		</div>
 	</div>
