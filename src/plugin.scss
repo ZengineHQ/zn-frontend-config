@@ -66,8 +66,9 @@ $color-success: #3c763d;
 	}
 
 	.required-fields {
-		font-size: 1em;
-		margin-left: .5em;
+		font-size: 1.2em;
+		padding: 8px 12px;
+		line-height: normal;
 	}
 
 	ng-form.ng-dirty {

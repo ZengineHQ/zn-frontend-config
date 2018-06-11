@@ -103,10 +103,6 @@
 								</div>
 							</div>
 						</div>
-
-						<div class="help-block danger required-fields" ng-show="wgnConfigForm.$error.required">
-							Please fill all required fields
-						</div>
 					</div>
 
 					<div class="form-actions fixed-actions">
@@ -119,6 +115,10 @@
 								ng-show="settings.multi || wgnConfigForm.$dirty">
 							Cancel
 						</button>
+
+						<div class="required-fields pull-right" ng-show="wgnConfigForm.$error.required">
+							Please fill all required fields
+						</div>
 					</div>
 				</form>
 			</div>
