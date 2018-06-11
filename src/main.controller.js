@@ -222,8 +222,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 			var filterForms = [];
 
-			$scope.settings.pages.forEach(function (page) {
-				page.fields.forEach(function (field) {
+			angular.forEach($scope.settings.pages, function (page) {
+				angular.forEach(page.fields, function (field) {
 					if (field.type === 'form' && field.id !== fieldId) {
 						if (field.id in $scope.editing.config && $scope.editing.config[field.id]) {
 							filterForms.push($scope.editing.config[field.id]);
@@ -254,7 +254,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var filterFields = [];
 
 			// Filter values used in other fields.
-			formDef.fields.forEach(function (field) {
+			angular.forEach(formDef.fields, function (field) {
 				if (field.id !== fieldDef.id && $scope.editing.config && field.id in $scope.editing.config && $scope.editing.config[field.id]) {
 					filterFields.push($scope.editing.config[field.id]);
 				}
@@ -292,7 +292,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		function loadFields (formId, formDef) {
 			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
-			formDef.fields.forEach(function (field) {
+
+			angular.forEach(formDef.fields, function (field) {
 				if (field.restrict && fieldTypes.indexOf(field.restrict) === -1) {
 					fieldTypes.push(field.restrict);
 				}
@@ -351,7 +352,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var allowedPageKeys = ['id', 'name', 'fields'];
 			var allowedFieldKeys = ['id', 'name', 'required', 'help', 'type', 'belongsTo', 'restrict', 'placeholder'];
 
-			settings.pages.forEach(function (page) {
+			angular.forEach(settings.pages, function (page) {
 				// Check for required page settings.
 				var pageKeys = Object.keys(page);
 				doValidateSettingsRequired(['fields'], pageKeys, 'page');
@@ -369,7 +370,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				doValidateSettingsAllowed(allowedPageKeys, pageKeys, 'page');
 
 				// Check field level settings.
-				settings.pages.fields.forEach(function (field) {
+				angular.forEach(settings.pages.fields, function (field) {
 					// Check for required field settings.
 					var fieldKeys = Object.keys(field);
 					doValidateSettingsRequired(['id', 'name', 'type'], fieldKeys, 'field');
