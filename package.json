@@ -1,7 +1,7 @@
 {
   "name": "@zenginehq/frontend-multi-config",
   "version": "2.2.0",
-  "description": "Helper library for working with multiple configurations in Zengine frontend plugins.",
+  "description": "Helper module for working with multiple configurations in Zengine frontend plugins.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "jshint --config .jshintrc ./src || true",
@@ -14,7 +14,8 @@
   },
   "keywords": [
     "zn-plugin",
-    "zn-frontend"
+    "zn-frontend",
+    "zn-module"
   ],
   "author": "Alex Weber <alex.weber@wizehive.com",
   "license": "MIT",
