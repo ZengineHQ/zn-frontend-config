@@ -5,6 +5,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		var workspaceId = $routeParams.workspace_id;
 		var _forms = [];
 		var _fields = {};
+		var formsLoading = {};
 
 		/**
 		 * Whether the plugin is loading or not, displays a throbber.
@@ -19,13 +20,6 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @type {Object<Object|boolean>}
 		 */
 		$scope.editing = { config: false };
-
-		/**
-		 * Stores which forms are in the process of loading field info.
-		 *
-		 * @type {Object}
-		 */
-		$scope.formsLoading = {};
 
 		// Init plugin.
 		init().then(function () {
@@ -274,6 +268,19 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		};
 
 		/**
+		 * Returns whether a given form is loading its fields.
+		 *
+		 * @param {string} key A form config id.
+		 *
+		 * @return {boolean}
+		 */
+		$scope.isFormLoading = function (key) {
+			if (key in $scope.editing.config) {
+				return $scope.editing.config[key] in formsLoading ? formsLoading[$scope.editing.config[key]] : false;
+			}
+		};
+
+		/**
 		 * Centralize discarding config changes to avoid duplicating logic.
 		 */
 		function doDiscardChanges () {
@@ -294,10 +301,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Loads field data for the given form.
 		 *
 		 * @param {number} formId The actual form id.
-		 * @param {Object} formDef The form this field belongs to.
+		 * @param {Object} formDef The page this form belongs to.
 		 */
 		function loadFields (formId, formDef) {
-			$scope.formsLoading[formId] = true;
+			formsLoading[formId] = true;
 
 			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
@@ -325,7 +332,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			}).catch(function (err) {
 				znMessage(err, 'error');
 			}).finally(function () {
-				$scope.formsLoading[formId] = false;
+				formsLoading[formId] = false;
 			});
 		}
 
