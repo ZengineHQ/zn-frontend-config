@@ -5,7 +5,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "jshint --config .jshintrc ./src || true",
-    "build": "node-sass src/plugin.scss src/plugin.css --output-style compressed",
+    "build": "node-sass src --output src --output-style compressed",
     "release": "jshint --config .jshintrc ./src && npm run build && standard-version"
   },
   "repository": {
