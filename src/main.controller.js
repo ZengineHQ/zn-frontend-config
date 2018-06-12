@@ -436,7 +436,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		function doValidateSettingsAllowed(allowed, keys, level) {
 			angular.forEach(keys, function (key) {
 				if (allowed.indexOf(key) === -1) {
-					throw new Error('Invalud multi config settings! Option "' + key + '" not allowed for ' + level);
+					throw new Error('Invalid multi config settings! Option "' + key + '" not allowed for ' + level);
 				}
 			});
 		}
