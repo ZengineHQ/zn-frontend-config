@@ -23,13 +23,15 @@
 					<select class="form-control" name="input"
 							ng-if="field.type === 'field' && field.belongsTo"
 							ng-model="editing.config[field.id]"
-							ng-options="field.id as field.name for field in getFields(field, specs)"
+							ng-options="f.id as f.name for f in getFields(field, specs)"
+							ng-disabled="isFormLoading(field.belongsTo)"
 							ng-required="field.required">
 						<option value=""></option>
 					</select>
+					<span ng-show="isFormLoading(field.belongsTo)" class="throbber inline throbber"></span>
 
 					<!--Simple text field-->
-					<input type="text" class="form-control" wgn-input-name name="{{ field.id }}"
+					<input type="text" class="form-control" name="{{ field.id }}"
 						   ng-if="field.type === 'text'"
 						   ng-model="editing.config[field.id]"
 						   ng-required="field.required"
@@ -37,7 +39,7 @@
 					>
 
 					<!--Number field-->
-					<input type="number" class="form-control" wgn-input-name name="{{ field.id }}"
+					<input type="number" class="form-control" name="{{ field.id }}"
 						   ng-if="field.type === 'number'"
 						   ng-model="editing.config[field.id]"
 						   ng-required="field.required"
@@ -45,14 +47,14 @@
 					>
 
 					<!--Textarea field-->
-					<textarea class="form-control" wgn-input-name name="{{ field.id }}"
+					<textarea class="form-control" name="{{ field.id }}"
 							  ng-if="field.type === 'textarea'"
 							  ng-model="editing.config[field.id]"
 							  ng-required="field.required"
 					></textarea>
 
 					<!--Dropdown field-->
-					<select class="form-control" wgn-input-name name="{{ field.id }}"
+					<select class="form-control" name="{{ field.id }}"
 							ng-if="field.type === 'select'"
 							ng-model="editing.config[field.id]"
 							ng-required="field.required">

@@ -5,6 +5,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		var workspaceId = $routeParams.workspace_id;
 		var _forms = [];
 		var _fields = {};
+		var formsLoading = {};
 
 		/**
 		 * Whether the plugin is loading or not, displays a throbber.
@@ -16,7 +17,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		/**
 		 * The current config being created/edited, or false if none.
 		 *
-		 * @type {Object|boolean}
+		 * @type {Object<Object|boolean>}
 		 */
 		$scope.editing = { config: false };
 
@@ -267,6 +268,19 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		};
 
 		/**
+		 * Returns whether a given form is loading its fields.
+		 *
+		 * @param {string} key A form config id.
+		 *
+		 * @return {boolean}
+		 */
+		$scope.isFormLoading = function (key) {
+			if (key in $scope.editing.config) {
+				return $scope.editing.config[key] in formsLoading ? formsLoading[$scope.editing.config[key]] : false;
+			}
+		};
+
+		/**
 		 * Centralize discarding config changes to avoid duplicating logic.
 		 */
 		function doDiscardChanges () {
@@ -287,9 +301,11 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Loads field data for the given form.
 		 *
 		 * @param {number} formId The actual form id.
-		 * @param {Object} formDef The form this field belongs to.
+		 * @param {Object} formDef The page this form belongs to.
 		 */
 		function loadFields (formId, formDef) {
+			formsLoading[formId] = true;
+
 			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
 
@@ -315,6 +331,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				});
 			}).catch(function (err) {
 				znMessage(err, 'error');
+			}).finally(function () {
+				formsLoading[formId] = false;
 			});
 		}
 
@@ -418,7 +436,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		function doValidateSettingsAllowed(allowed, keys, level) {
 			angular.forEach(keys, function (key) {
 				if (allowed.indexOf(key) === -1) {
-					throw new Error('Invalud multi config settings! Option "' + key + '" not allowed for ' + level);
+					throw new Error('Invalid multi config settings! Option "' + key + '" not allowed for ' + level);
 				}
 			});
 		}
