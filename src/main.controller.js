@@ -16,9 +16,16 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		/**
 		 * The current config being created/edited, or false if none.
 		 *
-		 * @type {Object|boolean}
+		 * @type {Object<Object|boolean>}
 		 */
 		$scope.editing = { config: false };
+
+		/**
+		 * Stores which forms are in the process of loading field info.
+		 *
+		 * @type {Object}
+		 */
+		$scope.formsLoading = {};
 
 		// Init plugin.
 		init().then(function () {
@@ -290,6 +297,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {Object} formDef The form this field belongs to.
 		 */
 		function loadFields (formId, formDef) {
+			$scope.formsLoading[formId] = true;
+
 			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
 
@@ -315,6 +324,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				});
 			}).catch(function (err) {
 				znMessage(err, 'error');
+			}).finally(function () {
+				$scope.formsLoading[formId] = false;
 			});
 		}
 

@@ -24,6 +24,7 @@
 							ng-if="field.type === 'field' && field.belongsTo"
 							ng-model="editing.config[field.id]"
 							ng-options="f.id as f.name for f in getFields(field, specs)"
+							ng-disabled="formsLoading[field.belongsTo]"
 							ng-required="field.required">
 						<option value=""></option>
 					</select>
