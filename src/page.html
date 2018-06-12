@@ -11,7 +11,7 @@
 					<!--Form selection element-->
 					<select class="form-control" name="input"
 							ng-if="field.type === 'form'"
-							ng-options="form.id as form.name for form in getForms(field.id)"
+							ng-options="form.id as form.name for form in getForms(field)"
 							ng-model="editing.config[field.id]"
 							ng-change="onSelectForm(field.id, specs)"
 							ng-init="initFormField(field.id, specs)"

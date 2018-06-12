@@ -216,18 +216,18 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 *
 		 * @return {Array<Object>}
 		 */
-		$scope.getForms = function (fieldId) {
-			if (!fieldId || !$scope.editing.config || !$scope.editing.config[fieldId]) {
+		$scope.getForms = function (field) {
+			if (!field.id || !$scope.editing.config || !$scope.editing.config[field.id]) {
 				return _forms;
 			}
 
 			var filterForms = [];
 
 			angular.forEach($scope.settings.pages, function (page) {
-				angular.forEach(page.fields, function (field) {
-					if (field.type === 'form' && field.id !== fieldId) {
-						if (field.id in $scope.editing.config && $scope.editing.config[field.id]) {
-							filterForms.push($scope.editing.config[field.id]);
+				angular.forEach(page.fields, function (f) {
+					if (f.type === 'form' && f.id !== field.id) {
+						if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
+							filterForms.push($scope.editing.config[f.id]);
 						}
 					}
 				});
