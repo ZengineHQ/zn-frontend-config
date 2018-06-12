@@ -29,7 +29,7 @@
 					</select>
 
 					<!--Simple text field-->
-					<input type="text" class="form-control" wgn-input-name name="{{ field.id }}"
+					<input type="text" class="form-control" name="{{ field.id }}"
 						   ng-if="field.type === 'text'"
 						   ng-model="editing.config[field.id]"
 						   ng-required="field.required"
@@ -37,7 +37,7 @@
 					>
 
 					<!--Number field-->
-					<input type="number" class="form-control" wgn-input-name name="{{ field.id }}"
+					<input type="number" class="form-control" name="{{ field.id }}"
 						   ng-if="field.type === 'number'"
 						   ng-model="editing.config[field.id]"
 						   ng-required="field.required"
@@ -45,14 +45,14 @@
 					>
 
 					<!--Textarea field-->
-					<textarea class="form-control" wgn-input-name name="{{ field.id }}"
+					<textarea class="form-control" name="{{ field.id }}"
 							  ng-if="field.type === 'textarea'"
 							  ng-model="editing.config[field.id]"
 							  ng-required="field.required"
 					></textarea>
 
 					<!--Dropdown field-->
-					<select class="form-control" wgn-input-name name="{{ field.id }}"
+					<select class="form-control" name="{{ field.id }}"
 							ng-if="field.type === 'select'"
 							ng-model="editing.config[field.id]"
 							ng-required="field.required">
