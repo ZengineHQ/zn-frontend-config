@@ -28,6 +28,7 @@
 							ng-required="field.required">
 						<option value=""></option>
 					</select>
+					<span ng-show="isFormLoading(field.belongsTo)" class="throbber inline throbber"></span>
 
 					<!--Simple text field-->
 					<input type="text" class="form-control" name="{{ field.id }}"
