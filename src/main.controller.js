@@ -288,6 +288,23 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		};
 
 		/**
+		 * Saves after a configuration toggle.
+		 *
+		 * @param {Object} config
+		 */
+		$scope.onConfigToggle = function (config) {
+			return doSaveConfig(config).then(function () {
+				if (config.enabled) {
+					$scope.$emit('wgnMultiConfigEnable', config);
+					znMessage('Configuration ' + config.name + ' enabled!', 'saved');
+				} else {
+					$scope.$emit('wgnMultiConfigDisable', config);
+					znMessage('Configuration ' + config.name + ' disabled!', 'saved');
+				}
+			});
+		};
+
+		/**
 		 * Centralize discarding config changes to avoid duplicating logic.
 		 */
 		function doDiscardChanges () {

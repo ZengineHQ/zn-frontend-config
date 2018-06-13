@@ -10,7 +10,8 @@
 			</div>
 
 			<div class="config-status" ng-if="settings.toggle">
-				<input class="toggle" id="{{ 'configToggle' + config.$id }}" type="checkbox"/>
+				<input class="toggle" id="{{ 'configToggle' + config.$id }}" type="checkbox" ng-model="config.enabled"
+					ng-change="onConfigToggle(config)">
 				<label for="{{ 'configToggle' + config.$id }}" class="toggle-label">
 					<span class="on">Enabled</span>
 					<span class="off">Disabled</span>
