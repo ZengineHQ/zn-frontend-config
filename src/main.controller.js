@@ -332,9 +332,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 *
 		 * @return {Array<Object>}
 		 */
-		function getFiltered
-
-		= function (fieldDef, formDef, type, source) {
+		function getFiltered (fieldDef, formDef, type, source) {
 			if (!fieldDef.belongsTo) {
 				return [];
 			}
