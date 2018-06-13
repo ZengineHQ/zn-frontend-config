@@ -84,9 +84,18 @@ $color-success: #3c763d;
 	.view-switcher {
 		float: right;
 
-		a, span {
+		.switcher-link,
+		.switcher-span {
 			display: inline-block;
-			margin-left: 1em;
+			margin-left: .5em;
+		}
+
+		.switcher-link {
+			color: black;
+		}
+
+		.switcher-span {
+			color: #aaa;
 		}
 	}
 }
@@ -110,23 +119,8 @@ $color-success: #3c763d;
 	margin: 2em 0 0 0;
 
 	li {
-		// @TODO
-	}
-
-	&.grid li {
 		border: 1px solid #dedede;
-		display: inline-block;
-		height: 14em;
-		margin: 0 2.5em 2.5em 0;
-		padding: 0;
-		position: relative;
 		overflow: hidden;
-		text-align: center;
-		width: 15em;
-
-		&:hover {
-			box-shadow: 0 0 3px -1px #000;
-		}
 	}
 
 	.config-name {
@@ -134,16 +128,54 @@ $color-success: #3c763d;
 		cursor: pointer;
 		font-size: 1.5em;
 		font-weight: 300;
-		line-height: 1.5;
-		padding: 12px 0 0 0;
-		height: 145px;
 	}
 
-	.config-status {
-		border-top: 1px solid #dedede;
-		position: absolute;
-		bottom: 0;
-		width: 100%;
+	&.list {
+		li {
+			margin-bottom: 2em;
+			position: relative;
+			padding: 1em;
+		}
+
+		.config-name {
+			display: inline-block;
+		}
+
+		.config-status {
+			display: inline-block;
+			position: absolute;
+			right: 70px;
+			top: 3px;
+		}
+	}
+
+	&.grid {
+		li {
+			display: inline-block;
+			height: 14em;
+			margin: 0 2.5em 2.5em 0;
+			padding: 0;
+			position: relative;
+			text-align: center;
+			width: 15em;
+
+			&:hover {
+				box-shadow: 0 0 3px -1px #000;
+			}
+		}
+
+		.config-name {
+			line-height: 1.5;
+			padding: 12px 0 0 0;
+			height: 145px;
+		}
+
+		.config-status {
+			border-top: 1px solid #dedede;
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+		}
 	}
 }
 
