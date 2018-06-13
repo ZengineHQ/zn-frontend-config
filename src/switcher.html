@@ -1,0 +1,21 @@
+<script type="text/ng-template" id="wgn-multi-config-display-switcher">
+	<div class="view-switcher" ng-show="configs.length">
+		View:
+
+		<a href="javascript:;" ng-click="display = 'grid'" ng-show="display === 'list'">
+			<i class="icon-table"></i> Grid
+		</a>
+
+		<span ng-hide="display === 'list'">
+			<i class="icon-table"></i> Grid
+		</span>
+
+		<a href="javascript:;" ng-click="display = 'list'" ng-show="display === 'grid'">
+			<i class="icon-list"></i> List
+		</a>
+
+		<span ng-hide="display === 'grid'">
+			<i class="icon-list"></i> List
+		</span>
+	</div>
+</script>
