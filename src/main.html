@@ -16,6 +16,25 @@
 
 		<div class="multi-config-container" ng-hide="loading">
 			<div class="section" ng-show="!editing.config && settings.multi">
+				<div class="view-switcher" ng-show="configs.length">
+					View:
+
+					<a href="javascript:;" ng-click="display = 'grid'" ng-show="display === 'list'">
+						<i class="icon-table"></i> Grid
+					</a>
+
+					<span ng-hide="display === 'list'">
+						<i class="icon-table"></i> Grid
+					</span>
+
+					<a href="javascript:;" ng-click="display = 'list'" ng-show="display === 'grid'">
+						<i class="icon-list"></i> List
+					</a>
+
+					<span ng-hide="display === 'grid'">
+						<i class="icon-list"></i> List
+					</span>
+				</div>
 				<div class="multi-config-label">Configurations</div>
 
 				<p ng-show="!configs.length" class="multi-config-empty">
@@ -24,7 +43,7 @@
 				</p>
 
 				<div ng-show="configs.length">
-					<ul class="multi-config-list">
+					<ul class="multi-config-list" ng-class="{grid: display === 'grid'}">
 						<li ng-repeat="config in configs" ng-click="onEditConfig(config.$id)">
 							<div class="config-name">
 								{{ config.name }}

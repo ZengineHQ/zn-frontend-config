@@ -79,6 +79,15 @@ $color-success: #3c763d;
 			@include field-state($color-success);
 		}
 	}
+
+	.view-switcher {
+		float: right;
+
+		a, span {
+			display: inline-block;
+			margin-left: 1em;
+		}
+	}
 }
 
 .multi-config-label {
@@ -100,6 +109,10 @@ $color-success: #3c763d;
 	margin: 2em 0 0 0;
 
 	li {
+		// @TODO
+	}
+
+	&.grid li {
 		border: 1px solid #dedede;
 		cursor: pointer;
 		display: inline-block;

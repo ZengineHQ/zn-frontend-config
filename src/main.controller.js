@@ -21,6 +21,13 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 */
 		$scope.editing = { config: false };
 
+		/**
+		 * The current display mode, one of 'grid' or 'list'.
+		 *
+		 * @type {string}
+		 */
+		$scope.display = 'grid';
+
 		// Init plugin.
 		init().then(function () {
 			$scope.loading = false;
