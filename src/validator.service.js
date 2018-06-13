@@ -89,8 +89,6 @@ plugin.service('wgnMultiConfigValidator', [function () {
 		// Ensure no options exist other than the allowed ones.
 		doValidateSettingsAllowed(allowedFieldKeys, fieldKeys, 'field', field.name);
 
-		console.log(allowedFieldKeys, fieldKeys);
-
 		// Ensure only valid field types are used.
 		if (validFieldTypes.indexOf(field.type) === -1) {
 			throw new Error('Invalid multi config settings! Field type "' + field.type + '" doesn\'t exist.');
