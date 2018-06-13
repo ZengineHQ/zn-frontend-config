@@ -61,7 +61,7 @@ plugin.service('wgnMultiConfigValidator', [function () {
 		doValidateSettingsAllowed(allowedPageKeys, pageKeys, 'page');
 
 		// Check field level settings.
-		angular.forEach(settings.pages.fields, function (field) {
+		angular.forEach(page.fields, function (field) {
 			doValidateField(field);
 		});
 	}
