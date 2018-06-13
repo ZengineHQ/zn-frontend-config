@@ -5,7 +5,9 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		var workspaceId = $routeParams.workspace_id;
 		var _forms = [];
 		var _fields = {};
-		var formsLoading = {};
+		var _folders = {};
+		var fieldsLoading = {};
+		var foldersLoading = {};
 
 		/**
 		 * Whether the plugin is loading or not, displays a throbber.
@@ -196,6 +198,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				if (formId && (!(formId in _fields) || !_fields[formId].length)) {
 					loadFields(formId, formDef);
 				}
+
+				if (formId && (!(formId in _folders) || !_folders[formId].length)) {
+					loadFolders(formId);
+				}
 			}
 		};
 
@@ -216,10 +222,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		};
 
 		/**
-		 * Loads all forms for a given field.
-		 * If a type is passed, it hides forms set for other form fields in the list.
+		 * Loads all forms for a given input.
+		 * If a type is passed, it hides forms set for other form inputs in the list.
 		 *
-		 * @param {string} [fieldId] Optional. The form field id.
+		 * @param {string} [fieldId] Optional. The form input id.
 		 *
 		 * @return {Array<Object>}
 		 */
@@ -240,7 +246,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				});
 			});
 
-			// Filter values used in other fields.
+			// Filter values used in other inputs.
 			return _forms.filter(function (f) {
 				return filterForms.indexOf(f.id) === -1;
 			});
@@ -249,30 +255,28 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		/**
 		 * Loads all fields for a given form.
 		 *
-		 * @param {Object} fieldDef The field definition.
-		 * @param {Object} formDef The form this field belongs to.
+		 * @param {Object} fieldDef The field input definition.
+		 * @param {Object} formDef The form this input belongs to.
 		 *
 		 * @return {Array<Object>}
 		 */
 		$scope.getFields = function (fieldDef, formDef) {
-			if (!fieldDef.belongsTo) {
-				return [];
-			}
-
-			var filterFields = [];
-
-			// Filter values used in other fields.
-			angular.forEach(formDef.fields, function (field) {
-				if (field.id !== fieldDef.id && $scope.editing.config && field.id in $scope.editing.config && $scope.editing.config[field.id]) {
-					filterFields.push($scope.editing.config[field.id]);
-				}
+			return getFiltered(fieldDef, formDef, 'field', _fields).filter(function (f) {
+				return !fieldDef.restrict || f.type === fieldDef.restrict && filterFields.indexOf(f.id) === -1;
 			});
-
-			var formId = $scope.editing.config[fieldDef.belongsTo];
-			return formId in _fields ? _fields[formId].filter(function (field) {
-				return !fieldDef.restrict || field.type === fieldDef.restrict && filterFields.indexOf(field.id) === -1;
-			}) : [];
 		};
+
+		/**
+		 * Loads all folders for a given form.
+		 *
+		 * @param {Object} fieldDef The folder input definition.
+		 * @param {Object} formDef The form this input belongs to.
+		 *
+		 * @return {Array<Object>}
+		 */
+		$scope.getFolders = function (fieldDef, formDef) {
+			return getFiltered(fieldDef, formDef, 'folder', _folders);
+		}
 
 		/**
 		 * Returns whether a given form is loading its fields.
@@ -281,9 +285,22 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 *
 		 * @return {boolean}
 		 */
-		$scope.isFormLoading = function (key) {
+		$scope.isFieldLoading = function (key) {
 			if (key in $scope.editing.config) {
-				return $scope.editing.config[key] in formsLoading ? formsLoading[$scope.editing.config[key]] : false;
+				return $scope.editing.config[key] in fieldsLoading ? fieldsLoading[$scope.editing.config[key]] : false;
+			}
+		};
+
+		/**
+		 * Returns whether a given form is loading its folders.
+		 *
+		 * @param {string} key A form config id.
+		 *
+		 * @return {boolean}
+		 */
+		$scope.isFolderLoading = function (key) {
+			if (key in $scope.editing.config) {
+				return $scope.editing.config[key] in foldersLoading ? foldersLoading[$scope.editing.config[key]] : false;
 			}
 		};
 
@@ -302,6 +319,36 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					znMessage('Configuration ' + config.name + ' disabled!', 'saved');
 				}
 			});
+		};
+
+		/**
+		 * Helper to return a list of filtered items from a given source.
+		 * Used to return fields and folders for a given form.
+		 *
+		 * @param {Object} fieldDef The folder input definition.
+		 * @param {Object} formDef The form this input belongs to.
+		 * @param {string} type The field type.
+		 * @param {Object} source The source data.
+		 *
+		 * @return {Array<Object>}
+		 */
+		function getFiltered = function (fieldDef, formDef, type, source) {
+			if (!fieldDef.belongsTo) {
+				return [];
+			}
+
+			var filterFields = [];
+
+			// Filter values used in other folder inputs.
+			angular.forEach(formDef.fields, function (f) {
+				if (f.type === type && f.id !== fieldDef.id && $scope.editing.config &&
+					f.id in $scope.editing.config && $scope.editing.config[f.id]) {
+					filterFields.push($scope.editing.config[f.id]);
+				}
+			});
+
+			var formId = $scope.editing.config[fieldDef.belongsTo];
+			return formId in source ? source[formId] : [];
 		};
 
 		/**
@@ -328,7 +375,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {Object} formDef The page this form belongs to.
 		 */
 		function loadFields (formId, formDef) {
-			formsLoading[formId] = true;
+			fieldsLoading[formId] = true;
 
 			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
@@ -356,7 +403,33 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			}).catch(function (err) {
 				znMessage(err, 'error');
 			}).finally(function () {
-				formsLoading[formId] = false;
+				fieldsLoading[formId] = false;
+			});
+		}
+
+		/**
+		 * Loads folder data for the given form.
+		 *
+		 * @param {number} formId The actual form id.
+		 */
+		function loadFolders (formId) {
+			foldersLoading[formId] = true;
+
+			return znData('FormFolders').get({
+				formId: formId
+			}).then(function (results) {
+				_folders = [];
+
+				angular.forEach(results, function (folder) {
+					_folders.push({
+						id: folder.id,
+						name: folder.name
+					});
+				});
+			}).catch(function (err) {
+				znMessage(err, 'error');
+			}).finally(function () {
+				foldersLoading[formId] = false;
 			});
 		}
 

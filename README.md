@@ -138,6 +138,7 @@ The following field types are available:
 
 - [form](#form)
 - [field](#field)
+- [folder](#folder)
 - [text](#text)
 - [number](#number)
 - [textarea](#textarea)
@@ -155,6 +156,13 @@ It has the following extra settings:
 
 - **belongsTo**: The field id for the `form` input this should display fields from
 - **restrict**: Whether to restrict to a certain Zengine field type. Possible options are: `text-input`, `date-picker`, `linked`, etc.
+
+#### folder
+
+A `folder` field is another special dropdown input that allows you to pick a folder from a certain form.
+It has the following extra settings:
+
+- **belongsTo**: The field id for the `form` input this should display fields from
 
 #### text
 

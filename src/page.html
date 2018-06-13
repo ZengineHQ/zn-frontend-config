@@ -24,11 +24,22 @@
 							ng-if="field.type === 'field'"
 							ng-model="editing.config[field.id]"
 							ng-options="f.id as f.name for f in getFields(field, specs)"
-							ng-disabled="isFormLoading(field.belongsTo)"
+							ng-disabled="isFieldLoading(field.belongsTo)"
 							ng-required="field.required">
 						<option value=""></option>
 					</select>
-					<span ng-show="isFormLoading(field.belongsTo)" class="throbber inline throbber"></span>
+					<span ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
+
+					<!--Folder selection element-->
+					<select class="form-control" name="input"
+							ng-if="field.type === 'folder'"
+							ng-model="editing.config[field.id]"
+							ng-options="f.id as f.name for f in getFolders(field, specs)"
+							ng-disabled="isFolderLoading(field.belongsTo)"
+							ng-required="field.required">
+						<option value=""></option>
+					</select>
+					<span ng-show="isFolderLoading(field.belongsTo)" class="throbber inline throbber"></span>
 
 					<!--Simple text field-->
 					<input type="text" class="form-control" name="{{ field.id }}"
