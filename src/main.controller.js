@@ -419,10 +419,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			return znData('FormFolders').get({
 				formId: formId
 			}).then(function (results) {
-				_folders = [];
+				_folders[formId] = [];
 
 				angular.forEach(results, function (folder) {
-					_folders.push({
+					_folders[formId].push({
 						id: folder.id,
 						name: folder.name
 					});
