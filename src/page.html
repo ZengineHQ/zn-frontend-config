@@ -28,7 +28,8 @@
 							ng-required="field.required">
 						<option value=""></option>
 					</select>
-					<span ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
+					<span ng-if="field.type === 'field'"
+						  ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
 
 					<!--Folder selection element-->
 					<select class="form-control" name="input"
@@ -39,7 +40,8 @@
 							ng-required="field.required">
 						<option value=""></option>
 					</select>
-					<span ng-show="isFolderLoading(field.belongsTo)" class="throbber inline throbber"></span>
+					<span ng-if="field.type === 'folder'"
+						  ng-show="isFolderLoading(field.belongsTo)" class="throbber inline throbber"></span>
 
 					<!--Simple text field-->
 					<input type="text" class="form-control" name="{{ field.id }}"
