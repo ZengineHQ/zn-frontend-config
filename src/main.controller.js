@@ -104,7 +104,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Saves the current configuration.
 		 */
 		$scope.onSaveConfig = function () {
-			return doSaveConfig().then(function () {
+			return doSaveConfig($scope.editing.config).then(function () {
 				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
 				doDiscardChanges();
 				znMessage('Configuration saved!', 'saved');
@@ -117,7 +117,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onDisableConfig = function () {
 			$scope.editing.config.enabled = false;
 
-			return doSaveConfig().then(function () {
+			return doSaveConfig($scope.editing.config).then(function () {
 				$scope.$emit('wgnMultiConfigDisable', $scope.editing.config);
 				znMessage('Configuration disabled!', 'saved');
 			});
@@ -129,7 +129,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onEnableConfig = function () {
 			$scope.editing.config.enabled = true;
 
-			return doSaveConfig().then(function () {
+			return doSaveConfig($scope.editing.config).then(function () {
 				$scope.$emit('wgnMultiConfigEnable', $scope.editing.config);
 				znMessage('Configuration enabled!', 'saved');
 			});
@@ -346,12 +346,14 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		/**
 		 * Helper to actually save changes to firebase.
 		 *
+		 * @param {Object} A config object.
+		 *
 		 * @return {Promise}
 		 */
-		function doSaveConfig () {
+		function doSaveConfig (config) {
 			return $scope.settings.multi ?
-				multiConfigService.save(workspaceId, $scope.configs, $scope.editing.config) :
-				multiConfigService.saveSingle(workspaceId, $scope.editing.config);
+				multiConfigService.save(workspaceId, $scope.configs, config) :
+				multiConfigService.saveSingle(workspaceId, config);
 		}
 
 		/**
