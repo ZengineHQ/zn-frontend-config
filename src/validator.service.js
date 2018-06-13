@@ -88,13 +88,10 @@ plugin.service('wgnMultiConfigValidator', [function () {
 		}
 
 		// Ensure required fields are present for certain special field types.
-		switch (field.type) {
-			case 'field':
-			case 'folder':
-				if (!('belongsTo' in field) || !field.belongsTo) {
-					throw new Error('Invalid multi config settings! Required key: "belongsTo" missing on field ' + field.id);
-				}
-				break;
+		if (field.type === 'field' || field.type === 'folder') {
+			if (!('belongsTo' in field) || !field.belongsTo) {
+				throw new Error('Invalid multi config settings! Required key: "belongsTo" missing on field ' + field.id);
+			}
 		}
 	}
 
