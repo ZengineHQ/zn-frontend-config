@@ -57,7 +57,7 @@ $color-success: #3c763d;
 	.section {
 		background: #fff;
 		border: 1px solid #dedede;
-		padding: 18px;
+		padding: 2em 2em 0 2em;
 		border-radius: 3px;
 		margin: 18px 0;
 	}
@@ -82,8 +82,9 @@ $color-success: #3c763d;
 }
 
 .multi-config-label {
+	font-size: 1.1em;
 	font-weight: 600;
-	margin-bottom: 1em;
+	margin-bottom: .8em;
 	text-transform: uppercase;
 }
 
@@ -96,7 +97,7 @@ $color-success: #3c763d;
 }
 
 .multi-config-list {
-	margin: 2em 0 1em 0;
+	margin: 2em 0 0 0;
 
 	li {
 		border: 1px solid #dedede;
