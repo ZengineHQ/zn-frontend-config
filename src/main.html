@@ -34,18 +34,18 @@
 						<button type="button" class="btn btn-success pull-right" ng-click="onEnableConfig()"
 								ng-show="settings.toggle && editing.config.$id && !editing.config.enabled"
 								ng-disabled="wgnConfigForm.$invalid">
-							<i class="icon-toggle-on"></i> Enable
+							Enable
 						</button>
 
 						<button type="button" class="btn btn-warning pull-right" ng-click="onDisableConfig()"
 								ng-show="settings.toggle && editing.config.$id && editing.config.enabled"
 								ng-disabled="wgnConfigForm.$invalid">
-							<i class="icon-toggle-off"></i> Disable
+							Disable
 						</button>
 
 						<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()"
 								ng-show="settings.multi && editing.config.$id">
-							<i class="icon-trash"></i> Delete
+							Delete
 						</button>
 					</div>
 
