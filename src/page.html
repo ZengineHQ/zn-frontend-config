@@ -21,7 +21,7 @@
 
 					<!--Field selection element-->
 					<select class="form-control" name="input"
-							ng-if="field.type === 'field' && field.belongsTo"
+							ng-if="field.type === 'field'"
 							ng-model="editing.config[field.id]"
 							ng-options="f.id as f.name for f in getFields(field, specs)"
 							ng-disabled="isFormLoading(field.belongsTo)"
