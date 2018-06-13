@@ -1,0 +1,23 @@
+<script type="text/ng-template" id="wgn-multi-config-list">
+	<ul class="multi-config-list" ng-class="{grid: display === 'grid'}">
+		<li ng-repeat="config in configs" ng-click="onEditConfig(config.$id)">
+			<div class="config-name">
+				{{ config.name }}
+			</div>
+
+			<div class="config-status" ng-if="settings.toggle"
+				 ng-class="{'bg-success': config.enabled, 'bg-warning': !config.enabled}">
+
+				<span ng-hide="config.enabled">
+					<i class="icon-toggle-off"></i>
+					Disabled
+				</span>
+
+				<span ng-show="config.enabled">
+					<i class="icon-toggle-on"></i>
+					Enabled
+				</span>
+			</div>
+		</li>
+	</ul>
+</script>
