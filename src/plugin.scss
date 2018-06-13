@@ -5,9 +5,10 @@ $color-success: #3c763d;
 	.form-label {
 		color: $color;
 	}
+
 	.form-control {
 		border-color: $color;
-		box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 	}
 }
 
@@ -130,25 +131,17 @@ $color-success: #3c763d;
 	}
 
 	.config-name {
+		color: #666;
 		font-size: 1.5em;
+		font-weight: 300;
 		line-height: 1.5;
 	}
 
 	.config-status {
-		padding: 0.6em 0;
+		border-top: 1px solid #dedede;
 		position: absolute;
 		bottom: 0;
 		width: 100%;
-
-		&.bg-success {
-			background-color: #4cae4c;
-			color: white;
-		}
-
-		&.bg-warning {
-			background-color: #ff9900;
-			color: white;
-		}
 	}
 }
 
@@ -173,4 +166,95 @@ $color-success: #3c763d;
 	font-size: 1.3em;
 	margin-top: 1.6em;
 	padding: .4em .6em;
+}
+
+$toggle-height: 15px;
+$toggle-green: rgba(19,191,17,1);
+$toggle-orange: #ff9900;
+
+*,*:before,*:after {
+	transition:.25s ease-in-out;
+}
+
+.toggle-label {
+	display: block;
+	background: #f3f3f3;
+	height: $toggle-height;
+	width: 35px;
+	border-radius: $toggle-height;
+	margin: $toggle-height auto;
+	position: relative;
+	box-shadow: 0 0 0 2px #dddddd;
+	font-weight: 300;
+
+	.on {
+		display: block;
+		position: absolute;
+		z-index: 0;
+		left: 0;
+		line-height: $toggle-height;
+		opacity: 0;
+		color: $toggle-green;
+	}
+	.off {
+		display: block;
+		position: absolute;
+		z-index: 0;
+		right: 45px;
+		text-align: right;
+		//min-width: 300px;
+		line-height: $toggle-height;
+		opacity: 1;
+		color: $toggle-orange;
+	}
+
+	&:before {
+		content: '';
+		display: block;
+		position: absolute;
+		z-index: 1;
+		top: 0;
+		left: 0;
+		border-radius: $toggle-height;
+		height: $toggle-height;
+		width: $toggle-height;
+		background: white;
+		box-shadow: 0 3px 3px rgba(0, 0, 0, .2), 0 0 0 2px #dddddd;
+	}
+}
+
+.toggle {
+	position: absolute;
+	left: -5000px;
+
+	+ .toggle-label {
+		background: $toggle-orange;
+		box-shadow: 0 0 0 2px $toggle-orange;
+
+		&:before {
+			box-shadow: 0 3px 3px rgba(0, 0, 0, .2), 0 0 0 2px $toggle-orange;
+		}
+	}
+
+	&:checked {
+		+ .toggle-label {
+			background: $toggle-green;
+			box-shadow: 0 0 0 2px $toggle-green;
+
+			.on {
+				left: 45px;
+				opacity: 1;
+			}
+
+			.off {
+				right: 0;
+				opacity: 0;
+			}
+
+			&:before {
+				left: 19px;
+				box-shadow: 0 3px 3px rgba(0, 0, 0, .2), 0 0 0 2px $toggle-green;
+			}
+		}
+	}
 }
