@@ -192,6 +192,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {Object} formDef
 		 */
 		$scope.onSelectForm = function (formField, formDef) {
+			/*jshint maxcomplexity:6 */
 			if (formField) {
 				var formId = $scope.editing.config[formField];
 

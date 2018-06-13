@@ -72,6 +72,7 @@ plugin.service('wgnMultiConfigValidator', [function () {
 	 * @param {Object} field
 	 */
 	function doValidateField (field) {
+		/*jshint maxcomplexity:6 */
 		var allowedFieldKeys = ['id', 'name', 'required', 'help', 'type', 'belongsTo', 'restrict', 'placeholder'];
 		var validFieldTypes = ['form', 'field', 'folder', 'text', 'number', 'textarea', 'select', 'markup'];
 
