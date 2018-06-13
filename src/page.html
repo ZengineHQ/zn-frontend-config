@@ -69,7 +69,7 @@
 					<span ng-if="field.required" class="danger">required</span>
 					<span ng-if="field.help" class="help-block">{{ field.help }}</span>
 
-					<span ng-if="fieldForm.input.$error.required" class="help-block danger">
+					<span ng-if="fieldForm.input.$dirty && fieldForm.input.$error.required" class="help-block danger">
 						This field is required
 					</span>
 				</div>
