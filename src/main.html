@@ -47,8 +47,8 @@
 				</div>
 			</div>
 
-			<div class="section" ng-show="editing.config">
-				<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" novalidate>
+			<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" ng-show="editing.config" novalidate>
+				<div class="section">
 					<div class="form-actions">
 						<button type="button" class="btn btn-success pull-right" ng-click="onEnableConfig()"
 								ng-show="settings.toggle && editing.config.$id && !editing.config.enabled"
@@ -105,23 +105,25 @@
 						</div>
 					</div>
 
-					<div class="form-actions bottom-actions">
-						<button type="submit" class="btn btn-primary pull-right"
-								ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid">
-							Save configuration
-						</button>
+				</div><!-- /.section -->
 
-						<button type="button" class="btn pull-right" ng-click="onDiscardChanges()"
-								ng-show="settings.multi || wgnConfigForm.$dirty">
-							Cancel
-						</button>
+				<div class="form-actions bottom-actions">
+					<button type="submit" class="btn btn-primary pull-right"
+							ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid">
+						Save configuration
+					</button>
 
-						<div class="required-fields pull-right" ng-show="wgnConfigForm.$error.required">
-							Please fill all required fields
-						</div>
+					<button type="button" class="btn pull-right" ng-click="onDiscardChanges()"
+							ng-show="settings.multi || wgnConfigForm.$dirty">
+						Cancel
+					</button>
+
+					<div class="required-fields pull-right" ng-show="wgnConfigForm.$error.required">
+						Please fill all required fields
 					</div>
-				</form>
-			</div><!-- /.section -->
+				</div>
+			</form>
+
 		</div><!-- /.multi-config-container -->
 
 	</div>
