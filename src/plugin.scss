@@ -115,11 +115,10 @@ $color-success: #3c763d;
 
 	&.grid li {
 		border: 1px solid #dedede;
-		cursor: pointer;
 		display: inline-block;
 		height: 14em;
 		margin: 0 2.5em 2.5em 0;
-		padding: 2.5em 0 0 0;
+		padding: 0;
 		position: relative;
 		overflow: hidden;
 		text-align: center;
@@ -132,9 +131,12 @@ $color-success: #3c763d;
 
 	.config-name {
 		color: #666;
+		cursor: pointer;
 		font-size: 1.5em;
 		font-weight: 300;
 		line-height: 1.5;
+		padding: 12px 0 0 0;
+		height: 145px;
 	}
 
 	.config-status {
@@ -178,6 +180,7 @@ $toggle-orange: #ff9900;
 
 .toggle-label {
 	display: block;
+	cursor: pointer;
 	background: #f3f3f3;
 	height: $toggle-height;
 	width: 35px;
