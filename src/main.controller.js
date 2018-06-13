@@ -414,6 +414,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				doValidateSettingsAllowed(allowedPageKeys, pageKeys, 'page');
 
 				// Check field level settings.
+				var validFieldTypes = ['form', 'field', 'folder', 'text', 'number', 'textarea', 'select', 'markup'];
 				angular.forEach(settings.pages.fields, function (field) {
 					// Check for required field settings.
 					var fieldKeys = Object.keys(field);
@@ -421,6 +422,21 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 					// Ensure no options exist other than the allowed ones.
 					doValidateSettingsAllowed(allowedFieldKeys, fieldKeys, 'field');
+
+					// Ensure only valid field types are used.
+					if (validFieldTypes.indexOf(field.type) === -1) {
+						throw new Error('Invalid multi config settings! Field type "' + field.type + '" doesn\'t exist.');
+					}
+
+					// Ensure required fields are present for certain special field types.
+					switch (field.type) {
+						case 'field':
+						case 'folder':
+							if (!('belongsTo' in field || !field.belongsTo) {
+								throw new Error('Invalid multi config settings! Required key: "belongsTo" missing on field ' + field.id);
+							}
+							break;
+					}
 				});
 			});
 
