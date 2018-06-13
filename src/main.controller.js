@@ -195,7 +195,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			if (formField) {
 				var formId = $scope.editing.config[formField];
 
-				if (formId && ((!(formId in _fields) || !_fields[formId].length)) {
+				if (formId && (!(formId in _fields) || !_fields[formId].length)) {
 					loadFields(formId, formDef);
 				}
 
@@ -261,6 +261,16 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @return {Array<Object>}
 		 */
 		$scope.getFields = function (fieldDef, formDef) {
+			var filterFields = [];
+
+			// Filter values used in other folder inputs.
+			angular.forEach(formDef.fields, function (f) {
+				if (f.type === 'field' && f.id !== fieldDef.id && $scope.editing.config &&
+					f.id in $scope.editing.config && $scope.editing.config[f.id]) {
+					filterFields.push($scope.editing.config[f.id]);
+				}
+			});
+
 			return getFiltered(fieldDef, formDef, 'field', _fields).filter(function (f) {
 				return !fieldDef.restrict || f.type === fieldDef.restrict && filterFields.indexOf(f.id) === -1;
 			});
@@ -276,7 +286,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 */
 		$scope.getFolders = function (fieldDef, formDef) {
 			return getFiltered(fieldDef, formDef, 'folder', _folders);
-		}
+		};
 
 		/**
 		 * Returns whether a given form is loading its fields.
@@ -337,19 +347,9 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				return [];
 			}
 
-			var filterFields = [];
-
-			// Filter values used in other folder inputs.
-			angular.forEach(formDef.fields, function (f) {
-				if (f.type === type && f.id !== fieldDef.id && $scope.editing.config &&
-					f.id in $scope.editing.config && $scope.editing.config[f.id]) {
-					filterFields.push($scope.editing.config[f.id]);
-				}
-			});
-
 			var formId = $scope.editing.config[fieldDef.belongsTo];
 			return formId in source ? source[formId] : [];
-		};
+		}
 
 		/**
 		 * Centralize discarding config changes to avoid duplicating logic.
