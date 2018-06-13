@@ -2,7 +2,8 @@
 
 	<div>
 		<div class="section">
-			<button ng-click="onNewConfig()" type="button" class="btn btn-success create-config-button" ng-hide="loading">
+			<button ng-click="onNewConfig()" type="button" class="btn btn-success create-config-button"
+					ng-hide="loading" ng-disabled="editing.config">
 				<i class="icon-plus"></i> Create Configuration
 			</button>
 
