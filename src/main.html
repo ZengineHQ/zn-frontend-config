@@ -29,6 +29,10 @@
 			</div>
 
 			<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" ng-show="editing.config" novalidate>
+				<a href="javascript:" ng-click="onDiscardChanges()">
+					<i class="icon icon-left-circled"></i> Back
+				</a>
+
 				<div class="section">
 					<div class="form-actions">
 						<button type="button" class="btn btn-success pull-right" ng-click="onEnableConfig()"
