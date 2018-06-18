@@ -14,6 +14,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		var _fieldIds = [];
 		var _formInputs = [];
 		var _fieldTypes = {};
+		var _highlightedFields = [];
 
 		// Accept either a configuration object or a string for the title.
 		if (!angular.isObject(args)) {
@@ -155,6 +156,18 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 				}
 			}
 
+			if ('highlighted' in def && def.highlighted) {
+				if (_highlightedFields.length >= 2) {
+					throw new Error('Multi Config: Only 2 fields maximum may be highlighted. Field "' + def.id + '" is not allowed.');
+				}
+
+				_highlightedFields.push({
+					id: def.id,
+					type: def.type,
+					name: def.name
+				});
+			}
+
 			_settings.pages[_currentPage].fields.push(def);
 			_fieldIds.push(def.id);
 
@@ -247,6 +260,15 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		srv.toggle = function (toggle) {
 			_settings.toggle = !!toggle;
 			return srv;
+		};
+
+		/**
+		 * Returns highlighted inputs.
+		 *
+		 * @return {Array<string>} An array of input ids.
+		 */
+		srv.getHighlighted = function () {
+			return _highlightedFields;
 		};
 
 		/**

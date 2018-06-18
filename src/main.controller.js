@@ -115,6 +115,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 */
 		$scope.onSaveConfig = function () {
 			$scope.saving = true;
+			doProcessHighlighted();
+
 			return doSaveConfig($scope.editing.config).then(function () {
 				$scope.saving = false;
 				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
@@ -504,6 +506,44 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				znMessage(err, 'error');
 			}).finally(function () {
 				_foldersLoading[formId] = false;
+			});
+		}
+
+		/**
+		 * Processes highlighted fields and adds additional keys to the config object.
+		 */
+		function doProcessHighlighted() {
+			// Extract highlighted fields.
+			var highlighted = $scope.options.getHighlighted();
+			var formatedHighligts = [];
+
+			angular.forEach(highlighted, function (input) {
+				switch (input.type) {
+					case 'form':
+						var form = $scope.getForms(input.id).filter(function (f) {
+							return f.id === $scope.editing.config[input.id];
+						})[0];
+
+						if (form) {
+							formatedHighligts.push({
+								type: input.type,
+								name: input.name,
+								value: form.name
+							});
+						}
+						break;
+
+					case 'field':
+						var fieldDef;
+
+						// @TODO get field and form defs for arg.
+						var field = $scope.getFields(fieldDef, formDef);
+						break;
+				}
+			});
+
+			angular.forEach(formatedHighligts, function (h, i) {
+				$scope.editing.config['_highlight' + (i + 1)] = h;
 			});
 		}
 

@@ -128,6 +128,7 @@ There are many different field types and some may have specific settings but all
 - **help**: Optional. Help text to display below the input
 - **required**: One of `true` to make the input required or `false` to make it optional. Defaults to `true`.
 - **type**: The `field type` (see next section)
+- **highlighted**: One of `true` or `false` to mark the input as highlighted. Highlighted inputs are displayed on the configuration list. **Note**: Only 2 fields can be highlighted at a given moment. 
 
 Note: Some specific field types may also define additional settings.
 
