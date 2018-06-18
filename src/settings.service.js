@@ -115,7 +115,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 			// Iterate over field type option definitions and validate the given field definition.
 			angular.forEach(Object.keys(opts), function (k) {
 				if ('required' in opts[k] && opts[k].required && !(k in def)) {
-					throw new Error('Multi Config: Required property "' + k + '" missing for field type "' + def.type + '"');
+					throw new Error('Multi Config: Required property "' + k + '" missing for "' + def.type + '" input with id "' + def.id + '"');
 				}
 
 				if ('validate' in opts[k]) {
