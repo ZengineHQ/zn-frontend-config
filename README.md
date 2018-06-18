@@ -83,13 +83,13 @@ We're done, that's it!
 
 The following methods are available:
 
-- **title(<string>)**: Customize the heading that will be displayed at the top of the page
-- **icon(<string>)**: Customize the icon to display next to heading
-- **help(<string>)**: Customize the help text that will be displayed below the heading
-- **multi(<boolean>)**: One of `true` to support multiple configurations or `false` to have a single configuration. Defaults to `false`
-- **toggle(<boolean>)**: One of `true` to allow enabling and disabling a configuration (ie: to prevent webhooks running) or `false` for configurations to be always on. Defaults to `true`
-- **page(<string>)**: Add a page (see "Settings Pages" below)
-- **field(<object>)**: Add a field definition (see "Settings Fields" below)
+- **title(_string_)**: Customize the heading that will be displayed at the top of the page
+- **icon(_string_)**: Customize the icon to display next to heading
+- **help(_string_)**: Customize the help text that will be displayed below the heading
+- **multi(_boolean_)**: One of `true` to support multiple configurations or `false` to have a single configuration. Defaults to `false`
+- **toggle(_boolean_)**: One of `true` to allow enabling and disabling a configuration (ie: to prevent webhooks running) or `false` for configurations to be always on. Defaults to `true`
+- **page(_string_)**: Add a page (see "Settings Pages" below)
+- **field(_object_)**: Add a field definition (see "Settings Fields" below)
 
 ### Settings Pages
 
