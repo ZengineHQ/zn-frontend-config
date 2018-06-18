@@ -1,0 +1,8 @@
+<script type="text/ng-template" id="wgn-multi-config-input-number">
+	<input type="number" class="form-control" name="{{ field.id }}"
+		   ng-if="field.type === 'number'"
+		   ng-model="editing.config[field.id]"
+		   ng-required="field.required"
+		   placeholder="field.placeholder"
+	>
+</script>

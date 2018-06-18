@@ -1,0 +1,14 @@
+<script type="text/ng-template" id="wgn-multi-config-input-field">
+	<div>
+		<select class="form-control" name="input"
+				ng-model="editing.config[field.id]"
+				ng-options="f.id as f.name for f in getFields(field, specs)"
+				ng-disabled="isFieldLoading(field.belongsTo)"
+				ng-required="field.required">
+			<option value=""></option>
+		</select>
+
+		<span ng-if="field.type === 'field'"
+			  ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
+	</div>
+</script>
