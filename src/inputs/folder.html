@@ -3,7 +3,7 @@
 		<select class="form-control" name="input"
 				ng-model="editing.config[field.id]"
 				ng-options="f.id as f.name for f in getFolders(field, specs)"
-				ng-disabled="isFolderLoading(field.belongsTo)"
+				ng-disabled="isFolderLoading(field.belongsTo) || !editing.config[field.belongsTo]"
 				ng-required="field.required">
 			<option value=""></option>
 		</select>
