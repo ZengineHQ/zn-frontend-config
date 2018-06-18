@@ -18,6 +18,13 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.loading = true;
 
 		/**
+		 * Whether the plugin is saving or not, displays a throbber.
+		 *
+		 * @type {boolean}
+		 */
+		$scope.saving = false;
+
+		/**
 		 * The current config being created/edited, or false if none.
 		 *
 		 * @type {Object<Object|boolean>}
@@ -107,7 +114,9 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Saves the current configuration.
 		 */
 		$scope.onSaveConfig = function () {
+			$scope.saving = true;
 			return doSaveConfig($scope.editing.config).then(function () {
+				$scope.saving = false;
 				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
 				znMessage('Configuration saved!', 'saved');
 
