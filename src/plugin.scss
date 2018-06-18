@@ -210,7 +210,9 @@ $toggle-orange: #ff9900;
 	display: inline-block;
 
 	.form-control {
-		min-width: 300px;
+		&:not([type=checkbox]):not([type=radio]) {
+			min-width: 300px;
+		}
 	}
 }
 
