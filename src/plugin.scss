@@ -15,10 +15,18 @@ $color-success: #3c763d;
 .multi-config-container {
 	margin-top: 2em;
 
+	.btn {
+		transition: .25s ease-in-out;
+	}
+
 	.btn.btn-warning {
 		background-color: #ec971f;
 		border-color: #d58512;
 		color: white;
+
+		&:hover {
+			background-color: lighten(#ec971f, 10%);
+		}
 	}
 
 	.danger {
@@ -238,15 +246,12 @@ $color-success: #3c763d;
 	font-size: 1.3em;
 	margin-top: 1.6em;
 	padding: .4em .6em;
+	transition: .25s ease-in-out;
 }
 
 $toggle-height: 15px;
 $toggle-green: rgba(19,191,17,1);
 $toggle-orange: #ff9900;
-
-*,*:before,*:after {
-	transition:.25s ease-in-out;
-}
 
 .multi-config-input {
 	display: inline-block;
@@ -263,6 +268,7 @@ $toggle-orange: #ff9900;
 	position: relative;
 	box-shadow: 0 0 0 2px #dddddd;
 	font-weight: 300;
+	transition: .25s ease-in-out;
 
 	.on {
 		display: block;
@@ -272,6 +278,7 @@ $toggle-orange: #ff9900;
 		line-height: $toggle-height;
 		opacity: 0;
 		color: $toggle-green;
+		transition: .25s ease-in-out;
 	}
 	.off {
 		display: block;
@@ -282,6 +289,7 @@ $toggle-orange: #ff9900;
 		line-height: $toggle-height;
 		opacity: 1;
 		color: $toggle-orange;
+		transition: .25s ease-in-out;
 	}
 
 	&:before {
@@ -296,6 +304,7 @@ $toggle-orange: #ff9900;
 		width: $toggle-height;
 		background: white;
 		box-shadow: 0 3px 3px rgba(0, 0, 0, .2), 0 0 0 2px #dddddd;
+		transition: .25s ease-in-out;
 	}
 }
 
@@ -309,6 +318,7 @@ $toggle-orange: #ff9900;
 
 		&:before {
 			box-shadow: 0 3px 3px rgba(0, 0, 0, .2), 0 0 0 2px $toggle-orange;
+			transition: .25s ease-in-out;
 		}
 	}
 
@@ -330,6 +340,7 @@ $toggle-orange: #ff9900;
 			&:before {
 				left: 19px;
 				box-shadow: 0 3px 3px rgba(0, 0, 0, .2), 0 0 0 2px $toggle-green;
+				transition: .25s ease-in-out;
 			}
 		}
 	}
