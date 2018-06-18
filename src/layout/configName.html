@@ -1,0 +1,18 @@
+<script type="text/ng-template" id="wgn-multi-config-config-name">
+	<div class="control-group multi-config-name" ng-show="settings.multi">
+		<label class="form-label config-title">Configuration Name</label>
+
+		<div class="controls">
+			<input type="text" class="form-control" name="configName"
+				   ng-model="editing.config.name" wgn-validator-config-name>
+
+			<span class="danger">required</span>
+
+			<span class="help-block">Specify a unique name for this configuration.</span>
+
+			<span class="help-block danger" ng-show="wgnConfigForm.$error.configName">
+				The config name must be unique
+			</span>
+		</div>
+	</div>
+</script>
