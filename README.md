@@ -25,35 +25,48 @@ Add the directive to you settings page template;
 
 ```html
 <script type="text/ng-template" id="wgn-settings">
-	<wgn-multi-config settings="configSettings"></wgn-multi-config>
+	<wgn-multi-config options="config"></wgn-multi-config>
 </script>
 
 ```
 
-Then, build out and add `configSettings` to your controller's scope:
+Then, build out and add `config` to your controller's scope by building a configuration object:
 
 ```js
-plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
-  // Define plugin settings (see "Settings" section below)
-  $scope.configSettings = {
-    title: 'My Awesome Plugin Settings',
-    icon: 'icon-emo-sunglasses',
-    help: 'This is some instructional text explaining what these settings do. I am concise, yet informative.',
-    multi: true,
-    toggle: true,
-    pages: [
-      {
-      	id: 'target',
-      	name: 'Target Form',
-      	fields: [],
-      },
-      {
-      	id: 'logging',
-      	name: 'Logging Form',
-      	fields: []
-      }
-    ]    
-  };
+plugin.controller('wgnSettingsCtrl', ['$scope', 'wgnMultiConfigSettings', function ($scope, multiConfigSettings) {
+  // Instantiate a new object instance and use the fluid api to set up your settings page.
+  // It has sensible defaults built in so everything is optional.
+  $scope.config = new multiConfigSettings('My Awesome Settings')
+    .multi(false)
+    .toggle(true)
+    .help('this is some help text')
+    .icon('emo-devil')
+    .page('First Page')
+    .field({
+      id: 'formId',
+      name: 'Eligibility Form',
+      help: 'The form which contains the eligibility data.',
+      type: 'form'
+    })
+    .field({
+      id: 'submittedFolder',
+      name: 'Submitted Folder',
+      help: 'The folder records go to when they are submitted.',
+      type: 'folder',
+    })
+    .field({
+      id: 'eligibleFolder',
+      name: 'Eligible Folder',
+      help: 'The folder records go to when they are eligible.',
+      type: 'folder',
+    })
+    .page('Second Page')
+    .field({
+      id: 'ineligibleFolder',
+      name: 'Ineligible Folder',
+      help: 'The folder records go to when they are ineligible.',
+      type: 'folder',
+    });
 	
   // For advanced usage you can also listen for certain multi config events (see "Events" section).
   $scope.$on('wgnMultiConfigEdit', function (ev, config) {
@@ -64,73 +77,62 @@ plugin.controller('wgnSettingsCtrl', ['$scope', function ($scope) {
 
 ### Boom!
 
-We're done, that's it! Give it some settings and the directive will take care of the rest!
+We're done, that's it!
 
-## Settings
+## Methods
 
-The following options are supported:
+The following methods are available:
 
-- **title**: A heading that will be displayed at the top of the page
-- **icon**: Optional. An icon to display next to heading
-- **help**: Optional. Help text that will be displayed below the heading
-- **multi**: Optional. One of `true` to support multiple configurations or `false` to have a single configuration. Defaults to `false`
-- **toggle**: Optional. One of `true` to allow enabling and disabling a configuration (ie: to prevent webhooks running) or `false` for configurations to be always on. Defaults to `false`
-- **pages**: An array of `settings pages` (see next section)
+- **title(_string_)**: Customize the heading that will be displayed at the top of the page
+- **icon(_string_)**: Customize the icon to display next to heading
+- **help(_string_)**: Customize the help text that will be displayed below the heading
+- **multi(_boolean_)**: One of `true` to support multiple configurations or `false` to have a single configuration. Defaults to `false`
+- **toggle(_boolean_)**: One of `true` to allow enabling and disabling a configuration (ie: to prevent webhooks running) or `false` for configurations to be always on. Defaults to `true`
+- **page(_string_)**: Add a page (see "Settings Pages" below)
+- **field(_object_)**: Add a field definition (see "Settings Fields" below)
 
 ### Settings Pages
 
-A `settings page` is what will actually hold the fields for your settings.
-
-You may define as many as you want but _must_ have at least one!
+A `settings page` is what will actually hold the field inputs for your settings.
 
 In the event that there are multiple settings pages, they will be navigatable using tabs.
 
-```js
-{
-	id: 'firstpage',
-	name: 'First Page',
-	fields: []
-}
-```
-
-The following properties are supported:
-
-- **id**: A slug
-- **name**: The title to be displayed on the tab if there are more than one page
-- **fields**: An array of `settings fields` for each page (see next section)
+To add one simply call `.page('My Title')`.
 
 ### Settings Fields
 
-A `field` is a simple object describing what the field should be:
+A `field` is a simple object describing what the input should be:
 
 ```js
-[
-  {
-    id: 'targetFormId',
-    name: 'Target Form',
-    help: 'The form which contains the data to check.',
-    required: true,
-    type: 'form'
-  },
-  {
-    id: 'targetFieldId',
-    name: 'Target Field',
-    help: 'The field which contains the specific data to check.',
-    required: true,
-    type: 'field',
-    belongsTo: 'targetFormId',
-    restrict: 'text-input'
-  }
-]
+var formInput = {
+  id: 'targetFormId',
+  name: 'Target Form',
+  help: 'The form which contains the data to check.',
+  type: 'form'
+};
+
+var fieldInput = {
+  id: 'targetFieldId',
+  name: 'Target Field',
+  help: 'The field which contains the specific data to check.',
+  type: 'field',
+  belongsTo: 'targetFormId',
+  restrict: 'text-input'	
+};
 ```
 
 There are many different field types and some may have specific settings but all fields share the following base settings:
 
 - **id**: A unique slug identifier. This will be used as the key in firebase to store the value
-- **name**: The field name. This will be used as the field label
-- **help**: Optional. Help text to display below the field
-- **required**: One of `true` to make the field required or `false` to make it optional. Defaults to `false`.
+- **name**: The input name. This will be used as the label
+- **help**: Optional. Help text to display below the input
+- **required**: One of `true` to make the input required or `false` to make it optional. Defaults to `true`.
 - **type**: The `field type` (see next section)
+- **highlighted**: One of `true` or `false` to mark the input as highlighted. Highlighted inputs are displayed on the configuration list. **Note**: Only 2 fields can be highlighted at a given moment. 
+
+Note: Some specific field types may also define additional settings.
+
+To add a field simply call `.field(fielDefinitionObject)`.
 
 ### Field Types
 
@@ -144,25 +146,26 @@ The following field types are available:
 - [textarea](#textarea)
 - [select](#select)
 - [markup](#markup)
+- [choice](#choice)
 
 #### form
 
-A `form` field is a dropdown input that allows you to pick one of the forms in the given workspace.
+A `form` input is a dropdown that allows you to pick one of the forms in the given workspace.
 
 #### field
 
-A `field` field is a special dropdown input that allows you to pick a field from a certain form, optionally limiting to a certain field type.
+A `field` input is a special dropdown that allows you to pick a field from a certain form, optionally limiting to a certain field type.
 It has the following extra settings:
 
-- **belongsTo**: The field id for the `form` input this should display fields from
+- **belongsTo**: Optional. The field id for the `form` input this should load fields from. If left blank it will default to the last defined form input on the current page.
 - **restrict**: Whether to restrict to a certain Zengine field type. Possible options are: `text-input`, `date-picker`, `linked`, etc.
 
 #### folder
 
-A `folder` field is another special dropdown input that allows you to pick a folder from a certain form.
+A `folder` input is another special dropdown that allows you to pick a folder from a certain form.
 It has the following extra settings:
 
-- **belongsTo**: The field id for the `form` input this should display fields from
+- **belongsTo**: Optional. The field id for the `form` input this should load folders from. If left blank it will default to the last defined form input on the current page. 
 
 #### text
 
@@ -182,7 +185,7 @@ A muli-line text input.
 
 #### select
 
-A dropdown input. It has the following extra setting:
+A dropdown. It has the following extra setting:
 
 - **options**: An array of Objects containing an option definition:
 
@@ -201,13 +204,23 @@ A dropdown input. It has the following extra setting:
 
 #### markup
 
-A special field that lets you display any arbitrary markup. Note: This field doesn't share any base settings and instead has just one:
+A special input that lets you display any arbitrary markup. Note: This field doesn't share any base settings and instead has just one:
 
 - **value**: A string with any valid HTML
 
-### Configuration Examples
+#### choice
 
-See [here](example.js) for additional configuration examples.
+A special input that allows you to deal with fields that have choices, ie: radio, checkbox and dropdown fields.
+There are two different modes: `select` and `score`. 
+
+- _Select_ allows one of the field's choices to be selected, for example: what the correct answer is
+- _Score_ allows a value to be assigned to each of the field's choices
+
+It has the following extra settings:
+
+- **mode**: One of `select` or `score` (see above for differences)
+- **restrict**: Optional. Whether to restrict to `radio`, `checkbox` or `dropdown`.
+- **belongsTo**: The field id for the `form` input this should display fields from
 
 ## Multi Config Events
 
@@ -247,3 +260,52 @@ zbf.load([workspaceId, 'settings', configId]).then(function (settings) {
   console.log('settings', settings);
 });
 ```
+
+## Advanced Usage - Custom Field Types
+
+In order to support virtually any kind of configuration a plugin may need there's also a way to define a custom field type:
+
+```js
+$scope.config = new multiConfigSettings('My Awesome Settings');
+// ... etc
+
+// Define a custom field type.
+$scope.config.fieldType({
+  type: 'monkey',
+  template: 'wgn-multi-config-input-monkey'
+});
+
+// Then use it inside a page.
+$scope.config.page('test page').field({
+  type: 'monkey',
+  id: 'myCustomField',
+  name: 'Custom Field'
+});
+```
+
+You must then create a directive to render that field:
+
+```js
+// @TODO revisit this once its implemented
+plugin.directive('wgnMultiConfigInputMonkey', [function () {
+		return {
+  		scope: true,
+  		templateUrl: 'wgn-multi-config-input-monkey',
+  		restrict: 'E',
+  		replace: true,
+  		link: function ($scope, $el, $attrs) {
+  			$scope.specs = $scope.$eval($attrs.specs);
+  		}
+  	};
+}]);
+```  
+
+And finally the directive template:
+
+```html
+<script type="text/ng-template" id="wgn-multi-config-input-monkey">
+	@TODO some magic here
+</script>
+```
+
+All internal field types have been defined this way so please refer to the [source code](src/input.service.js) for some working examples.

@@ -1,0 +1,10 @@
+<script type="text/ng-template" id="wgn-multi-config-input-form">
+	<select class="form-control" name="input"
+			ng-options="form.id as form.name for form in getForms(field.id)"
+			ng-model="editing.config[field.id]"
+			ng-change="onSelectForm(field.id, specs)"
+			ng-init="initFormField(field.id, specs)"
+			ng-required="field.required">
+		<option value=""></option>
+	</select>
+</script>

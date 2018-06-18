@@ -15,10 +15,18 @@ $color-success: #3c763d;
 .multi-config-container {
 	margin-top: 2em;
 
+	.btn {
+		transition: .25s ease-in-out;
+	}
+
 	.btn.btn-warning {
 		background-color: #ec971f;
 		border-color: #d58512;
 		color: white;
+
+		&:hover {
+			background-color: lighten(#ec971f, 10%);
+		}
 	}
 
 	.danger {
@@ -38,12 +46,12 @@ $color-success: #3c763d;
 		z-index: 99;
 	}
 
-	.bottom-actions {
-		float: none;
+	.form-control {
+		width: 300px;
 	}
 
-	.form-control {
-		max-width: 300px;
+	.bottom-actions {
+		float: none;
 	}
 
 	.help-block {
@@ -84,19 +92,60 @@ $color-success: #3c763d;
 	.view-switcher {
 		float: right;
 
-		.switcher-link,
-		.switcher-span {
-			display: inline-block;
-			margin-left: .5em;
-		}
-
 		.switcher-link {
 			color: black;
+			display: inline-block;
+			margin-left: .5em;
+			transition: .25s ease-in-out;
+
+			&.disabled {
+				opacity: 1;
+				color: #aaa;
+			}
+		}
+	}
+
+	.form-group.group-choice {
+		border: 1px solid #dedede;
+		padding: 1em;
+
+		.controls {
+			position: relative;
+
+			span.danger {
+				position: absolute;
+				right: 0;
+				top: 10px;
+			}
 		}
 
-		.switcher-span {
-			color: #aaa;
+		.score-input {
+			.controls {
+				display: inline-block;
+				padding-left: .5em;
+			}
 		}
+	}
+
+	.form-group {
+		max-width: 400px;
+
+		.radio {
+			input[type=radio] {
+				margin-top: 1px;
+				width: auto;
+				height: auto;
+			}
+		}
+	}
+
+	.single-page {
+		margin-top: 2em;
+	}
+
+	.config-highlight {
+		color: #888;
+		font-weight: 200;
 	}
 }
 
@@ -147,6 +196,11 @@ $color-success: #3c763d;
 			right: 70px;
 			top: 3px;
 		}
+
+		.config-highlights {
+			display: inline-block;
+			margin-left: 200px;
+		}
 	}
 
 	&.grid {
@@ -168,6 +222,10 @@ $color-success: #3c763d;
 			line-height: 1.5;
 			padding: 12px 0 0 0;
 			height: 145px;
+
+			&.with-highlight {
+				height: 100px;
+			}
 		}
 
 		.config-status {
@@ -206,8 +264,8 @@ $toggle-height: 15px;
 $toggle-green: rgba(19,191,17,1);
 $toggle-orange: #ff9900;
 
-*,*:before,*:after {
-	transition:.25s ease-in-out;
+.multi-config-input {
+	display: inline-block;
 }
 
 .toggle-label {
@@ -221,6 +279,7 @@ $toggle-orange: #ff9900;
 	position: relative;
 	box-shadow: 0 0 0 2px #dddddd;
 	font-weight: 300;
+	transition: .25s ease-in-out;
 
 	.on {
 		display: block;
@@ -230,6 +289,7 @@ $toggle-orange: #ff9900;
 		line-height: $toggle-height;
 		opacity: 0;
 		color: $toggle-green;
+		transition: .25s ease-in-out;
 	}
 	.off {
 		display: block;
@@ -237,10 +297,10 @@ $toggle-orange: #ff9900;
 		z-index: 0;
 		right: 45px;
 		text-align: right;
-		//min-width: 300px;
 		line-height: $toggle-height;
 		opacity: 1;
 		color: $toggle-orange;
+		transition: .25s ease-in-out;
 	}
 
 	&:before {
@@ -255,6 +315,7 @@ $toggle-orange: #ff9900;
 		width: $toggle-height;
 		background: white;
 		box-shadow: 0 3px 3px rgba(0, 0, 0, .2), 0 0 0 2px #dddddd;
+		transition: .25s ease-in-out;
 	}
 }
 
@@ -268,6 +329,7 @@ $toggle-orange: #ff9900;
 
 		&:before {
 			box-shadow: 0 3px 3px rgba(0, 0, 0, .2), 0 0 0 2px $toggle-orange;
+			transition: .25s ease-in-out;
 		}
 	}
 
@@ -289,6 +351,7 @@ $toggle-orange: #ff9900;
 			&:before {
 				left: 19px;
 				box-shadow: 0 3px 3px rgba(0, 0, 0, .2), 0 0 0 2px $toggle-green;
+				transition: .25s ease-in-out;
 			}
 		}
 	}

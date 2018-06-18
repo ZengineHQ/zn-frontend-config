@@ -1,84 +1,16 @@
 <script type="text/ng-template" id="wgn-multi-config-page">
-	<div class="form-group" ng-repeat="field in specs.fields">
-		<!--Special markup field-->
-		<div ng-if="field.type === 'markup'" ng-bind-html="field.value"></div>
+	<div id="multi-config-page-{{ specs.id }}">
+		<div class="form-group" ng-class="'group-' + field.type" ng-repeat="field in specs.fields">
+			<!--Special markup input-->
+			<div ng-if="field.type === 'markup'" ng-bind-html="field.value"></div>
 
-		<div ng-if="field.type !== 'markup'">
-			<ng-form name="fieldForm">
-				<label class="form-label">{{ field.name }}</label>
+			<!-- Other inputs get created dynamically -->
+			<ng-form name="fieldForm" ng-if="field.type !== 'markup'">
+				<label class="form-label" ng-show="field.name">{{ field.name }}</label>
 
 				<div class="controls">
-					<!--Form selection element-->
-					<select class="form-control" name="input"
-							ng-if="field.type === 'form'"
-							ng-options="form.id as form.name for form in getForms(field.id)"
-							ng-model="editing.config[field.id]"
-							ng-change="onSelectForm(field.id, specs)"
-							ng-init="initFormField(field.id, specs)"
-							ng-required="field.required">
-						<option value=""></option>
-					</select>
+					<wgn-multi-config-input definition="field"></wgn-multi-config-input>
 
-					<!--Field selection element-->
-					<select class="form-control" name="input"
-							ng-if="field.type === 'field'"
-							ng-model="editing.config[field.id]"
-							ng-options="f.id as f.name for f in getFields(field, specs)"
-							ng-disabled="isFieldLoading(field.belongsTo)"
-							ng-required="field.required">
-						<option value=""></option>
-					</select>
-					<span ng-if="field.type === 'field'"
-						  ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
-
-					<!--Folder selection element-->
-					<select class="form-control" name="input"
-							ng-if="field.type === 'folder'"
-							ng-model="editing.config[field.id]"
-							ng-options="f.id as f.name for f in getFolders(field, specs)"
-							ng-disabled="isFolderLoading(field.belongsTo)"
-							ng-required="field.required">
-						<option value=""></option>
-					</select>
-					<span ng-if="field.type === 'folder'"
-						  ng-show="isFolderLoading(field.belongsTo)" class="throbber inline throbber"></span>
-
-					<!--Simple text field-->
-					<input type="text" class="form-control" name="{{ field.id }}"
-						   ng-if="field.type === 'text'"
-						   ng-model="editing.config[field.id]"
-						   ng-required="field.required"
-						   placeholder="field.placeholder"
-					>
-
-					<!--Number field-->
-					<input type="number" class="form-control" name="{{ field.id }}"
-						   ng-if="field.type === 'number'"
-						   ng-model="editing.config[field.id]"
-						   ng-required="field.required"
-						   placeholder="field.placeholder"
-					>
-
-					<!--Textarea field-->
-					<textarea class="form-control" name="{{ field.id }}"
-							  ng-if="field.type === 'textarea'"
-							  ng-model="editing.config[field.id]"
-							  ng-required="field.required"
-					></textarea>
-
-					<!--Dropdown field-->
-					<select class="form-control" name="{{ field.id }}"
-							ng-if="field.type === 'select'"
-							ng-model="editing.config[field.id]"
-							ng-required="field.required">
-						<option ng-repeat="opt in field.options" value="opt.value">
-							{{ opt.label }}
-						</option>
-					</select>
-
-					<!--@TODO other field types as needed-->
-
-					<!--Common elements-->
 					<span ng-if="field.required" class="danger">Required</span>
 					<span ng-if="field.help" class="help-block">{{ field.help }}</span>
 
