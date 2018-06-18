@@ -92,18 +92,16 @@ $color-success: #3c763d;
 	.view-switcher {
 		float: right;
 
-		.switcher-link,
-		.switcher-span {
-			display: inline-block;
-			margin-left: .5em;
-		}
-
 		.switcher-link {
 			color: black;
-		}
+			display: inline-block;
+			margin-left: .5em;
+			transition: .25s ease-in-out;
 
-		.switcher-span {
-			color: #aaa;
+			&.disabled {
+				opacity: 1;
+				color: #aaa;
+			}
 		}
 	}
 
