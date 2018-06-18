@@ -25,8 +25,20 @@
 			ng-show="configs.length">
 
 			<li ng-repeat="config in configs">
-				<div class="config-name" ng-click="onEditConfig(config.$id)">
+				<div class="config-name" ng-click="onEditConfig(config.$id)" ng-class="{'with-highlight': config.mch1}">
 					{{ config.configName }}
+				</div>
+
+				<div class="config-highlights" ng-if="config.mch1">
+					<div class="config-highlight">
+						<span class="mch-name">{{ config.mch1.type }}:</span>
+						<span class="mch-value">{{ config.mch1.value }}</span>
+					</div>
+
+					<div class="config-highlight" ng-if="config.mch2">
+						<span class="mch-name">{{ config.mch2.type }}:</span>
+						<span class="mch-value">{{ config.mch2.value }}</span>
+					</div>
 				</div>
 
 				<div class="config-status" ng-if="settings.toggle">

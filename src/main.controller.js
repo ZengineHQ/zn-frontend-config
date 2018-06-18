@@ -527,8 +527,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 						if (form) {
 							formatedHighligts.push({
-								type: input.type,
-								name: input.name,
+								type: input.type.charAt(0).toUpperCase() + input.type.substr(1),
+								// name: input.name,
 								value: form.name
 							});
 						}

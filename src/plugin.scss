@@ -142,6 +142,11 @@ $color-success: #3c763d;
 	.single-page {
 		margin-top: 2em;
 	}
+
+	.config-highlight {
+		color: #888;
+		font-weight: 200;
+	}
 }
 
 .multi-config-label {
@@ -191,6 +196,11 @@ $color-success: #3c763d;
 			right: 70px;
 			top: 3px;
 		}
+
+		.config-highlights {
+			display: inline-block;
+			margin-left: 200px;
+		}
 	}
 
 	&.grid {
@@ -212,6 +222,10 @@ $color-success: #3c763d;
 			line-height: 1.5;
 			padding: 12px 0 0 0;
 			height: 145px;
+
+			&.with-highlight {
+				height: 100px;
+			}
 		}
 
 		.config-status {
