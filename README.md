@@ -145,7 +145,7 @@ The following field types are available:
 - [textarea](#textarea)
 - [select](#select)
 - [markup](#markup)
-- [choice][#choice]
+- [choice](#choice)
 
 #### form
 
