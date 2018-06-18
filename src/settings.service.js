@@ -239,7 +239,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		 * Returns a multi config settings object.
 		 * This is the final product of this service.
 		 *
-		 * @returns {Object}
+		 * @return {Object}
 		 */
 		srv.config = function () {
 			return _settings;
