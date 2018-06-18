@@ -272,7 +272,12 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.getFields = function (fieldDef, formDef) {
 			// Filter by restrict key if available.
 			return getFiltered(fieldDef, formDef, 'field', _fields).filter(function (f) {
-				return !fieldDef.restrict || f.type === fieldDef.restrict;
+				if (!fieldDef.restrict) {
+					return true;
+				}
+
+				var r = fieldDef.restrict.split('|');
+				return r.indexOf(f.type) !== -1;
 			});
 		};
 
@@ -427,8 +432,14 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var fieldTypes = [];
 
 			angular.forEach(formDef.fields, function (field) {
-				if (field.restrict && fieldTypes.indexOf(field.restrict) === -1) {
-					fieldTypes.push(field.restrict);
+				if (field.restrict) {
+					var res = field.restrict.split('|');
+
+					angular.forEach(res, function (r) {
+						if (fieldTypes.indexOf(r) === -1) {
+							fieldTypes.push(r);
+						}
+					});
 				}
 			});
 
