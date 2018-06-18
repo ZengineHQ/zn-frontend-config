@@ -138,7 +138,7 @@ plugin.service('wgnMultiConfigInputs', [function () {
 	 * Checks whether an item is allowed in a list.
 	 * This is only used to check for allowed input types.
 	 *
-	 * @param {string| source
+	 * @param {string} source
 	 * @param {Array<string>} allowed
 	 *
 	 * @return {boolean}
