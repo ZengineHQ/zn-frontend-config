@@ -1,0 +1,19 @@
+<script type="text/ng-template" id="wgn-multi-config-list">
+	<ul class="multi-config-list" ng-class="{grid: display === 'grid', list: display === 'list'}">
+		<li ng-repeat="config in configs">
+			<div class="config-name" ng-click="onEditConfig(config.$id)">
+				{{ config.name }}
+			</div>
+
+			<div class="config-status" ng-if="settings.toggle">
+				<input class="toggle" id="{{ 'configToggle' + config.$id }}" type="checkbox"
+					   ng-model="config.enabled"
+					   ng-change="onConfigToggle(config)">
+				<label for="{{ 'configToggle' + config.$id }}" class="toggle-label">
+					<span class="on">Enabled</span>
+					<span class="off">Disabled</span>
+				</label>
+			</div>
+		</li>
+	</ul>
+</script>
