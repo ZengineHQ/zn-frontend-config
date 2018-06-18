@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="wgn-multi-config-page">
 	<div id="multi-config-page-{{ specs.id }}">
-		<div class="form-group" ng-repeat="field in specs.fields">
+		<div class="form-group" ng-class="'group-' + field.type" ng-repeat="field in specs.fields">
 			<!--Special markup input-->
 			<div ng-if="field.type === 'markup'" ng-bind-html="field.value"></div>
 
