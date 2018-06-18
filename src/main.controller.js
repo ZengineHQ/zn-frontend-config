@@ -270,18 +270,9 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @return {Array<Object>}
 		 */
 		$scope.getFields = function (fieldDef, formDef) {
-			var filterFields = [];
-
-			// Filter values used in other folder inputs.
-			angular.forEach(formDef.fields, function (f) {
-				if (f.type === 'field' && f.id !== fieldDef.id && $scope.editing.config &&
-					f.id in $scope.editing.config && $scope.editing.config[f.id]) {
-					filterFields.push($scope.editing.config[f.id]);
-				}
-			});
-
+			// Filter by restrict key if available.
 			return getFiltered(fieldDef, formDef, 'field', _fields).filter(function (f) {
-				return !fieldDef.restrict || f.type === fieldDef.restrict && filterFields.indexOf(f.id) === -1;
+				return !fieldDef.restrict || f.type === fieldDef.restrict;
 			});
 		};
 
@@ -382,8 +373,21 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				return [];
 			}
 
+			var filters = [];
+
+			// Filter values used in other folder inputs.
+			angular.forEach(formDef.fields, function (f) {
+				if (f.type === type && f.id !== fieldDef.id && $scope.editing.config &&
+					f.id in $scope.editing.config && $scope.editing.config[f.id]) {
+					filters.push($scope.editing.config[f.id]);
+				}
+			});
+
 			var formId = $scope.editing.config[fieldDef.belongsTo];
-			return formId in source ? source[formId] : [];
+
+			return formId in source ? source[formId].filter(function (f) {
+				return filters.indexOf(f.id) === -1;
+			}) : [];
 		}
 
 		/**
