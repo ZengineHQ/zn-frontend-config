@@ -1,13 +1,12 @@
-plugin.directive('wgnMultiConfigInput', [function ($compile) {
+plugin.directive('wgnMultiConfigInput', [function () {
 	return {
 		scope: true,
 		restrict: 'E',
 		replace: true,
+		template: '<div class="multi-config-input" ng-include="template"></div>',
 		link: function ($scope, $el, $attrs) {
 			$scope.field = $scope.$eval($attrs.definition);
-			var tpl = '<' + $scope.field.template + '></' + $scope.field.template + '>';
-			// $el.append($compile(tpl)($scope));
-			$el.append('<h1>HELLO</h1>');
+			$scope.template = $scope.field.template;
 		}
 	};
 }]);

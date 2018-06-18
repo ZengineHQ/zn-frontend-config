@@ -42,10 +42,6 @@ $color-success: #3c763d;
 		float: none;
 	}
 
-	.form-control {
-		max-width: 300px;
-	}
-
 	.help-block {
 		margin-top: .5em;
 	}
@@ -208,6 +204,14 @@ $toggle-orange: #ff9900;
 
 *,*:before,*:after {
 	transition:.25s ease-in-out;
+}
+
+.multi-config-input {
+	display: inline-block;
+
+	.form-control {
+		min-width: 300px;
+	}
 }
 
 .toggle-label {
