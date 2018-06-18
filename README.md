@@ -307,4 +307,4 @@ And finally the directive template:
 </script>
 ```
 
-All internal field types have been defined this way so please refer to the [source code](src/fields.service.js) for some working examples.
+All internal field types have been defined this way so please refer to the [source code](src/input.service.js) for some working examples.
