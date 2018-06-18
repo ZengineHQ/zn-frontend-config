@@ -78,7 +78,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onDeleteConfig = function () {
 			znModal({
 				title: 'Are you sure?',
-				template: '<p>Are you sure you want to delete the <strong>' + $scope.editing.config.name + '</strong> configuration?</p><p>This action is irreversible.</p>',
+				template: '<p>Are you sure you want to delete the <strong>' + $scope.editing.config._name + '</strong> configuration?</p><p>This action is irreversible.</p>',
 				classes: '',
 				closeButton: false,
 				btns: {
@@ -354,10 +354,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			return doSaveConfig(config).then(function () {
 				if (config.enabled) {
 					$scope.$emit('wgnMultiConfigEnable', config);
-					znMessage('Configuration ' + config.name + ' enabled!', 'saved');
+					znMessage('Configuration ' + config._name + ' enabled!', 'saved');
 				} else {
 					$scope.$emit('wgnMultiConfigDisable', config);
-					znMessage('Configuration ' + config.name + ' disabled!', 'saved');
+					znMessage('Configuration ' + config._name + ' disabled!', 'saved');
 				}
 			});
 		};

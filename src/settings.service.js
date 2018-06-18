@@ -86,6 +86,15 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 				}
 			});
 
+			// Make sure reserved ids aren't used.
+			var reserved = ['_name'];
+			if (reserved.indexOf(def.id) !== -1) {
+				throw new Error('Multi Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.')
+			}
+			if (def.id.indexOf('_highlight') === 0) {
+				throw new Error('Multi Config: The id prefix "_highlight" is reserved for internal use and can\'t be used for inputs.')
+			}
+
 			// Make sure id is unique.
 			if (_fieldIds.indexOf(def.id) !== -1) {
 				throw new Error('Multi Config: Field id "' + def.id + '" is already in use');
