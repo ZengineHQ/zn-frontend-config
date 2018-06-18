@@ -26,7 +26,7 @@
 
 			<li ng-repeat="config in configs">
 				<div class="config-name" ng-click="onEditConfig(config.$id)">
-					{{ config._name }}
+					{{ config.configName }}
 				</div>
 
 				<div class="config-status" ng-if="settings.toggle">

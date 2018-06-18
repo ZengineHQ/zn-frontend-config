@@ -8,7 +8,7 @@ plugin.directive('wgnValidatorConfigName', [function () {
 				var valid = true;
 
 				scope.configs.forEach(function (config) {
-					if (config._name === viewVal && config.$id !== ourId) {
+					if (config.configName === viewVal && config.$id !== ourId) {
 						valid = false;
 					}
 				});
