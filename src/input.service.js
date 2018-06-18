@@ -14,22 +14,7 @@ plugin.service('wgnMultiConfigInputs', [function () {
 					required: true
 				},
 				restrict: {
-					required: false,
-					validate: function (r) {
-						return checkAllowedItems(r, [
-							'text-input',
-							'date-picker',
-							'text-area',
-							'radio',
-							'checkbox',
-							'dropdown',
-							'linked',
-							'numeric',
-							'file-upload',
-							// @TODO add other types here as the need for them arises.
-							// @TODO consider ditching this and just passing through to Zengine API.
-						]);
-					}
+					required: false
 				}
 			},
 			template: 'wgn-multi-config-input-field'
