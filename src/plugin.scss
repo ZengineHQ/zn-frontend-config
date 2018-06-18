@@ -38,6 +38,10 @@ $color-success: #3c763d;
 		z-index: 99;
 	}
 
+	.form-control {
+		width: 300px;
+	}
+
 	.bottom-actions {
 		float: none;
 	}
@@ -104,6 +108,7 @@ $color-success: #3c763d;
 
 			span.danger {
 				position: absolute;
+				right: 0;
 				top: 10px;
 			}
 		}
@@ -117,6 +122,8 @@ $color-success: #3c763d;
 	}
 
 	.form-group {
+		max-width: 400px;
+
 		.radio {
 			input[type=radio] {
 				margin-top: 1px;
@@ -124,6 +131,10 @@ $color-success: #3c763d;
 				height: auto;
 			}
 		}
+	}
+
+	.single-page {
+		margin-top: 2em;
 	}
 }
 
@@ -239,10 +250,6 @@ $toggle-orange: #ff9900;
 
 .multi-config-input {
 	display: inline-block;
-
-	.form-control {
-		min-width: 300px;
-	}
 }
 
 .toggle-label {
@@ -272,7 +279,6 @@ $toggle-orange: #ff9900;
 		z-index: 0;
 		right: 45px;
 		text-align: right;
-		//min-width: 300px;
 		line-height: $toggle-height;
 		opacity: 1;
 		color: $toggle-orange;
