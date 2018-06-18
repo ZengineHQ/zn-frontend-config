@@ -7,7 +7,7 @@
 				ng-required="field.required">
 			<option value=""></option>
 		</select>
-		<span ng-if="field.type === 'folder'"
-			  ng-show="isFolderLoading(field.belongsTo)" class="throbber inline throbber"></span>
+
+		<span ng-show="isFolderLoading(field.belongsTo)" class="throbber inline throbber"></span>
 	</div>
 </script>
