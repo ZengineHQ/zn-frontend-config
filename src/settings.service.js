@@ -42,9 +42,14 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 				}
 
 				if (p.id === id) {
-					// This id already exists but we can't throw an error since we are the ones who generated it.
-					// @TODO one day we might need a better fix but this is enough of an edge case we can leave it for now.
-					id += 2;
+					// This id already exists but we can't throw an error since we are the ones who generated it so
+					// find a suffix to make it unique.
+					var counter = 0;
+
+					do {
+						++counter;
+						id += counter.toString();
+					} while(!isIdUnique(_settings.pages, id));
 				}
 			});
 
@@ -263,6 +268,26 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 				.replace(/[^\w\-]+/g, '');        // remove all non-word chars
 
 			return slug.charAt(0).toLowerCase() + slug.substr(1);
+		}
+
+		/**
+		 * Checks whether an id hasn't been used before in a list of sources.
+		 *
+		 * @param {Array<string>} source
+		 * @param {string} id
+		 *
+		 * @return {boolean}
+		 */
+		function isIdUnique(source, id) {
+			var unique = true;
+
+			angular.forEach(source, function (s) {
+				if (s.id === id) {
+					unique = false;
+				}
+			});
+
+			return unique;
 		}
 
 		// Dog food our own bootstrapping of internal field types.
