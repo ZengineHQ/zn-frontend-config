@@ -298,6 +298,32 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		};
 
 		/**
+		 * Loads all choices for a given field.
+		 * This only really applies to checkbox, dropdown and radio fields.
+		 *
+		 * @param {Object} fieldDef The choice input definition.
+		 *
+		 * @return {Object}
+		 */
+		$scope.getChoices = function (fieldDef) {
+			var fieldId = $scope.editing.config[fieldDef.id + '_source'];
+
+			if (fieldId) {
+				var formId = $scope.editing.config[fieldDef.belongsTo];
+
+				if (formId && _fields[formId]) {
+					var field = _fields[formId].filter(function (f) {
+						return f.id === fieldId;
+					})[0];
+
+					if (field && 'choices' in field) {
+						return field.choices;
+					}
+				}
+			}
+		};
+
+		/**
 		 * Returns whether a given form is loading its fields.
 		 *
 		 * @param {string} key A form config id.
@@ -410,11 +436,17 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				_fields[formId] = [];
 
 				angular.forEach(results, function (field) {
-					_fields[formId].push({
+					var f = {
 						id: field.id,
 						name: field.label,
 						type: field.type
-					});
+					};
+
+					if ('settings' in field && 'properties' in field.settings && 'choices' in field.settings.properties) {
+						f.choices = field.settings.properties.choices;
+					}
+
+					_fields[formId].push(f);
 				});
 			}).catch(function (err) {
 				znMessage(err, 'error');
