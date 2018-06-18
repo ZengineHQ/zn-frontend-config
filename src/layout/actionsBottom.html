@@ -1,7 +1,7 @@
 <script type="text/ng-template" id="wgn-multi-config-bottom-actions">
 	<div class="form-actions bottom-actions">
 		<button type="submit" class="btn btn-primary pull-right"
-				ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid">
+				ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid || saving">
 			Save configuration
 		</button>
 
