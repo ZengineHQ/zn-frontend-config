@@ -34,10 +34,9 @@ Then, build out and add `config` to your controller's scope by building a config
 
 ```js
 plugin.controller('wgnSettingsCtrl', ['$scope', 'wgnMultiConfigSettings', function ($scope, multiConfigSettings) {
-	// Instantiate a new object instance and use the fluid api to set up your settings page.
-	// It has sensible defaults built in so everything is optional.
-	
-	$scope.config = new multiConfigSettings('My Awesome Settings')
+  // Instantiate a new object instance and use the fluid api to set up your settings page.
+  // It has sensible defaults built in so everything is optional.
+  $scope.config = new multiConfigSettings('My Awesome Settings')
     .multi(false)
     .toggle(true)
     .help('this is some help text')
