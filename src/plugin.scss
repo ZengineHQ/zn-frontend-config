@@ -94,6 +94,37 @@ $color-success: #3c763d;
 			color: #aaa;
 		}
 	}
+
+	.form-group.group-choice {
+		border: 1px solid #dedede;
+		padding: 1em;
+
+		.controls {
+			position: relative;
+
+			span.danger {
+				position: absolute;
+				top: 10px;
+			}
+		}
+
+		.score-input {
+			.controls {
+				display: inline-block;
+				padding-left: 1em;
+			}
+		}
+	}
+
+	.form-group {
+		.radio {
+			input[type=radio] {
+				margin-top: 1px;
+				width: auto;
+				height: auto;
+			}
+		}
+	}
 }
 
 .multi-config-label {
@@ -210,9 +241,7 @@ $toggle-orange: #ff9900;
 	display: inline-block;
 
 	.form-control {
-		&:not([type=checkbox]):not([type=radio]) {
-			min-width: 300px;
-		}
+		min-width: 300px;
 	}
 }
 

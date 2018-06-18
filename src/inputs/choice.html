@@ -12,20 +12,27 @@
 			<span ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
 		</div>
 
-		<div ng-if="editing.config[field.id + '_source']">
-			<h3 ng-if="field.mode === 'select'">Select a choice</h3>
-			<h3 ng-if="field.mode === 'score'">Score all choices</h3>
+		<div ng-show="editing.config[field.id + '_source']">
+			<p ng-if="field.mode === 'select'">Select a choice</p>
+			<p ng-if="field.mode === 'score'">Score all choices</p>
 
 			<!-- Display field choices -->
 			<div ng-repeat="(key, val) in getChoices(field)" class="form-group">
-				<label class="form-label">{{ val }}</label>
+				<div ng-if="field.mode === 'score'" class="score-input">
+					<label class="form-label">{{ val }}</label>
 
-				<div class="controls">
-					<input type="text" class="form-control" ng-if="field.mode === 'score'"
-						   ng-model="editing.config[field.id + '_opt_' + key]">
+					<div class="controls">
+						<input type="text" class="form-control"
+							   ng-model="editing.config[field.id + '_opt_' + key]">
+					</div>
+				</div>
 
-					<input type="radio" class="form-control" ng-if="field.mode === 'select'" value="{{ key }}"
-						   ng-model="editing.config[field.id + '_val']" name="{{ field.id }}">
+				<div ng-if="field.mode === 'select'" class="radio">
+					<label>
+						<input type="radio" class="form-control" value="{{ key }}"
+							   ng-model="editing.config[field.id + '_val']" name="{{ field.id }}">
+						{{ val }}
+					</label>
 				</div>
 			</div>
 		</div>
