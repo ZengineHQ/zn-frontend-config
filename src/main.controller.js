@@ -271,7 +271,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 */
 		$scope.getFields = function (fieldDef, formDef) {
 			// Filter by restrict key if available.
-			return getFiltered(fieldDef, formDef, 'field', _fields).filter(function (f) {
+			return getFiltered(fieldDef, formDef, _fields).filter(function (f) {
 				if (!fieldDef.restrict) {
 					return true;
 				}
@@ -290,7 +290,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @return {Array<Object>}
 		 */
 		$scope.getFolders = function (fieldDef, formDef) {
-			return getFiltered(fieldDef, formDef, 'folder', _folders);
+			return getFiltered(fieldDef, formDef, _folders);
 		};
 
 		/**
@@ -368,12 +368,11 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 *
 		 * @param {Object} fieldDef The folder input definition.
 		 * @param {Object} formDef The form this input belongs to.
-		 * @param {string} type The field type.
 		 * @param {Object} source The source data.
 		 *
 		 * @return {Array<Object>}
 		 */
-		function getFiltered (fieldDef, formDef, type, source) {
+		function getFiltered (fieldDef, formDef, source) {
 			if (!fieldDef.belongsTo) {
 				return [];
 			}
@@ -382,9 +381,12 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 			// Filter values used in other folder inputs.
 			angular.forEach(formDef.fields, function (f) {
-				if (f.type === type && f.id !== fieldDef.id && $scope.editing.config &&
-					f.id in $scope.editing.config && $scope.editing.config[f.id]) {
-					filters.push($scope.editing.config[f.id]);
+				if (f.type === fieldDef.type && f.id !== fieldDef.id && $scope.editing.config) {
+					if (f.type === 'choice' && f.id + '_source' in $scope.editing.config && $scope.editing.config[f.id + '_source']) {
+						filters.push($scope.editing.config[f.id + '_source']);
+					} else if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
+						filters.push($scope.editing.config[f.id]);
+					}
 				}
 			});
 
