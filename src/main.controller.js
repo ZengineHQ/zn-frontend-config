@@ -552,6 +552,21 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 							});
 						}
 						break;
+
+					case 'folder':
+						var fieldDef = $scope.options.getField(input.id);
+						var folder = $scope.getFolders(fieldDef, false).filter(function (f) {
+							return f.id === $scope.editing.config[input.id];
+						})[0];
+
+						if (folder) {
+							formatedHighligts.push({
+								type: inputTypeFormatted,
+								value: folder.name
+							});
+						}
+						break;
+
 					default:
 						// @TODO Reconsider whether we want to allow all inputs here.
 						var val = $scope.editing.config[input.id].toString();
