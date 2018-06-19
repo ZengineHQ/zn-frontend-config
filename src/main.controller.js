@@ -2,10 +2,13 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 	function ($scope, $q, $routeParams, znData, znModal, znMessage, multiConfigService) {
 
 		// No need to pollute the scope.
-		var workspaceId = $routeParams.workspace_id;
+		var _workspaceId = $routeParams.workspace_id;
 		var _forms = [];
 		var _fields = {};
-		var formsLoading = {};
+		var _folders = {};
+		var _fieldsLoading = {};
+		var _foldersLoading = {};
+		var _originalConfig;
 
 		/**
 		 * Whether the plugin is loading or not, displays a throbber.
@@ -15,11 +18,25 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.loading = true;
 
 		/**
+		 * Whether the plugin is saving or not, displays a throbber.
+		 *
+		 * @type {boolean}
+		 */
+		$scope.saving = false;
+
+		/**
 		 * The current config being created/edited, or false if none.
 		 *
 		 * @type {Object<Object|boolean>}
 		 */
 		$scope.editing = { config: false };
+
+		/**
+		 * The current display mode, one of 'grid' or 'list'.
+		 *
+		 * @type {string}
+		 */
+		$scope.display = 'grid';
 
 		// Init plugin.
 		init().then(function () {
@@ -33,12 +50,15 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var promise = $scope.editing.config ? $scope.onDiscardChanges() : $q.when();
 
 			return promise.then(function () {
-				doResetTab();
 				$scope.editing.config = {
 					enabled: false
 				};
-				$scope.wgnConfigForm.$setPristine();
-				$scope.$emit('wgnMultiConfigAdd');
+
+				doRunHook('add', $scope.editing.config).then(function (data) {
+					angular.extend($scope.editing.config, data);
+					doResetTab();
+					$scope.wgnConfigForm.$setPristine();
+				});
 			});
 		};
 
@@ -51,14 +71,15 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var promise = $scope.editing.config ? $scope.onDiscardChanges() : $q.when();
 
 			return promise.then(function () {
-				doResetTab();
-
 				$scope.editing.config = $scope.configs.filter(function (config) {
 					return config.$id === id;
 				})[0];
 
-				$scope.wgnConfigForm.$setPristine();
-				$scope.$emit('wgnMultiConfigEdit', $scope.editing.config);
+				doRunHook('edit', $scope.editing.config).then(function (data) {
+					angular.extend($scope.editing.config, data);
+					doResetTab();
+					$scope.wgnConfigForm.$setPristine();
+				});
 			});
 		};
 
@@ -68,7 +89,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onDeleteConfig = function () {
 			znModal({
 				title: 'Are you sure?',
-				template: '<p>Are you sure you want to delete the <strong>' + $scope.editing.config.name + '</strong> configuration?</p><p>This action is irreversible.</p>',
+				template: '<p>Are you sure you want to delete the <strong>' + $scope.editing.config.configName + '</strong> configuration?</p><p>This action is irreversible.</p>',
 				classes: '',
 				closeButton: false,
 				btns: {
@@ -80,10 +101,11 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					'Yes': {
 						danger: true,
 						action: function () {
-							return multiConfigService.deleteConfig(workspaceId, $scope.editing.config, $scope.configs).then(function () {
-								$scope.$emit('wgnMultiConfigDelete', $scope.editing.config);
-								doDiscardChanges();
-								znMessage('The configuration has been deleted!', 'info');
+							return multiConfigService.deleteConfig(_workspaceId, $scope.editing.config, $scope.configs).then(function () {
+								doRunHook('delete', $scope.editing.config).finally(function () {
+									doDiscardChanges();
+									znMessage('The configuration has been deleted!', 'info');
+								});
 							}).catch(function (err) {
 								znMessage(err, 'error');
 							});
@@ -97,10 +119,23 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Saves the current configuration.
 		 */
 		$scope.onSaveConfig = function () {
-			return doSaveConfig().then(function () {
-				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
-				$scope.wgnConfigForm.$setPristine();
+			$scope.saving = true;
+			doProcessHighlighted();
+
+			return doRunHook('save', $scope.editing.config).then(function (newCfg) {
+				angular.extend($scope.editing.config, newCfg);
+				return doSaveConfig($scope.editing.config);
+			}).then(function () {
 				znMessage('Configuration saved!', 'saved');
+
+				if ($scope.settings.multi) {
+					doDiscardChanges();
+				} else {
+					doResetTab();
+					$scope.wgnConfigForm.$setPristine();
+				}
+
+				$scope.saving = false;
 			});
 		};
 
@@ -110,8 +145,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onDisableConfig = function () {
 			$scope.editing.config.enabled = false;
 
-			return doSaveConfig().then(function () {
-				$scope.$emit('wgnMultiConfigDisable', $scope.editing.config);
+			return doRunHook('disable', $scope.editing.config).then(function (data) {
+				angular.extend($scope.editing.config, data);
+				return doSaveConfig($scope.editing.config);
+			}).then(function () {
 				znMessage('Configuration disabled!', 'saved');
 			});
 		};
@@ -122,8 +159,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onEnableConfig = function () {
 			$scope.editing.config.enabled = true;
 
-			return doSaveConfig().then(function () {
-				$scope.$emit('wgnMultiConfigEnable', $scope.editing.config);
+			doRunHook('enable', $scope.editing.config).then(function (data) {
+				angular.extend($scope.editing.config, data);
+				return doSaveConfig($scope.editing.config);
+			}).then(function () {
 				znMessage('Configuration enabled!', 'saved');
 			});
 		};
@@ -157,8 +196,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					'Yes': {
 						danger: true,
 						action: function () {
-							doDiscardChanges();
-							def.resolve();
+							doRunHook('discard', $scope.editing.config).finally(function () {
+								doDiscardChanges();
+								def.resolve();
+							});
 						}
 					}
 				}
@@ -183,11 +224,16 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {Object} formDef
 		 */
 		$scope.onSelectForm = function (formField, formDef) {
+			/*jshint maxcomplexity:6 */
 			if (formField) {
 				var formId = $scope.editing.config[formField];
 
 				if (formId && (!(formId in _fields) || !_fields[formId].length)) {
 					loadFields(formId, formDef);
+				}
+
+				if (formId && (!(formId in _folders) || !_folders[formId].length)) {
+					loadFolders(formId);
 				}
 			}
 		};
@@ -209,15 +255,15 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		};
 
 		/**
-		 * Loads all forms for a given field.
-		 * If a type is passed, it hides forms set for other form fields in the list.
+		 * Loads all forms for a given input.
+		 * If a type is passed, it hides forms set for other form inputs in the list.
 		 *
-		 * @param {string} [fieldId] Optional. The form field id.
+		 * @param {string} fieldId The form input id.
 		 *
 		 * @return {Array<Object>}
 		 */
 		$scope.getForms = function (fieldId) {
-			if (!fieldId || !$scope.editing.config || !$scope.editing.config[fieldId]) {
+			if (!$scope.editing.config) {
 				return _forms;
 			}
 
@@ -233,7 +279,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				});
 			});
 
-			// Filter values used in other fields.
+			// Filter values used in other inputs.
 			return _forms.filter(function (f) {
 				return filterForms.indexOf(f.id) === -1;
 			});
@@ -242,29 +288,59 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		/**
 		 * Loads all fields for a given form.
 		 *
-		 * @param {Object} fieldDef The field definition.
-		 * @param {Object} formDef The form this field belongs to.
+		 * @param {Object} fieldDef The field input definition.
+		 * @param {Object} formDef The form this input belongs to.
 		 *
 		 * @return {Array<Object>}
 		 */
 		$scope.getFields = function (fieldDef, formDef) {
-			if (!fieldDef.belongsTo) {
-				return [];
-			}
-
-			var filterFields = [];
-
-			// Filter values used in other fields.
-			angular.forEach(formDef.fields, function (field) {
-				if (field.id !== fieldDef.id && $scope.editing.config && field.id in $scope.editing.config && $scope.editing.config[field.id]) {
-					filterFields.push($scope.editing.config[field.id]);
+			// Filter by restrict key if available.
+			return getFiltered(fieldDef, formDef, _fields).filter(function (f) {
+				if (!fieldDef.restrict) {
+					return true;
 				}
-			});
 
-			var formId = $scope.editing.config[fieldDef.belongsTo];
-			return formId in _fields ? _fields[formId].filter(function (field) {
-				return !fieldDef.restrict || field.type === fieldDef.restrict && filterFields.indexOf(field.id) === -1;
-			}) : [];
+				var r = fieldDef.restrict.split('|');
+				return r.indexOf(f.type) !== -1;
+			});
+		};
+
+		/**
+		 * Loads all folders for a given form.
+		 *
+		 * @param {Object} fieldDef The folder input definition.
+		 * @param {Object} formDef The form this input belongs to.
+		 *
+		 * @return {Array<Object>}
+		 */
+		$scope.getFolders = function (fieldDef, formDef) {
+			return getFiltered(fieldDef, formDef, _folders);
+		};
+
+		/**
+		 * Loads all choices for a given field.
+		 * This only really applies to checkbox, dropdown and radio fields.
+		 *
+		 * @param {Object} fieldDef The choice input definition.
+		 *
+		 * @return {Object}
+		 */
+		$scope.getChoices = function (fieldDef) {
+			var fieldId = $scope.editing.config[fieldDef.id + '_source'];
+
+			if (fieldId) {
+				var formId = $scope.editing.config[fieldDef.belongsTo];
+
+				if (formId && _fields[formId]) {
+					var field = _fields[formId].filter(function (f) {
+						return f.id === fieldId;
+					})[0];
+
+					if (field && 'choices' in field) {
+						return field.choices;
+					}
+				}
+			}
 		};
 
 		/**
@@ -274,27 +350,107 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 *
 		 * @return {boolean}
 		 */
-		$scope.isFormLoading = function (key) {
-			if (key in $scope.editing.config) {
-				return $scope.editing.config[key] in formsLoading ? formsLoading[$scope.editing.config[key]] : false;
+		$scope.isFieldLoading = function (key) {
+			if ($scope.editing.config && key in $scope.editing.config) {
+				return $scope.editing.config[key] in _fieldsLoading ? _fieldsLoading[$scope.editing.config[key]] : false;
 			}
 		};
+
+		/**
+		 * Returns whether a given form is loading its folders.
+		 *
+		 * @param {string} key A form config id.
+		 *
+		 * @return {boolean}
+		 */
+		$scope.isFolderLoading = function (key) {
+			if ($scope.editing.config && key in $scope.editing.config) {
+				return $scope.editing.config[key] in _foldersLoading ? _foldersLoading[$scope.editing.config[key]] : false;
+			}
+		};
+
+		/**
+		 * Saves after a configuration toggle.
+		 *
+		 * @param {Object} config
+		 */
+		$scope.onConfigToggle = function (config) {
+			if (config.enabled) {
+				doRunHook('enable', config).then(function (data) {
+					angular.extend($scope.editing.config, data);
+					return doSaveConfig(config).then(function () {
+						znMessage('Configuration ' + config.configName + ' enabled!', 'saved');
+					});
+				});
+			} else {
+				doRunHook('disable', config).then(function (data) {
+					angular.extend($scope.editing.config, data);
+					return doSaveConfig(config).then(function () {
+						znMessage('Configuration ' + config.configName + ' disabled!', 'saved');
+					});
+				});
+			}
+		};
+
+		/**
+		 * Helper to return a list of filtered items from a given source.
+		 * Used to return fields and folders for a given form.
+		 *
+		 * @param {Object} fieldDef The folder input definition.
+		 * @param {Object|false} formDef The form this input belongs to in order to filter values used in other fields or false to return them all.
+		 * @param {Object} source The source data.
+		 *
+		 * @return {Array<Object>}
+		 */
+		function getFiltered (fieldDef, formDef, source) {
+			if (!fieldDef.belongsTo) {
+				return [];
+			}
+
+			var filters = [];
+
+			// Filter values used in other folder inputs.
+			if (formDef) {
+				angular.forEach(formDef.fields, function (f) {
+					if (f.type === fieldDef.type && f.id !== fieldDef.id && $scope.editing.config) {
+						if (f.type === 'choice' && f.id + '_source' in $scope.editing.config && $scope.editing.config[f.id + '_source']) {
+							filters.push($scope.editing.config[f.id + '_source']);
+						} else if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
+							filters.push($scope.editing.config[f.id]);
+						}
+					}
+				});
+			}
+
+			var formId = $scope.editing.config[fieldDef.belongsTo];
+
+			return formId in source ? source[formId].filter(function (f) {
+				return filters.indexOf(f.id) === -1;
+			}) : [];
+		}
 
 		/**
 		 * Centralize discarding config changes to avoid duplicating logic.
 		 */
 		function doDiscardChanges () {
-			$scope.editing.config = false;
-			$scope.wgnConfigForm.$setPristine();
 			doResetTab();
-			$scope.$emit('wgnMultiConfigDiscard');
+
+			if ($scope.settings.multi) {
+				$scope.editing.config = false;
+			} else {
+				$scope.editing.config = _originalConfig;
+			}
+
+			$scope.wgnConfigForm.$setPristine();
 		}
 
 		/**
 		 * Switches to the first tab.
 		 */
 		function doResetTab () {
-			$scope.view = $scope.settings.pages[0].id;
+			if ($scope.settings.pages.length) {
+				$scope.view = $scope.settings.pages[0].id;
+			}
 		}
 
 		/**
@@ -304,14 +460,20 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {Object} formDef The page this form belongs to.
 		 */
 		function loadFields (formId, formDef) {
-			formsLoading[formId] = true;
+			_fieldsLoading[formId] = true;
 
 			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
 
 			angular.forEach(formDef.fields, function (field) {
-				if (field.restrict && fieldTypes.indexOf(field.restrict) === -1) {
-					fieldTypes.push(field.restrict);
+				if (field.restrict) {
+					var res = field.restrict.split('|');
+
+					angular.forEach(res, function (r) {
+						if (fieldTypes.indexOf(r) === -1) {
+							fieldTypes.push(r);
+						}
+					});
 				}
 			});
 
@@ -323,143 +485,176 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 				_fields[formId] = [];
 
 				angular.forEach(results, function (field) {
-					_fields[formId].push({
+					var f = {
 						id: field.id,
 						name: field.label,
 						type: field.type
+					};
+
+					if ('settings' in field && 'properties' in field.settings && 'choices' in field.settings.properties) {
+						f.choices = field.settings.properties.choices;
+					}
+
+					_fields[formId].push(f);
+				});
+			}).catch(function (err) {
+				znMessage(err, 'error');
+			}).finally(function () {
+				_fieldsLoading[formId] = false;
+			});
+		}
+
+		/**
+		 * Loads folder data for the given form.
+		 *
+		 * @param {number} formId The actual form id.
+		 */
+		function loadFolders (formId) {
+			_foldersLoading[formId] = true;
+
+			return znData('FormFolders').get({
+				formId: formId
+			}).then(function (results) {
+				_folders[formId] = [];
+
+				angular.forEach(results, function (folder) {
+					_folders[formId].push({
+						id: folder.id,
+						name: folder.name
 					});
 				});
 			}).catch(function (err) {
 				znMessage(err, 'error');
 			}).finally(function () {
-				formsLoading[formId] = false;
+				_foldersLoading[formId] = false;
+			});
+		}
+
+		/**
+		 * Processes highlighted fields and adds additional keys to the config object.
+		 */
+		function doProcessHighlighted () {
+			// Find highlighted fields.
+			var highlighted = $scope.options.getHighlighted();
+			var formatedHighligts = [];
+
+			// Extract info from each one and save it for display.
+			angular.forEach(highlighted, function (input) {
+				/*jshint maxcomplexity:9 */
+				var inputTypeFormatted = input.type.charAt(0).toUpperCase() + input.type.substr(1);
+
+				switch (input.type) {
+					case 'form':
+						var form = $scope.getForms(input.id).filter(function (f) {
+							return f.id === $scope.editing.config[input.id];
+						})[0];
+
+						if (form) {
+							formatedHighligts.push({
+								type: inputTypeFormatted,
+								value: form.name
+							});
+						}
+						break;
+
+					case 'field':
+					case 'choice':
+						var fieldDef = $scope.options.getField(input.id);
+						var field = $scope.getFields(fieldDef, false).filter(function (f) {
+							var configKey = input.type === 'choice' ? input.id + '_source' : input.id;
+							return f.id === $scope.editing.config[configKey];
+						})[0];
+
+						if (field) {
+							formatedHighligts.push({
+								type: inputTypeFormatted,
+								value: field.name
+							});
+						}
+						break;
+
+					case 'folder':
+						var folderDef = $scope.options.getField(input.id);
+						var folder = $scope.getFolders(folderDef, false).filter(function (f) {
+							return f.id === $scope.editing.config[input.id];
+						})[0];
+
+						if (folder) {
+							formatedHighligts.push({
+								type: inputTypeFormatted,
+								value: folder.name
+							});
+						}
+						break;
+
+					default:
+						// @TODO Reconsider whether we want to allow all inputs here.
+						var val = $scope.editing.config[input.id].toString();
+						if (val.length > 22) {
+							val = val.substr(0, 22) + '...';
+						}
+
+						formatedHighligts.push({
+							type: inputTypeFormatted,
+							value: val
+						});
+				}
+			});
+
+			angular.forEach(formatedHighligts, function (h, i) {
+				$scope.editing.config['mch' + (i + 1)] = h;
 			});
 		}
 
 		/**
 		 * Helper to actually save changes to firebase.
 		 *
+		 * @param {Object} A config object.
+		 *
 		 * @return {Promise}
 		 */
-		function doSaveConfig () {
+		function doSaveConfig (config) {
 			return $scope.settings.multi ?
-				multiConfigService.save(workspaceId, $scope.configs, $scope.editing.config) :
-				multiConfigService.saveSingle(workspaceId, $scope.editing.config);
+				multiConfigService.save(_workspaceId, $scope.configs, config) :
+				multiConfigService.saveSingle(_workspaceId, config);
 		}
 
 		/**
-		 * Validates multi config settings.
+		 * Runs a Multi Config hook.
 		 *
-		 * @param {Object} settings
+		 * @param {string} hook
+		 * @param {Objecg} data
 		 */
-		function doValidateSettings(settings) {
-			// Check for required top level settings.
-			var pluginKeys = Object.keys(settings);
-			doValidateSettingsRequired(['title', 'pages'], pluginKeys, 'plugin');
-
-			// Make sure we have at least one page.
-			if (!Array.isArray(settings.pages) || !settings.pages.length) {
-				throw new Error('Invalid multi config settings! At least one page must be defined.');
-			}
-
-			// Ensure no top level options exist other than the allowed ones.
-			var allowedPluginKeys = ['title', 'icon', 'help', 'multi', 'toggle', 'pages'];
-			doValidateSettingsAllowed(allowedPluginKeys, Object.keys(settings), 'page');
-
-			// Check page level settings.
-			var allowedPageKeys = ['id', 'name', 'fields'];
-			var allowedFieldKeys = ['id', 'name', 'required', 'help', 'type', 'belongsTo', 'restrict', 'placeholder'];
-
-			angular.forEach(settings.pages, function (page) {
-				// Check for required page settings.
-				var pageKeys = Object.keys(page);
-				doValidateSettingsRequired(['fields'], pageKeys, 'page');
-
-				if (settings.pages.length > 1) {
-					doValidateSettingsRequired(['id', 'name'], pageKeys, 'page');
-				}
-
-				// Make sure we have at least one field.
-				if (!Array.isArray(page.fields) || !page.fields) {
-					throw new Error('Invalid multi config settings! At least one field must be defined for page ' + page.id);
-				}
-
-				// Ensure no options exist other than the allowed ones.
-				doValidateSettingsAllowed(allowedPageKeys, pageKeys, 'page');
-
-				// Check field level settings.
-				angular.forEach(settings.pages.fields, function (field) {
-					// Check for required field settings.
-					var fieldKeys = Object.keys(field);
-					doValidateSettingsRequired(['id', 'name', 'type'], fieldKeys, 'field');
-
-					// Ensure no options exist other than the allowed ones.
-					doValidateSettingsAllowed(allowedFieldKeys, fieldKeys, 'field');
-				});
-			});
-
-			// Finally, add some default settings we don't want to be empty.
-			if (!settings.icon) {
-				settings.icon = 'icon-puzzle';
-			}
-			if (!settings.help) {
-				settings.help = 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.';
-			}
-		}
-
-		/**
-		 * Validates required settings exist.
-		 *
-		 * @param {Array<string>} required The required keys.
-		 * @param {Array<string>} keys The keys to check.
-		 * @param {string} level The hierarchical level of the settings we're checking.
-		 *
-		 * @throws Error
-		 */
-		function doValidateSettingsRequired(required, keys, level) {
-			angular.forEach(required, function (option) {
-				if (keys.indexOf(option) === -1) {
-					throw new Error('Invalid multi config settings! Missing: "' + option + '" for ' + level);
-				}
-			});
-		}
-
-		/**
-		 * Validates only allowed settings exist.
-		 *
-		 * @param {Array<string>} allowed The allowed keys.
-		 * @param {Array<string>} keys The keys to check.
-		 * @param {string} level The hierarchical level of the settings we're checking.
-		 *
-		 * @throws Error
-		 */
-		function doValidateSettingsAllowed(allowed, keys, level) {
-			angular.forEach(keys, function (key) {
-				if (allowed.indexOf(key) === -1) {
-					throw new Error('Invalid multi config settings! Option "' + key + '" not allowed for ' + level);
-				}
-			});
+		function doRunHook (hook, data) {
+			return $scope.options.run(hook, data);
 		}
 
 		/**
 		 * Bootstraps plugin.
 		 */
 		function init () {
-			doValidateSettings($scope.settings);
+			$scope.settings = $scope.options.getConfig();
 			doResetTab();
 
 			// Load settings.
-			return multiConfigService.load(workspaceId, $scope.settings.multi).then(function (configs) {
+			return multiConfigService.load(_workspaceId, $scope.settings.multi).then(function (configs) {
+				var def = $q.defer();
+
 				$scope.configs = configs;
 
 				if (!$scope.settings.multi) {
 					$scope.editing.config = $scope.configs;
+					_originalConfig = angular.copy($scope.configs);
 				}
 
-				$scope.$emit('wgnMultiConfigInit', $scope.configs);
+				doRunHook('init', $scope.configs).finally(function () {
+					def.resolve();
+				});
+
+				return def.promise;
 			}).then(function () {
 				// Load available forms.
-				return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200 });
+				return znData('Forms').get({ 'workspace.id': _workspaceId, 'limit': 200 });
 			}).then(function (forms) {
 				_forms = forms;
 			});

@@ -1,0 +1,7 @@
+<script type="text/ng-template" id="wgn-multi-config-input-textarea">
+	<textarea class="form-control" name="{{ field.id }}"
+			  ng-if="field.type === 'textarea'"
+			  ng-model="editing.config[field.id]"
+			  ng-required="field.required"
+	></textarea>
+</script>
