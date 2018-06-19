@@ -201,6 +201,11 @@ $color-success: #3c763d;
 			display: inline-block;
 			margin-left: 200px;
 		}
+
+		.config-highlight {
+			display: inline-block;
+			margin-left: 12px;
+		}
 	}
 
 	&.grid {
@@ -233,6 +238,10 @@ $color-success: #3c763d;
 			position: absolute;
 			bottom: 0;
 			width: 100%;
+		}
+
+		.config-highlight {
+			margin-bottom: 10px;
 		}
 	}
 }
