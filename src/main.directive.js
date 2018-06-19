@@ -1,10 +1,10 @@
-plugin.directive('wgnMultiConfig', [function () {
+plugin.directive('wgnConfig', [function () {
 	return {
 		scope: {
 			options: '='
 		},
-		controller: 'wgnMultiConfigCtrl',
-		templateUrl: 'wgn-multi-config',
+		controller: 'wgnConfigCtrl',
+		templateUrl: 'wgn-config',
 		restrict: 'E',
 		replace: true
 	};

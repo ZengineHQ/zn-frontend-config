@@ -1,4 +1,4 @@
-plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function ($q, multiConfigInputs) {
+plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, configInputs) {
 	return function (args) {
 		var srv = this;
 		var _defaults = {
@@ -347,7 +347,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 		};
 
 		/**
-		 * Returns a multi config settings object.
+		 * Returns a config settings object.
 		 * This is the final product of this service.
 		 *
 		 * @return {Object}
@@ -397,7 +397,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 		}
 
 		// Dog food our own bootstrapping of internal field types.
-		angular.forEach(multiConfigInputs.all(), function (type) {
+		angular.forEach(configInputs.all(), function (type) {
 			srv.fieldType(type);
 		});
 
