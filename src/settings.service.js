@@ -15,6 +15,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		var _formInputs = [];
 		var _fieldTypes = {};
 		var _highlightedFields = [];
+		var _hooks = {};
 
 		// Accept either a configuration object or a string for the title.
 		if (!angular.isObject(args)) {
@@ -209,6 +210,54 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 			};
 
 			return srv;
+		};
+
+		/**
+		 * Registers a callback to run when a certain hook is fired.
+		 *
+		 * @param {string} event
+		 * @param {function} cb
+		 */
+		srv.on = function (event, cb) {
+			var allowedEvents = [
+				'add',
+				'edit',
+				'delete',
+				'enable',
+				'disable',
+				'discard',
+				'init',
+				'preSave',
+				'postSave'
+			];
+
+			if (allowedEvents.indexOf(event) === -1) {
+				throw new Error('Multi Config: Invalid event name: ' + event);
+			}
+
+			// @TODO we really want to support multiple callbacks per hook but it can get messy so let's put it on ice.
+			if (!(event in _hooks)) {
+				// _hooks[event] = [];
+				_hooks[event] = cb;
+			} else {
+				throw new Error('Multi Config: Only a single listener can subscribe to the event "' + event + '".')
+			}
+
+			// _hooks[event].push(cb);
+
+		};
+
+		/**
+		 * Invokes a hook by executing registered callbacks.
+		 *
+		 * @param {string} event
+		 */
+		srv.run = function (event, data) {
+			if (event in _hooks) {
+				return _hooks[event](data);
+			}
+
+			return $q.when(data);
 		};
 
 		/**
