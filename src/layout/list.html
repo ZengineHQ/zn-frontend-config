@@ -29,7 +29,7 @@
 					{{ config.configName }}
 				</div>
 
-				<div class="config-highlights" ng-if="config.mch1">
+				<div class="config-highlights" ng-if="config.mch1" ng-click="onEditConfig(config.$id)">
 					<div class="config-highlight">
 						<span class="mch-name">{{ config.mch1.type }}:</span>
 						<span class="mch-value">{{ config.mch1.value }}</span>
