@@ -239,7 +239,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 				// _hooks[event] = [];
 				_hooks[event] = cb;
 			} else {
-				throw new Error('Multi Config: Only a single listener can subscribe to the event "' + event + '".')
+				throw new Error('Multi Config: Only a single listener can subscribe to the event "' + event + '".');
 			}
 
 			// _hooks[event].push(cb);

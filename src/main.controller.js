@@ -163,7 +163,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 			doRunHook('enable', $scope.editing.config).then(function (data) {
 				angular.extend($scope.editing.config, data);
-				return doSaveConfig($scope.editing.config)
+				return doSaveConfig($scope.editing.config);
 			}).then(function () {
 				znMessage('Configuration enabled!', 'saved');
 			});
