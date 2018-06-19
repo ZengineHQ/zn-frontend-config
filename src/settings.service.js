@@ -1,4 +1,4 @@
-plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (multiConfigInputs) {
+plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function ($q, multiConfigInputs) {
 	return function (args) {
 		var srv = this;
 		var _defaults = {
@@ -255,7 +255,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		 */
 		srv.run = function (event, data) {
 			if (event in _hooks) {
-				return _hooks[event](data);
+				return $q.when(_hooks[event](data));
 			}
 
 			return $q.when(data);
