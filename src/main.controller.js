@@ -50,12 +50,14 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var promise = $scope.editing.config ? $scope.onDiscardChanges() : $q.when();
 
 			return promise.then(function () {
-				doResetTab();
 				$scope.editing.config = {
 					enabled: false
 				};
-				$scope.wgnConfigForm.$setPristine();
-				$scope.$emit('wgnMultiConfigAdd');
+
+				doRunHook('add', $scope.editing.config).finally(function () {
+					doResetTab();
+					$scope.wgnConfigForm.$setPristine();
+				});
 			});
 		};
 
@@ -74,8 +76,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					return config.$id === id;
 				})[0];
 
-				$scope.wgnConfigForm.$setPristine();
-				$scope.$emit('wgnMultiConfigEdit', $scope.editing.config);
+				doRunHook('edit', $scope.editing.config).finally(function () {
+					doResetTab();
+					$scope.wgnConfigForm.$setPristine();
+				});
 			});
 		};
 
@@ -98,9 +102,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 						danger: true,
 						action: function () {
 							return multiConfigService.deleteConfig(_workspaceId, $scope.editing.config, $scope.configs).then(function () {
-								$scope.$emit('wgnMultiConfigDelete', $scope.editing.config);
-								doDiscardChanges();
-								znMessage('The configuration has been deleted!', 'info');
+								doRunHook('delete', $scope.editing.config).finally(function () {
+									doDiscardChanges();
+									znMessage('The configuration has been deleted!', 'info');
+								});
 							}).catch(function (err) {
 								znMessage(err, 'error');
 							});
@@ -117,17 +122,21 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			$scope.saving = true;
 			doProcessHighlighted();
 
-			return doSaveConfig($scope.editing.config).then(function () {
-				$scope.saving = false;
-				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
-				znMessage('Configuration saved!', 'saved');
+			return doRunHook('preSave', $scope.editing.config).finally(function () {
+				return doSaveConfig($scope.editing.config);
+			}).then(function () {
+				doRunHook('postSave', $scope.editing.config).finally(function () {
+					znMessage('Configuration saved!', 'saved');
 
-				if ($scope.settings.multi) {
-					doDiscardChanges();
-				} else {
-					doResetTab();
-					$scope.wgnConfigForm.$setPristine();
-				}
+					if ($scope.settings.multi) {
+						doDiscardChanges();
+					} else {
+						doResetTab();
+						$scope.wgnConfigForm.$setPristine();
+					}
+
+					$scope.saving = false;
+				});
 			});
 		};
 
@@ -138,8 +147,9 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			$scope.editing.config.enabled = false;
 
 			return doSaveConfig($scope.editing.config).then(function () {
-				$scope.$emit('wgnMultiConfigDisable', $scope.editing.config);
-				znMessage('Configuration disabled!', 'saved');
+				doRunHook('disable', $scope.editing.config).finally(function () {
+					znMessage('Configuration disabled!', 'saved');
+				});
 			});
 		};
 
@@ -150,8 +160,9 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			$scope.editing.config.enabled = true;
 
 			return doSaveConfig($scope.editing.config).then(function () {
-				$scope.$emit('wgnMultiConfigEnable', $scope.editing.config);
-				znMessage('Configuration enabled!', 'saved');
+				doRunHook('enable', $scope.editing.config).finally(function () {
+					znMessage('Configuration enabled!', 'saved');
+				});
 			});
 		};
 
@@ -184,9 +195,10 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					'Yes': {
 						danger: true,
 						action: function () {
-							doDiscardChanges();
-							$scope.$emit('wgnMultiConfigDiscard');
-							def.resolve();
+							doRunHook('discard', $scope.editing.config).finally(function () {
+								doDiscardChanges();
+								def.resolve();
+							});
 						}
 					}
 				}
@@ -364,11 +376,13 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onConfigToggle = function (config) {
 			return doSaveConfig(config).then(function () {
 				if (config.enabled) {
-					$scope.$emit('wgnMultiConfigEnable', config);
-					znMessage('Configuration ' + config.configName + ' enabled!', 'saved');
+					doRunHook('enable', config).finally(function () {
+						znMessage('Configuration ' + config.configName + ' enabled!', 'saved');
+					});
 				} else {
-					$scope.$emit('wgnMultiConfigDisable', config);
-					znMessage('Configuration ' + config.configName + ' disabled!', 'saved');
+					doRunHook('disable', config).finally(function () {
+						znMessage('Configuration ' + config.configName + ' disabled!', 'saved');
+					});
 				}
 			});
 		};
@@ -521,6 +535,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 			// Extract info from each one and save it for display.
 			angular.forEach(highlighted, function (input) {
+				/*jshint maxcomplexity:9 */
 				var inputTypeFormatted = input.type.charAt(0).toUpperCase() + input.type.substr(1);
 
 				switch (input.type) {
@@ -554,8 +569,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 						break;
 
 					case 'folder':
-						var fieldDef = $scope.options.getField(input.id);
-						var folder = $scope.getFolders(fieldDef, false).filter(function (f) {
+						var folderDef = $scope.options.getField(input.id);
+						var folder = $scope.getFolders(folderDef, false).filter(function (f) {
 							return f.id === $scope.editing.config[input.id];
 						})[0];
 
@@ -600,6 +615,16 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		}
 
 		/**
+		 * Runs a Multi Config hook.
+		 *
+		 * @param {string} hook
+		 * @param {Objecg} data
+		 */
+		function doRunHook (hook, data) {
+			return $scope.options.run(hook, data);
+		}
+
+		/**
 		 * Bootstraps plugin.
 		 */
 		function init () {
@@ -608,6 +633,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 			// Load settings.
 			return multiConfigService.load(_workspaceId, $scope.settings.multi).then(function (configs) {
+				var def = $q.defer();
+
 				$scope.configs = configs;
 
 				if (!$scope.settings.multi) {
@@ -615,7 +642,11 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					_originalConfig = angular.copy($scope.configs);
 				}
 
-				$scope.$emit('wgnMultiConfigInit', $scope.configs);
+				doRunHook('init', $scope.configs).finally(function () {
+					def.resolve();
+				});
+
+				return def.promise;
 			}).then(function () {
 				// Load available forms.
 				return znData('Forms').get({ 'workspace.id': _workspaceId, 'limit': 200 });
