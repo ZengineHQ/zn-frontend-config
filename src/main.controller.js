@@ -116,8 +116,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onSaveConfig = function () {
 			$scope.saving = true;
 			doProcessHighlighted();
-
-			console.log($scope.editing.config);
+			
 			return doSaveConfig($scope.editing.config).then(function () {
 				$scope.saving = false;
 				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
@@ -542,10 +541,15 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 						var field = $scope.getFields(fieldDef, formDef);
 						break;
 					default:
-						// @TODO maybe forbid arbitrary fields from being used.
+						// @TODO Reconsider whether we want to allow all inputs here.
+						var val = $scope.editing.config[input.id].toString();
+						if (val.length > 22) {
+							val = val.substr(0, 22) + '...';
+						}
+
 						formatedHighligts.push({
 							type: inputTypeFormatted,
-							value: $scope.editing.config[input.id]
+							value: val
 						});
 				}
 			});
