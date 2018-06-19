@@ -1,6 +1,7 @@
 # TODO
 
-- [ ] highlighted fields
+- [x] highlighted fields
+- [ ] replace events with hooks 
 - [ ] custom field validation 
 
 ### Probably more trouble than they're worth
