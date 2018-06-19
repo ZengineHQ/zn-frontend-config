@@ -74,7 +74,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		 * @param {Object} def The field definition.
 		 */
 		srv.field = function (def) {
-			/*jshint maxcomplexity:10 */
+			/*jshint maxcomplexity:14 */
 			// Make sure we have a page, this will only be false if a field is added before a page.
 			if (_currentPage === false) {
 				throw new Error('Multi Config: No page exists to add fields to');
@@ -90,10 +90,10 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 			// Make sure reserved ids aren't used.
 			var reserved = ['configName'];
 			if (reserved.indexOf(def.id) !== -1) {
-				throw new Error('Multi Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.')
+				throw new Error('Multi Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.');
 			}
 			if (def.id.indexOf('mch') === 0) {
-				throw new Error('Multi Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.')
+				throw new Error('Multi Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.');
 			}
 
 			// Make sure id is unique.
