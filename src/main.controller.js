@@ -260,12 +260,12 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Loads all forms for a given input.
 		 * If a type is passed, it hides forms set for other form inputs in the list.
 		 *
-		 * @param {string} [fieldId] Optional. The form input id.
+		 * @param {string} fieldId The form input id.
 		 *
 		 * @return {Array<Object>}
 		 */
 		$scope.getForms = function (fieldId) {
-			if (!fieldId || !$scope.editing.config || !$scope.editing.config[fieldId]) {
+			if (!$scope.editing.config) {
 				return _forms;
 			}
 
