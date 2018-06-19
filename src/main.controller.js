@@ -122,22 +122,20 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			$scope.saving = true;
 			doProcessHighlighted();
 
-			return doRunHook('preSave', $scope.editing.config).then(function (newCfg) {
+			return doRunHook('save', $scope.editing.config).then(function (newCfg) {
 				angular.extend($scope.editing.config, newCfg);
 				return doSaveConfig($scope.editing.config);
 			}).then(function () {
-				doRunHook('postSave', $scope.editing.config).finally(function () {
-					znMessage('Configuration saved!', 'saved');
+				znMessage('Configuration saved!', 'saved');
 
-					if ($scope.settings.multi) {
-						doDiscardChanges();
-					} else {
-						doResetTab();
-						$scope.wgnConfigForm.$setPristine();
-					}
+				if ($scope.settings.multi) {
+					doDiscardChanges();
+				} else {
+					doResetTab();
+					$scope.wgnConfigForm.$setPristine();
+				}
 
-					$scope.saving = false;
-				});
+				$scope.saving = false;
 			});
 		};
 

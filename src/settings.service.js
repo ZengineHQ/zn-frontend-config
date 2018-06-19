@@ -227,8 +227,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 				'disable',
 				'discard',
 				'init',
-				'preSave',
-				'postSave'
+				'save'
 			];
 
 			if (allowedEvents.indexOf(event) === -1) {
