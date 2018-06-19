@@ -139,6 +139,11 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 						throw new Error('Config: Validation failed for property "' + k + '" in field type "' + def.type + '"');
 					}
 				}
+
+				// Exclusive defaults to true.
+				if (k === 'exclusive' && !('exclusive' in def)) {
+					def.exclusive = true;
+				}
 			});
 
 			// Store the template so we can build it later.
