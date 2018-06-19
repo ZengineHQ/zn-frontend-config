@@ -245,6 +245,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 
 			// _hooks[event].push(cb);
 
+			return srv;
 		};
 
 		/**
