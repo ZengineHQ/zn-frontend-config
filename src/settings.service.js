@@ -279,17 +279,22 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		 * @return {Object|false}
 		 */
 		srv.getField = function (id) {
-			for (var i = 0; i < _settings.pages.length; ++i) {
-				var field = _settings.pages[i].fields.filter(function (f) {
-					return f.id === id;
-				})[0];
+			var ret = false;
 
-				if (field) {
-					return field;
-				}
+			for (var i = 0; i < _settings.pages.length; ++i) {
+				/*jshint loopfunc:true */
+				(function (i) {
+					var field = _settings.pages[i].fields.filter(function (f) {
+						return f.id === id;
+					})[0];
+
+					if (field) {
+						ret = field;
+					}
+				}(i));
 			}
 
-			return false;
+			return ret;
 		};
 
 		/**
