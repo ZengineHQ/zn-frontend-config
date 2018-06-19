@@ -519,6 +519,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var formatedHighligts = [];
 
 			angular.forEach(highlighted, function (input) {
+				var inputTypeFormatted = input.type.charAt(0).toUpperCase() + input.type.substr(1);
+
 				switch (input.type) {
 					case 'form':
 						var form = $scope.getForms(input.id).filter(function (f) {
@@ -527,8 +529,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 
 						if (form) {
 							formatedHighligts.push({
-								type: input.type.charAt(0).toUpperCase() + input.type.substr(1),
-								// name: input.name,
+								type: inputTypeFormatted,
 								value: form.name
 							});
 						}
