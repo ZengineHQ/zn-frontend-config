@@ -603,7 +603,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Bootstraps plugin.
 		 */
 		function init () {
-			$scope.settings = $scope.options.config();
+			$scope.settings = $scope.options.getConfig();
 			doResetTab();
 
 			// Load settings.

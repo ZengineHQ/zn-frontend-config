@@ -303,7 +303,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		 *
 		 * @return {Object}
 		 */
-		srv.config = function () {
+		srv.getConfig = function () {
 			return _settings;
 		};
 
