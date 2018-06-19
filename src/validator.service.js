@@ -2,7 +2,7 @@ plugin.service('wgnConfigValidator', [function () {
 	var srv = this;
 
 	/**
-	 * Validates multi config settings.
+	 * Validates config settings.
 	 *
 	 * @param {Object} settings
 	 *
@@ -15,7 +15,7 @@ plugin.service('wgnConfigValidator', [function () {
 
 		// Make sure we have at least one page.
 		if (!Array.isArray(settings.pages) || !settings.pages.length) {
-			throw new Error('Invalid multi config settings! At least one page must be defined.');
+			throw new Error('Invalid config settings! At least one page must be defined.');
 		}
 
 		// Ensure no top level options exist other than the allowed ones.
@@ -58,7 +58,7 @@ plugin.service('wgnConfigValidator', [function () {
 
 		// Make sure we have at least one field.
 		if (!Array.isArray(page.fields) || !page.fields) {
-			throw new Error('Invalid multi config settings! At least one field must be defined for page ' + page.id);
+			throw new Error('Invalid config settings! At least one field must be defined for page ' + page.id);
 		}
 
 		// Ensure no options exist other than the allowed ones.
@@ -91,13 +91,13 @@ plugin.service('wgnConfigValidator', [function () {
 
 		// Ensure only valid field types are used.
 		if (validFieldTypes.indexOf(field.type) === -1) {
-			throw new Error('Invalid multi config settings! Field type "' + field.type + '" doesn\'t exist.');
+			throw new Error('Invalid config settings! Field type "' + field.type + '" doesn\'t exist.');
 		}
 
 		// Ensure required fields are present for certain special field types.
 		if (field.type === 'field' || field.type === 'folder') {
 			if (!('belongsTo' in field) || !field.belongsTo) {
-				throw new Error('Invalid multi config settings! Required key: "belongsTo" missing on field ' + field.id);
+				throw new Error('Invalid config settings! Required key: "belongsTo" missing on field ' + field.id);
 			}
 		}
 	}
@@ -115,7 +115,7 @@ plugin.service('wgnConfigValidator', [function () {
 	function doValidateSettingsRequired (required, keys, level, context) {
 		angular.forEach(required, function (option) {
 			if (keys.indexOf(option) === -1) {
-				throw new Error('Invalid multi config settings! Missing: "' + option + '" for ' + level + ' "' + context + '"');
+				throw new Error('Invalid config settings! Missing: "' + option + '" for ' + level + ' "' + context + '"');
 			}
 		});
 	}
@@ -133,7 +133,7 @@ plugin.service('wgnConfigValidator', [function () {
 	function doValidateSettingsAllowed (allowed, keys, level, context) {
 		angular.forEach(keys, function (key) {
 			if (allowed.indexOf(key) === -1) {
-				throw new Error('Invalid multi config settings! Option "' + key + '" not allowed for ' + level + ' "' + context + '"');
+				throw new Error('Invalid config settings! Option "' + key + '" not allowed for ' + level + ' "' + context + '"');
 			}
 		});
 	}

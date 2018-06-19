@@ -347,7 +347,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		};
 
 		/**
-		 * Returns a multi config settings object.
+		 * Returns a config settings object.
 		 * This is the final product of this service.
 		 *
 		 * @return {Object}
