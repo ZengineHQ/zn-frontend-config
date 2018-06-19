@@ -1,4 +1,4 @@
-plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'znModal', 'znMessage', 'wgnMultiConfigSrv',
+plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'znModal', 'znMessage', 'wgnConfigSrv',
 	function ($scope, $q, $routeParams, znData, znModal, znMessage, configService) {
 
 		// No need to pollute the scope.
@@ -246,7 +246,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 */
 		$scope.initFormField = function (formField, formDef) {
 			if ($scope.loading) {
-				$scope.$on('wgnMultiConfigInit', function () {
+				$scope.$on('wgnConfigInit', function () {
 					$scope.onSelectForm(formField, formDef);
 				});
 			} else {

@@ -1,4 +1,4 @@
-plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function ($q, configInputs) {
+plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, configInputs) {
 	return function (args) {
 		var srv = this;
 		var _defaults = {

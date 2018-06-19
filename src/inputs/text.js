@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigInputText', [function () {
+plugin.directive('wgnConfigInputText', [function () {
 	return {
 		scope: false,
 		template: 'wgn-config-input-text',

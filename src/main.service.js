@@ -1,4 +1,4 @@
-plugin.service('wgnMultiConfigSrv', ['$q', '$firebase', 'znData', function ($q, $firebase, znData) {
+plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $firebase, znData) {
 
 	var srv = this;
 

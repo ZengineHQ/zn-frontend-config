@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigInputChoice', [function () {
+plugin.directive('wgnConfigInputChoice', [function () {
 	return {
 		scope: false,
 		template: 'wgn-config-input-choice',

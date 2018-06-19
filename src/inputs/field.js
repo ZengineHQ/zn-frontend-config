@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigInputField', [function () {
+plugin.directive('wgnConfigInputField', [function () {
 	return {
 		scope: false,
 		template: 'wgn-config-input-field',

@@ -1,4 +1,4 @@
-plugin.service('wgnMultiConfigValidator', [function () {
+plugin.service('wgnConfigValidator', [function () {
 	var srv = this;
 
 	/**

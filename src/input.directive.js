@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigInput', [function () {
+plugin.directive('wgnConfigInput', [function () {
 	return {
 		scope: true,
 		restrict: 'E',

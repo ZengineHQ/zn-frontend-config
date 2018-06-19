@@ -1,4 +1,4 @@
-plugin.service('wgnMultiConfigInputs', [function () {
+plugin.service('wgnConfigInputs', [function () {
 	// This is just a centralized place to store the internal input type definitions and keep our main service cleaner.
 	var srv = this;
 

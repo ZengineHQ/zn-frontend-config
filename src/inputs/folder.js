@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigInputFolder', [function () {
+plugin.directive('wgnConfigInputFolder', [function () {
 	return {
 		scope: false,
 		template: 'wgn-config-input-folder',

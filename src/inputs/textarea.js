@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigInputTextarea', [function () {
+plugin.directive('wgnConfigInputTextarea', [function () {
 	return {
 		scope: false,
 		template: 'wgn-config-input-textarea',

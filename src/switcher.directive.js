@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigDisplaySwitcher', [function () {
+plugin.directive('wgnConfigDisplaySwitcher', [function () {
 	return {
 		scope: false,
 		templateUrl: 'wgn-config-display-switcher',

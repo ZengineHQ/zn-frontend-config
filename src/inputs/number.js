@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigInputNumber', [function () {
+plugin.directive('wgnConfigInputNumber', [function () {
 	return {
 		scope: false,
 		template: 'wgn-config-input-number',

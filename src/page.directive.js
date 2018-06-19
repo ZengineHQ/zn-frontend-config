@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigPage', [function () {
+plugin.directive('wgnConfigPage', [function () {
 	return {
 		scope: true,
 		templateUrl: 'wgn-config-page',

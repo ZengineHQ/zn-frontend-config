@@ -1,4 +1,4 @@
-plugin.directive('wgnMultiConfigInputs', [function () {
+plugin.directive('wgnConfigInputs', [function () {
 	return {
 		scope: false,
 		templateUrl: 'wgn-config-inputs',
