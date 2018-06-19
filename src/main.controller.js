@@ -71,8 +71,6 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var promise = $scope.editing.config ? $scope.onDiscardChanges() : $q.when();
 
 			return promise.then(function () {
-				doResetTab();
-
 				$scope.editing.config = $scope.configs.filter(function (config) {
 					return config.$id === id;
 				})[0];
