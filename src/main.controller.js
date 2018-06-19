@@ -620,7 +620,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		}
 
 		/**
-		 * Runs a Multi Config hook.
+		 * Runs a Config hook.
 		 *
 		 * @param {string} hook
 		 * @param {Objecg} data
