@@ -1,7 +1,7 @@
 {
   "name": "@zenginehq/frontend-config",
   "version": "3.0.0",
-  "description": "Helper module for working with multiple configurations in Zengine frontend plugins.",
+  "description": "Helper module for implementing Zengine plugin configuration forms.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "jshint --config .jshintrc ./src || true",
