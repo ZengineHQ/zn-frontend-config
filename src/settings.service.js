@@ -272,6 +272,27 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		};
 
 		/**
+		 * Returns a field definition given an id.
+		 *
+		 * @param {string} id
+		 *
+		 * @return {Object|false}
+		 */
+		srv.getField = function (id) {
+			for (var i = 0; i < _settings.pages.length; ++i) {
+				var field = _settings.pages[i].fields.filter(function (f) {
+					return f.id === id;
+				})[0];
+
+				if (field) {
+					return field;
+				}
+			}
+
+			return false;
+		};
+
+		/**
 		 * Returns a multi config settings object.
 		 * This is the final product of this service.
 		 *
