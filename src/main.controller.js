@@ -116,7 +116,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onSaveConfig = function () {
 			$scope.saving = true;
 			doProcessHighlighted();
-			
+
 			return doSaveConfig($scope.editing.config).then(function () {
 				$scope.saving = false;
 				$scope.$emit('wgnMultiConfigSave', $scope.editing.config);
