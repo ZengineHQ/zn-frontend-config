@@ -145,7 +145,13 @@ $color-success: #3c763d;
 
 	.config-highlight {
 		color: #888;
+		cursor: pointer;
 		font-weight: 200;
+
+		.mch-name {
+			color: #666;
+			font-weight: 300;
+		}
 	}
 }
 
