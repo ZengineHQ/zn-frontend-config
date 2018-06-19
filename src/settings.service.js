@@ -255,7 +255,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 		 */
 		srv.run = function (event, data) {
 			if (event in _hooks) {
-				return $q.when(_hooks[event](data));
+				return $q.when(_hooks[event](angular.copy(data)));
 			}
 
 			return $q.when(data);
