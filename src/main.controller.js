@@ -54,7 +54,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					enabled: false
 				};
 
-				doRunHook('add', $scope.editing.config).finally(function () {
+				doRunHook('add', $scope.editing.config).then(function (data) {
+					angular.extend($scope.editing.config, data);
 					doResetTab();
 					$scope.wgnConfigForm.$setPristine();
 				});
@@ -76,7 +77,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					return config.$id === id;
 				})[0];
 
-				doRunHook('edit', $scope.editing.config).finally(function () {
+				doRunHook('edit', $scope.editing.config).then(function (data) {
+					angular.extend($scope.editing.config, data);
 					doResetTab();
 					$scope.wgnConfigForm.$setPristine();
 				});
@@ -145,10 +147,11 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onDisableConfig = function () {
 			$scope.editing.config.enabled = false;
 
-			return doSaveConfig($scope.editing.config).then(function () {
-				doRunHook('disable', $scope.editing.config).finally(function () {
-					znMessage('Configuration disabled!', 'saved');
-				});
+			return doRunHook('disable', $scope.editing.config).then(function (data) {
+				angular.extend($scope.editing.config, data);
+				return doSaveConfig($scope.editing.config);
+			}).then(function () {
+				znMessage('Configuration disabled!', 'saved');
 			});
 		};
 
@@ -158,10 +161,11 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		$scope.onEnableConfig = function () {
 			$scope.editing.config.enabled = true;
 
-			return doSaveConfig($scope.editing.config).then(function () {
-				doRunHook('enable', $scope.editing.config).finally(function () {
-					znMessage('Configuration enabled!', 'saved');
-				});
+			doRunHook('enable', $scope.editing.config).then(function (data) {
+				angular.extend($scope.editing.config, data);
+				return doSaveConfig($scope.editing.config)
+			}).then(function () {
+				znMessage('Configuration enabled!', 'saved');
 			});
 		};
 
@@ -373,17 +377,21 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * @param {Object} config
 		 */
 		$scope.onConfigToggle = function (config) {
-			return doSaveConfig(config).then(function () {
-				if (config.enabled) {
-					doRunHook('enable', config).finally(function () {
+			if (config.enabled) {
+				doRunHook('enable', config).then(function (data) {
+					angular.extend($scope.editing.config, data);
+					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.configName + ' enabled!', 'saved');
 					});
-				} else {
-					doRunHook('disable', config).finally(function () {
+				});
+			} else {
+				doRunHook('disable', config).then(function (data) {
+					angular.extend($scope.editing.config, data);
+					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.configName + ' disabled!', 'saved');
 					});
-				}
-			});
+				});
+			}
 		};
 
 		/**
