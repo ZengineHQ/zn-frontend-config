@@ -541,6 +541,12 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 						// @TODO get field and form defs for arg.
 						var field = $scope.getFields(fieldDef, formDef);
 						break;
+					default:
+						// @TODO maybe forbid arbitrary fields from being used.
+						formatedHighligts.push({
+							type: inputTypeFormatted,
+							value: $scope.editing.config[input.id]
+						});
 				}
 			});
 
