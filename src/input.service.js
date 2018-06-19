@@ -5,7 +5,12 @@ plugin.service('wgnConfigInputs', [function () {
 	var _internalInputTypes = [
 		{
 			type: 'form',
-			template: 'wgn-config-input-form'
+			template: 'wgn-config-input-form',
+			options: {
+				exclusive: {
+					required: false
+				}
+			}
 		},
 		{
 			type: 'field',
@@ -14,6 +19,9 @@ plugin.service('wgnConfigInputs', [function () {
 					required: true
 				},
 				restrict: {
+					required: false
+				},
+				exclusive: {
 					required: false
 				}
 			},
@@ -24,6 +32,9 @@ plugin.service('wgnConfigInputs', [function () {
 			options: {
 				belongsTo: {
 					required: true
+				},
+				exclusive: {
+					required: false
 				}
 			},
 			template: 'wgn-config-input-folder'
