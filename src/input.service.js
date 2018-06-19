@@ -115,6 +115,9 @@ plugin.service('wgnConfigInputs', [function () {
 					validate: function (r) {
 						return checkAllowedItems(r, ['radio', 'checkbox', 'dropdown']);
 					}
+				},
+				exclusive: {
+					required: false
 				}
 			},
 			template: 'wgn-config-input-choice'
