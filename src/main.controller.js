@@ -1,5 +1,5 @@
 plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'znModal', 'znMessage', 'wgnMultiConfigSrv',
-	function ($scope, $q, $routeParams, znData, znModal, znMessage, multiConfigService) {
+	function ($scope, $q, $routeParams, znData, znModal, znMessage, configService) {
 
 		// No need to pollute the scope.
 		var _workspaceId = $routeParams.workspace_id;
@@ -101,7 +101,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 					'Yes': {
 						danger: true,
 						action: function () {
-							return multiConfigService.deleteConfig(_workspaceId, $scope.editing.config, $scope.configs).then(function () {
+							return configService.deleteConfig(_workspaceId, $scope.editing.config, $scope.configs).then(function () {
 								doRunHook('delete', $scope.editing.config).finally(function () {
 									doDiscardChanges();
 									znMessage('The configuration has been deleted!', 'info');
@@ -615,8 +615,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 */
 		function doSaveConfig (config) {
 			return $scope.settings.multi ?
-				multiConfigService.save(_workspaceId, $scope.configs, config) :
-				multiConfigService.saveSingle(_workspaceId, config);
+				configService.save(_workspaceId, $scope.configs, config) :
+				configService.saveSingle(_workspaceId, config);
 		}
 
 		/**
@@ -637,7 +637,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			doResetTab();
 
 			// Load settings.
-			return multiConfigService.load(_workspaceId, $scope.settings.multi).then(function (configs) {
+			return configService.load(_workspaceId, $scope.settings.multi).then(function (configs) {
 				var def = $q.defer();
 
 				$scope.configs = configs;
