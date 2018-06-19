@@ -1,4 +1,4 @@
-plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (multiConfigInputs) {
+plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function ($q, multiConfigInputs) {
 	return function (args) {
 		var srv = this;
 		var _defaults = {
@@ -15,6 +15,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		var _formInputs = [];
 		var _fieldTypes = {};
 		var _highlightedFields = [];
+		var _hooks = {};
 
 		// Accept either a configuration object or a string for the title.
 		if (!angular.isObject(args)) {
@@ -74,7 +75,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		 * @param {Object} def The field definition.
 		 */
 		srv.field = function (def) {
-			/*jshint maxcomplexity:10 */
+			/*jshint maxcomplexity:14 */
 			// Make sure we have a page, this will only be false if a field is added before a page.
 			if (_currentPage === false) {
 				throw new Error('Multi Config: No page exists to add fields to');
@@ -90,10 +91,10 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 			// Make sure reserved ids aren't used.
 			var reserved = ['configName'];
 			if (reserved.indexOf(def.id) !== -1) {
-				throw new Error('Multi Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.')
+				throw new Error('Multi Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.');
 			}
 			if (def.id.indexOf('mch') === 0) {
-				throw new Error('Multi Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.')
+				throw new Error('Multi Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.');
 			}
 
 			// Make sure id is unique.
@@ -212,6 +213,54 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		};
 
 		/**
+		 * Registers a callback to run when a certain hook is fired.
+		 *
+		 * @param {string} event
+		 * @param {function} cb
+		 */
+		srv.on = function (event, cb) {
+			var allowedEvents = [
+				'add',
+				'edit',
+				'delete',
+				'enable',
+				'disable',
+				'discard',
+				'init',
+				'save'
+			];
+
+			if (allowedEvents.indexOf(event) === -1) {
+				throw new Error('Multi Config: Invalid event name: ' + event);
+			}
+
+			// @TODO we really want to support multiple callbacks per hook but it can get messy so let's put it on ice.
+			if (!(event in _hooks)) {
+				// _hooks[event] = [];
+				_hooks[event] = cb;
+			} else {
+				throw new Error('Multi Config: Only a single listener can subscribe to the event "' + event + '".')
+			}
+
+			// _hooks[event].push(cb);
+
+			return srv;
+		};
+
+		/**
+		 * Invokes a hook by executing registered callbacks.
+		 *
+		 * @param {string} event
+		 */
+		srv.run = function (event, data) {
+			if (event in _hooks) {
+				return $q.when(_hooks[event](angular.copy(data)));
+			}
+
+			return $q.when(data);
+		};
+
+		/**
 		 * Sets the settings page title.
 		 *
 		 * @param {string} title
@@ -279,17 +328,22 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		 * @return {Object|false}
 		 */
 		srv.getField = function (id) {
-			for (var i = 0; i < _settings.pages.length; ++i) {
-				var field = _settings.pages[i].fields.filter(function (f) {
-					return f.id === id;
-				})[0];
+			var ret = false;
 
-				if (field) {
-					return field;
-				}
+			for (var i = 0; i < _settings.pages.length; ++i) {
+				/*jshint loopfunc:true */
+				(function (i) {
+					var field = _settings.pages[i].fields.filter(function (f) {
+						return f.id === id;
+					})[0];
+
+					if (field) {
+						ret = field;
+					}
+				}(i));
 			}
 
-			return false;
+			return ret;
 		};
 
 		/**
@@ -298,7 +352,7 @@ plugin.service('wgnMultiConfigSettings', ['wgnMultiConfigInputs', function (mult
 		 *
 		 * @return {Object}
 		 */
-		srv.config = function () {
+		srv.getConfig = function () {
 			return _settings;
 		};
 
