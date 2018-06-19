@@ -122,7 +122,8 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			$scope.saving = true;
 			doProcessHighlighted();
 
-			return doRunHook('preSave', $scope.editing.config).finally(function () {
+			return doRunHook('preSave', $scope.editing.config).then(function (newCfg) {
+				angular.extend($scope.editing.config, newCfg);
 				return doSaveConfig($scope.editing.config);
 			}).then(function () {
 				doRunHook('postSave', $scope.editing.config).finally(function () {
