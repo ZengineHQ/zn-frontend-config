@@ -136,7 +136,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 
 				if ('validate' in opts[k]) {
 					if (!opts[k].validate(def[k])) {
-						throw new Error('Multi Config: Validation failed for property "' + k + '" in field type "' + def.type + '"');
+						throw new Error('Config: Validation failed for property "' + k + '" in field type "' + def.type + '"');
 					}
 				}
 			});
