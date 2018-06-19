@@ -378,7 +378,7 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		 * Used to return fields and folders for a given form.
 		 *
 		 * @param {Object} fieldDef The folder input definition.
-		 * @param {Object} formDef The form this input belongs to.
+		 * @param {Object|false} formDef The form this input belongs to in order to filter values used in other fields or false to return them all.
 		 * @param {Object} source The source data.
 		 *
 		 * @return {Array<Object>}
@@ -391,15 +391,17 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 			var filters = [];
 
 			// Filter values used in other folder inputs.
-			angular.forEach(formDef.fields, function (f) {
-				if (f.type === fieldDef.type && f.id !== fieldDef.id && $scope.editing.config) {
-					if (f.type === 'choice' && f.id + '_source' in $scope.editing.config && $scope.editing.config[f.id + '_source']) {
-						filters.push($scope.editing.config[f.id + '_source']);
-					} else if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
-						filters.push($scope.editing.config[f.id]);
+			if (formDef) {
+				angular.forEach(formDef.fields, function (f) {
+					if (f.type === fieldDef.type && f.id !== fieldDef.id && $scope.editing.config) {
+						if (f.type === 'choice' && f.id + '_source' in $scope.editing.config && $scope.editing.config[f.id + '_source']) {
+							filters.push($scope.editing.config[f.id + '_source']);
+						} else if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
+							filters.push($scope.editing.config[f.id]);
+						}
 					}
-				}
-			});
+				});
+			}
 
 			var formId = $scope.editing.config[fieldDef.belongsTo];
 
@@ -512,11 +514,12 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 		/**
 		 * Processes highlighted fields and adds additional keys to the config object.
 		 */
-		function doProcessHighlighted() {
-			// Extract highlighted fields.
+		function doProcessHighlighted () {
+			// Find highlighted fields.
 			var highlighted = $scope.options.getHighlighted();
 			var formatedHighligts = [];
 
+			// Extract info from each one and save it for display.
 			angular.forEach(highlighted, function (input) {
 				var inputTypeFormatted = input.type.charAt(0).toUpperCase() + input.type.substr(1);
 
@@ -535,10 +538,19 @@ plugin.controller('wgnMultiConfigCtrl', ['$scope', '$q', '$routeParams', 'znData
 						break;
 
 					case 'field':
-						var fieldDef;
+					case 'choice':
+						var fieldDef = $scope.options.getField(input.id);
+						var field = $scope.getFields(fieldDef, false).filter(function (f) {
+							var configKey = input.type === 'choice' ? input.id + '_source' : input.id;
+							return f.id === $scope.editing.config[configKey];
+						})[0];
 
-						// @TODO get field and form defs for arg.
-						var field = $scope.getFields(fieldDef, formDef);
+						if (field) {
+							formatedHighligts.push({
+								type: inputTypeFormatted,
+								value: field.name
+							});
+						}
 						break;
 					default:
 						// @TODO Reconsider whether we want to allow all inputs here.
