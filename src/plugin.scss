@@ -12,7 +12,7 @@ $color-success: #3c763d;
 	}
 }
 
-.multi-config-container {
+.config-container {
 	margin-top: 2em;
 
 	.btn {
@@ -155,14 +155,14 @@ $color-success: #3c763d;
 	}
 }
 
-.multi-config-label {
+.config-label {
 	font-size: 1.1em;
 	font-weight: 600;
 	margin-bottom: .8em;
 	text-transform: uppercase;
 }
 
-.multi-config-intro {
+.config-intro {
 	font-size: 1em;
 	font-weight: 200;
 	line-height: 1.5;
@@ -170,7 +170,7 @@ $color-success: #3c763d;
 	width: 70%;
 }
 
-.multi-config-list {
+.config-list {
 	margin: 2em 0 0 0;
 
 	li {
@@ -252,7 +252,7 @@ $color-success: #3c763d;
 	}
 }
 
-.multi-config-name {
+.config-name {
 
 	label {
 		font-weight: 300;
@@ -260,7 +260,7 @@ $color-success: #3c763d;
 	}
 }
 
-.multi-config-empty {
+.config-empty {
 	font-size: 1.3em;
 	font-weight: 400;
 	padding: 5em 2em;
@@ -279,7 +279,7 @@ $toggle-height: 15px;
 $toggle-green: rgba(19,191,17,1);
 $toggle-orange: #ff9900;
 
-.multi-config-input {
+.config-input {
 	display: inline-block;
 }
 

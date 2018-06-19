@@ -1,7 +1,7 @@
 plugin.directive('wgnMultiConfigDisplaySwitcher', [function () {
 	return {
 		scope: false,
-		templateUrl: 'wgn-multi-config-display-switcher',
+		templateUrl: 'wgn-config-display-switcher',
 		restrict: 'E',
 		replace: true
 	};

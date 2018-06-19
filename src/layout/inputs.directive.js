@@ -1,7 +1,7 @@
 plugin.directive('wgnMultiConfigInputs', [function () {
 	return {
 		scope: false,
-		templateUrl: 'wgn-multi-config-inputs',
+		templateUrl: 'wgn-config-inputs',
 		restrict: 'E',
 		replace: true
 	};

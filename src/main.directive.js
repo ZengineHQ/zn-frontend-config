@@ -4,7 +4,7 @@ plugin.directive('wgnMultiConfig', [function () {
 			options: '='
 		},
 		controller: 'wgnMultiConfigCtrl',
-		templateUrl: 'wgn-multi-config',
+		templateUrl: 'wgn-config',
 		restrict: 'E',
 		replace: true
 	};

@@ -1,7 +1,7 @@
 plugin.directive('wgnMultiConfigInputDropdown', [function () {
 	return {
 		scope: false,
-		template: 'wgn-multi-config-input-dropdown',
+		template: 'wgn-config-input-dropdown',
 		restrict: 'E',
 		replace: true
 	};

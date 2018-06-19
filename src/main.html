@@ -1,4 +1,4 @@
-<script type="text/ng-template" id="wgn-multi-config">
+<script type="text/ng-template" id="wgn-config">
 
 	<div>
 		<div class="section">
@@ -9,13 +9,13 @@
 
 			<h2><i class="icon-{{ settings.icon }}"></i> {{ settings.title }}</h2>
 
-			<p class="multi-config-intro">{{ settings.help }}</p>
+			<p class="config-intro">{{ settings.help }}</p>
 		</div>
 
 		<span ng-show="loading" class="throbber"></span>
 
-		<div class="multi-config-container" ng-hide="loading">
-			<wgn-multi-config-list ng-show="!editing.config && settings.multi"></wgn-multi-config-list>
+		<div class="config-container" ng-hide="loading">
+			<wgn-config-list ng-show="!editing.config && settings.multi"></wgn-config-list>
 
 			<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" ng-show="editing.config" novalidate>
 				<a href="javascript:" ng-click="onDiscardChanges()" ng-show="settings.multi">
@@ -41,9 +41,9 @@
 						</button>
 					</div>
 
-					<wgn-multi-config-name></wgn-multi-config-name>
+					<wgn-config-name></wgn-config-name>
 
-					<wgn-multi-config-inputs></wgn-multi-config-inputs>
+					<wgn-config-inputs></wgn-config-inputs>
 				</div>
 
 				<div class="form-actions bottom-actions">

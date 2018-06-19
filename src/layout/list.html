@@ -1,4 +1,4 @@
-<script type="text/ng-template" id="wgn-multi-config-list">
+<script type="text/ng-template" id="wgn-config-list">
 	<div class="section">
 		<div class="view-switcher" ng-show="configs.length">
 			View:
@@ -14,14 +14,14 @@
 			</a>
 		</div>
 
-		<div class="multi-config-label">Configurations</div>
+		<div class="config-label">Configurations</div>
 
-		<p ng-show="!configs.length" class="multi-config-empty">
+		<p ng-show="!configs.length" class="config-empty">
 			You don't have any configurations yet.
 			<a href="javascript:" ng-click="onNewConfig()">Let's create one!</a>
 		</p>
 
-		<ul class="multi-config-list" ng-class="{grid: display === 'grid', list: display === 'list'}"
+		<ul class="config-list" ng-class="{grid: display === 'grid', list: display === 'list'}"
 			ng-show="configs.length">
 
 			<li ng-repeat="config in configs">
