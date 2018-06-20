@@ -194,23 +194,25 @@ $color-success: #3c763d;
 
 		.config-name {
 			display: inline-block;
+			width: 30em;
 		}
 
 		.config-status {
 			display: inline-block;
 			position: absolute;
-			right: 70px;
+			right: 5em;
 			top: 3px;
 		}
 
 		.config-highlights {
 			display: inline-block;
-			margin-left: 200px;
+			margin-left: 7em;
 		}
 
 		.config-highlight {
 			display: inline-block;
-			margin-left: 12px;
+			margin-left: 1em;
+			width: 11em;
 		}
 	}
 
