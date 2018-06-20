@@ -257,7 +257,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		$scope.initFormField = function (fieldDefId) {
 			if ($scope.loading) {
-				$scope.$on('wgnConfigInit', function () {
+				$scope.options.on('init', function () {
 					$scope.onSelectForm(fieldDefId);
 				});
 			} else {
