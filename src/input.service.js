@@ -62,7 +62,7 @@ plugin.service('wgnConfigInputs', [function () {
 			template: 'wgn-config-input-textarea'
 		},
 		{
-			type: 'select',
+			type: 'dropdown',
 			options: {
 				options: {
 					required: true,
@@ -87,7 +87,7 @@ plugin.service('wgnConfigInputs', [function () {
 					}
 				}
 			},
-			template: 'wgn-config-input-select'
+			template: 'wgn-config-input-dropdown'
 		},
 		{
 			type: 'markup',
