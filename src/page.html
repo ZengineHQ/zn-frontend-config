@@ -1,5 +1,5 @@
-<script type="text/ng-template" id="wgn-multi-config-page">
-	<div id="multi-config-page-{{ specs.id }}">
+<script type="text/ng-template" id="wgn-config-page">
+	<div id="config-page-{{ specs.id }}">
 		<div class="form-group" ng-class="'group-' + field.type" ng-repeat="field in specs.fields">
 			<!--Special markup input-->
 			<div ng-if="field.type === 'markup'" ng-bind-html="field.value"></div>
@@ -9,7 +9,7 @@
 				<label class="form-label" ng-show="field.name">{{ field.name }}</label>
 
 				<div class="controls">
-					<wgn-multi-config-input definition="field"></wgn-multi-config-input>
+					<wgn-config-input definition="field"></wgn-config-input>
 
 					<span ng-if="field.required" class="danger">Required</span>
 					<span ng-if="field.help" class="help-block">{{ field.help }}</span>

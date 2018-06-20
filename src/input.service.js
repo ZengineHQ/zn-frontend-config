@@ -1,11 +1,16 @@
-plugin.service('wgnMultiConfigInputs', [function () {
+plugin.service('wgnConfigInputs', [function () {
 	// This is just a centralized place to store the internal input type definitions and keep our main service cleaner.
 	var srv = this;
 
 	var _internalInputTypes = [
 		{
 			type: 'form',
-			template: 'wgn-multi-config-input-form'
+			template: 'wgn-config-input-form',
+			options: {
+				exclusive: {
+					required: false
+				}
+			}
 		},
 		{
 			type: 'field',
@@ -15,18 +20,24 @@ plugin.service('wgnMultiConfigInputs', [function () {
 				},
 				restrict: {
 					required: false
+				},
+				exclusive: {
+					required: false
 				}
 			},
-			template: 'wgn-multi-config-input-field'
+			template: 'wgn-config-input-field'
 		},
 		{
 			type: 'folder',
 			options: {
 				belongsTo: {
 					required: true
+				},
+				exclusive: {
+					required: false
 				}
 			},
-			template: 'wgn-multi-config-input-folder'
+			template: 'wgn-config-input-folder'
 		},
 		{
 			type: 'text',
@@ -35,7 +46,7 @@ plugin.service('wgnMultiConfigInputs', [function () {
 					required: false
 				}
 			},
-			template: 'wgn-multi-config-input-text'
+			template: 'wgn-config-input-text'
 		},
 		{
 			type: 'number',
@@ -44,11 +55,11 @@ plugin.service('wgnMultiConfigInputs', [function () {
 					required: false
 				}
 			},
-			template: 'wgn-multi-config-input-number'
+			template: 'wgn-config-input-number'
 		},
 		{
 			type: 'textarea',
-			template: 'wgn-multi-config-input-textarea'
+			template: 'wgn-config-input-textarea'
 		},
 		{
 			type: 'select',
@@ -76,7 +87,7 @@ plugin.service('wgnMultiConfigInputs', [function () {
 					}
 				}
 			},
-			template: 'wgn-multi-config-input-select'
+			template: 'wgn-config-input-select'
 		},
 		{
 			type: 'markup',
@@ -85,7 +96,7 @@ plugin.service('wgnMultiConfigInputs', [function () {
 					required: true
 				}
 			},
-			template: 'wgn-multi-config-input-markup'
+			template: 'wgn-config-input-markup'
 		},
 		{
 			type: 'choice',
@@ -104,9 +115,12 @@ plugin.service('wgnMultiConfigInputs', [function () {
 					validate: function (r) {
 						return checkAllowedItems(r, ['radio', 'checkbox', 'dropdown']);
 					}
+				},
+				exclusive: {
+					required: false
 				}
 			},
-			template: 'wgn-multi-config-input-choice'
+			template: 'wgn-config-input-choice'
 		}
 	];
 

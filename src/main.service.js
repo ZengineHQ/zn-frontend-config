@@ -1,4 +1,4 @@
-plugin.service('wgnMultiConfigSrv', ['$q', '$firebase', 'znData', function ($q, $firebase, znData) {
+plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $firebase, znData) {
 
 	var srv = this;
 
@@ -81,7 +81,7 @@ plugin.service('wgnMultiConfigSrv', ['$q', '$firebase', 'znData', function ($q, 
 	};
 
 	/**
-	 * Saves a multi config plugin configuration.
+	 * Saves a config plugin configuration.
 	 *
 	 * @param {number} workspaceId
 	 * @param {Object} $ref A Firebase reference.

@@ -2,7 +2,6 @@
 .jshintrc
 .nvmrc
 README.md
-TODO.md
 CHANGELOG.md
-example.js
 plugin.scss
+screenshots/

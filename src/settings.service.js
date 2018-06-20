@@ -1,4 +1,4 @@
-plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function ($q, multiConfigInputs) {
+plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, configInputs) {
 	return function (args) {
 		var srv = this;
 		var _defaults = {
@@ -40,7 +40,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 			// Ensure name and id are unique.
 			angular.forEach(_settings.pages, function (p) {
 				if (p.name === name) {
-					throw new Error('Multi Config: Page name must be unique!');
+					throw new Error('Config: Page name must be unique!');
 				}
 
 				if (p.id === id) {
@@ -78,33 +78,33 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 			/*jshint maxcomplexity:14 */
 			// Make sure we have a page, this will only be false if a field is added before a page.
 			if (_currentPage === false) {
-				throw new Error('Multi Config: No page exists to add fields to');
+				throw new Error('Config: No page exists to add fields to');
 			}
 
 			// Validate required properties.
 			['id', 'name', 'type'].forEach(function (p) {
 				if (!(p in def) || !def[p]) {
-					throw new Error('Multi Config: Missing required field property: "' + p + '"');
+					throw new Error('Config: Missing required field property: "' + p + '"');
 				}
 			});
 
 			// Make sure reserved ids aren't used.
 			var reserved = ['configName'];
 			if (reserved.indexOf(def.id) !== -1) {
-				throw new Error('Multi Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.');
+				throw new Error('Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.');
 			}
 			if (def.id.indexOf('mch') === 0) {
-				throw new Error('Multi Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.');
+				throw new Error('Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.');
 			}
 
 			// Make sure id is unique.
 			if (_fieldIds.indexOf(def.id) !== -1) {
-				throw new Error('Multi Config: Field id "' + def.id + '" is already in use');
+				throw new Error('Config: Field id "' + def.id + '" is already in use');
 			}
 
 			// Make sure field type exists.
 			if (!(def.type in _fieldTypes)) {
-				throw new Error('Multi Config: Inexistent field type: ' + def.type);
+				throw new Error('Config: Inexistent field type: ' + def.type);
 			}
 
 			// Type cast a couple optional common properties.
@@ -131,13 +131,18 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 			// Iterate over field type option definitions and validate the given field definition.
 			angular.forEach(Object.keys(opts), function (k) {
 				if ('required' in opts[k] && opts[k].required && !(k in def)) {
-					throw new Error('Multi Config: Required property "' + k + '" missing for "' + def.type + '" input with id "' + def.id + '"');
+					throw new Error('Config: Required property "' + k + '" missing for "' + def.type + '" input with id "' + def.id + '"');
 				}
 
 				if ('validate' in opts[k]) {
 					if (!opts[k].validate(def[k])) {
-						throw new Error('Multi Config: Validation failed for property "' + k + '" in field type "' + def.type + '"');
+						throw new Error('Config: Validation failed for property "' + k + '" in field type "' + def.type + '"');
 					}
+				}
+
+				// Exclusive defaults to true.
+				if (k === 'exclusive' && !('exclusive' in def)) {
+					def.exclusive = true;
 				}
 			});
 
@@ -153,13 +158,13 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 			// Finally if the field has the special "belongsTo" option, validate its target exists.
 			if ('belongsTo' in def) {
 				if (_formInputs.indexOf(def.belongsTo) === -1) {
-					throw new Error('Multi Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
+					throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
 				}
 			}
 
 			if ('highlighted' in def && def.highlighted) {
 				if (_highlightedFields.length >= 2) {
-					throw new Error('Multi Config: Only 2 fields maximum may be highlighted. Field "' + def.id + '" is not allowed.');
+					throw new Error('Config: Only 2 fields maximum may be highlighted. Field "' + def.id + '" is not allowed.');
 				}
 
 				_highlightedFields.push({
@@ -183,24 +188,24 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 		 */
 		srv.fieldType = function (data) {
 			if (!angular.isObject(data)) {
-				throw new Error('Multi Config: Object required as parameter when calling "fieldType()".');
+				throw new Error('Config: Object required as parameter when calling "fieldType()".');
 			}
 
 			var requiredFields = ['type', 'template'];
 			angular.forEach(requiredFields, function (f) {
 				if (!(f in data) || !data[f]) {
-					throw new Error('Multi Config: Missing "' + f + '" key in parameter object required when calling fieldType().');
+					throw new Error('Config: Missing "' + f + '" key in parameter object required when calling fieldType().');
 				}
 			});
 
 			// Ensure field type doesn't already exit.
 			if (data.type in _fieldTypes) {
-				throw new Error('Multi Config: Field types must be unique, trying to define "' + data.type + '" but it already exists.');
+				throw new Error('Config: Field types must be unique, trying to define "' + data.type + '" but it already exists.');
 			}
 
 			// Ensure options is an object.
 			if ('options' in data && !angular.isObject(data.options)) {
-				throw new Error('Multi Config: Field options must be an object for field type "' + data.type + '"');
+				throw new Error('Config: Field options must be an object for field type "' + data.type + '"');
 			}
 
 			// Finally add the type.
@@ -231,7 +236,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 			];
 
 			if (allowedEvents.indexOf(event) === -1) {
-				throw new Error('Multi Config: Invalid event name: ' + event);
+				throw new Error('Config: Invalid event name: ' + event);
 			}
 
 			// @TODO we really want to support multiple callbacks per hook but it can get messy so let's put it on ice.
@@ -239,7 +244,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 				// _hooks[event] = [];
 				_hooks[event] = cb;
 			} else {
-				throw new Error('Multi Config: Only a single listener can subscribe to the event "' + event + '".');
+				throw new Error('Config: Only a single listener can subscribe to the event "' + event + '".');
 			}
 
 			// _hooks[event].push(cb);
@@ -347,7 +352,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 		};
 
 		/**
-		 * Returns a multi config settings object.
+		 * Returns a config settings object.
 		 * This is the final product of this service.
 		 *
 		 * @return {Object}
@@ -397,7 +402,7 @@ plugin.service('wgnMultiConfigSettings', ['$q', 'wgnMultiConfigInputs', function
 		}
 
 		// Dog food our own bootstrapping of internal field types.
-		angular.forEach(multiConfigInputs.all(), function (type) {
+		angular.forEach(configInputs.all(), function (type) {
 			srv.fieldType(type);
 		});
 
