@@ -307,7 +307,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.getFields = function (fieldDef, formDef) {
 			// Filter by restrict key if available.
 			return getFiltered(fieldDef, formDef, _fields).filter(function (f) {
-				if (!fieldDef.restrict) {
+				if (!('restrict' in fieldDef) || !fieldDef.restrict) {
 					return true;
 				}
 
