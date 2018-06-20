@@ -680,12 +680,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			return configService.load(_workspaceId, $scope.settings.multi).then(function (configs) {
 				var def = $q.defer();
 
-				$scope.configs = configs;
-
 				if (!$scope.settings.multi) {
-					$scope.editing.config = $scope.configs;
-					_originalConfig = angular.copy($scope.configs);
+					$scope.editing.config = configs;
+					_originalConfig = angular.copy(configs);
 				}
+
+				$scope.configs = configs;
 
 				doRunHook('init', $scope.configs).finally(function () {
 					def.resolve();
