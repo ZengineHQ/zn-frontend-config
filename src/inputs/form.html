@@ -3,8 +3,8 @@
 	<select class="form-control" name="input"
 			ng-options="form.id as form.name for form in getForms(field)"
 			ng-model="editing.config[field.id]"
-			ng-change="onSelectForm(field.id, specs)"
-			ng-init="initFormField(field.id, specs)"
+			ng-change="onSelectForm(field.id)"
+			ng-init="initFormField(field.id)"
 			ng-required="field.required">
 		<option value=""></option>
 	</select>
