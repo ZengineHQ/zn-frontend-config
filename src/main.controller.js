@@ -434,9 +434,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			if (formDef) {
 				angular.forEach(formDef.fields, function (f) {
 					// Split into multiple if statements for legibility.
-					if (f.type === fieldDef.type && f.id !== fieldDef.id && f.type === 'choice') {
+					if (f.type === fieldDef.type && f.id !== fieldDef.id) {
 						if (f.exclusive && $scope.editing.config) {
-							if (f.id + '_source' in $scope.editing.config && $scope.editing.config[f.id + '_source']) {
+							if (f.type === 'choice' && f.id + '_source' in $scope.editing.config && $scope.editing.config[f.id + '_source']) {
 								filters.push($scope.editing.config[f.id + '_source']);
 							} else if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
 								filters.push($scope.editing.config[f.id]);
