@@ -133,7 +133,21 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				return doSaveConfig($scope.editing.config);
 			}).then(function () {
-				znMessage('Configuration saved!', 'saved');
+				if (!$scope.settings.toggle || $scope.editing.config.enabled) {
+					znMessage('Configuration saved!', 'saved');
+				} else {
+					znModal({
+						title: '',
+						template: '<p>Your new configuration was saved!</p><p>It must be manually enabled to be active.</p>',
+						classes: '',
+						closeButton: false,
+						btns: {
+							'OK': {
+								primary: true
+							}
+						}
+					});
+				}
 
 				if ($scope.settings.multi) {
 					doDiscardChanges();
