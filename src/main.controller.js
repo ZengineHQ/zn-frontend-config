@@ -483,50 +483,54 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {number} formId The actual form id.
 		 * @param {Object} formDef The page this form belongs to.
 		 */
-		function loadFields (formId, formDef) {
-			_fieldsLoading[formId] = true;
+		 function loadFields (formId, formDef) {
+ 			_fieldsLoading[formId] = true;
 
-			// Find all Zengine field types being used in our form.
-			var fieldTypes = [];
+ 			// Find all Zengine field types being used in our form.
+ 			var fieldTypes = [];
+ 			var params = {
+ 				formId: formId,
+ 				limit: 200
+ 			};
 
-			angular.forEach(formDef.fields, function (field) {
-				if (field.restrict) {
-					var res = field.restrict.split('|');
+ 			angular.forEach(formDef.fields, function (field) {
+ 				if (field.restrict) {
+ 					var res = field.restrict.split('|');
 
-					angular.forEach(res, function (r) {
-						if (fieldTypes.indexOf(r) === -1) {
-							fieldTypes.push(r);
-						}
-					});
-				}
-			});
+ 					angular.forEach(res, function (r) {
+ 						if (fieldTypes.indexOf(r) === -1) {
+ 							fieldTypes.push(r);
+ 						}
+ 					});
+ 				}
+ 			});
 
-			return znData('FormFields').query({
-				formId: formId,
-				type: fieldTypes.join('|'),
-				limit: 200
-			}).then(function (results) {
-				_fields[formId] = [];
+ 			if (fieldTypes.length) {
+ 				params.type = fieldTypes;
+ 			}
 
-				angular.forEach(results, function (field) {
-					var f = {
-						id: field.id,
-						name: field.label,
-						type: field.type
-					};
+ 			return znData('FormFields').query(params).then(function (results) {
+ 				_fields[formId] = [];
 
-					if ('settings' in field && 'properties' in field.settings && 'choices' in field.settings.properties) {
-						f.choices = field.settings.properties.choices;
-					}
+ 				angular.forEach(results, function (field) {
+ 					var f = {
+ 						id: field.id,
+ 						name: field.label,
+ 						type: field.type
+ 					};
 
-					_fields[formId].push(f);
-				});
-			}).catch(function (err) {
-				znMessage(err, 'error');
-			}).finally(function () {
-				_fieldsLoading[formId] = false;
-			});
-		}
+ 					if ('settings' in field && 'properties' in field.settings && 'choices' in field.settings.properties) {
+ 						f.choices = field.settings.properties.choices;
+ 					}
+
+ 					_fields[formId].push(f);
+ 				});
+ 			}).catch(function (err) {
+ 				znMessage(err, 'error');
+ 			}).finally(function () {
+ 				_fieldsLoading[formId] = false;
+ 			});
+ 		}
 
 		/**
 		 * Loads folder data for the given form.
