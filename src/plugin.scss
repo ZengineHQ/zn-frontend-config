@@ -277,6 +277,13 @@ $color-success: #3c763d;
 	padding: .4em .6em;
 }
 
+.config-enable-message {
+	p {
+		font-size: 1.2em;
+		text-align: center;
+	}
+}
+
 $toggle-height: 15px;
 $toggle-green: rgba(19,191,17,1);
 $toggle-orange: #ff9900;
