@@ -506,7 +506,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
  			});
 
  			if (fieldTypes.length) {
- 				params.type = fieldTypes;
+ 				params.type = fieldTypes.join('|');
  			}
 
  			return znData('FormFields').query(params).then(function (results) {
