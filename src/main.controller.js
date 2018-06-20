@@ -100,9 +100,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				closeButton: false,
 				btns: {
 					'No': {
-						primary: true,
-						action: function () {
-						}
+						primary: true
 					},
 					'Yes': {
 						danger: true,
