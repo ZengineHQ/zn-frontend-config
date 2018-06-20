@@ -424,6 +424,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				return [];
 			}
 
+			if (!source.length) {
+				return [];
+			}
+
 			var filters = [];
 
 			// Filter values used in other folder inputs.
