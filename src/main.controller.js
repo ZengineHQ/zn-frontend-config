@@ -283,13 +283,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}
 
 			var filterForms = [];
-
 			angular.forEach($scope.settings.pages, function (page) {
-				angular.forEach(page.fields, function (field) {
-					if (field.type === 'form' && field.id !== fieldDef.id) {
-						// Split into 2 ifs for legibility.
-						if (field.id in $scope.editing.config && $scope.editing.config[field.id]) {
-							filterForms.push($scope.editing.config[field.id]);
+				angular.forEach(page.fields, function (f) {
+					// Split into two if statements for legibility.
+					if (f.type === 'form' && f.id !== fieldDef.id && f.exclusive) {
+						if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
+							filterForms.push($scope.editing.config[f.id]);
 						}
 					}
 				});
