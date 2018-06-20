@@ -393,7 +393,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			if (config.enabled) {
 				doRunHook('enable', config).then(function (data) {
 					if (data && angular.isObject(data)) {
-						angular.extend($scope.editing.config, data);
+						angular.extend(config, data);
 					}
 
 					return doSaveConfig(config).then(function () {
@@ -403,7 +403,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			} else {
 				doRunHook('disable', config).then(function (data) {
 					if (data && angular.isObject(data)) {
-						angular.extend($scope.editing.config, data);
+						angular.extend(config, data);
 					}
 
 					return doSaveConfig(config).then(function () {
