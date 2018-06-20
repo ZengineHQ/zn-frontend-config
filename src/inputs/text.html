@@ -1,7 +1,6 @@
 <!--Textfield input-->
 <script type="text/ng-template" id="wgn-config-input-text">
 	<input type="text" class="form-control" name="{{ field.id }}"
-		   ng-if="field.type === 'text'"
 		   ng-model="editing.config[field.id]"
 		   ng-required="field.required"
 		   placeholder="field.placeholder"
