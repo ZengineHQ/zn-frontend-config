@@ -239,27 +239,26 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				throw new Error('Config: Invalid event name: ' + event);
 			}
 
-			// @TODO we really want to support multiple callbacks per hook but it can get messy so let's put it on ice.
 			if (!(event in _hooks)) {
-				// _hooks[event] = [];
-				_hooks[event] = cb;
-			} else {
-				throw new Error('Config: Only a single listener can subscribe to the event "' + event + '".');
+				_hooks[event] = [];
 			}
 
-			// _hooks[event].push(cb);
-
+			_hooks[event].push(cb);
 			return srv;
 		};
 
 		/**
-		 * Invokes a hook by executing registered callbacks.
+		 * Invokes a hook by executing registered callbacks in sequence.
 		 *
 		 * @param {string} event
 		 */
 		srv.run = function (event, data) {
 			if (event in _hooks) {
-				return $q.when(_hooks[event](angular.copy(data)));
+				return _hooks[event].reduce(function (promise, item, index) {
+					return promise.then(function(result) {
+						return $q.when(_hooks[event][index](angular.copy(result)));
+					});
+				}, $q.when(data));
 			}
 
 			return $q.when(data);
