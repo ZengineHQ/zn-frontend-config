@@ -134,7 +134,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				return doSaveConfig($scope.editing.config);
 			}).then(function () {
 				znMessage('Configuration saved!', 'saved');
-				
+
 				if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
 					znModal({
 						title: '',
@@ -500,6 +500,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			// Find all Zengine field types being used in our form.
 			var fieldTypes = [];
+			var params = {
+				formId: formId,
+				limit: 200,
+			};
+
 			angular.forEach($scope.options.getDependentFields(fieldDefId), function (f) {
 				if (f.restrict) {
 					var res = f.restrict.split('|');
@@ -512,11 +517,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 			});
 
-			return znData('FormFields').query({
-				formId: formId,
-				type: fieldTypes.join('|'),
-				limit: 200
-			}).then(function (results) {
+			if (fieldTypes.length) {
+				params.type = fieldTypes.join('|');
+			}
+
+			return znData('FormFields').query(params).then(function (results) {
 				_fields[formId] = [];
 
 				angular.forEach(results, function (field) {
