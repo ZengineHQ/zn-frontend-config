@@ -239,7 +239,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		$scope.onSelectForm = function (fieldDefId) {
 			/*jshint maxcomplexity:6 */
-			var formId = $scope.editing.config[formField];
+			var formId = $scope.editing.config[fieldDefId];
 
 			if (formId && (!(formId in _fields) || !_fields[formId].length)) {
 				loadFields(formId, fieldDefId);
@@ -424,13 +424,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				return [];
 			}
 
-			if (!source.length) {
+			if (!Object.keys(source).length) {
 				return [];
 			}
 
 			var filters = [];
 
-			// Filter values used in other folder inputs.
+			// Filter values used in other inputs of the same type.
 			if (formDef) {
 				angular.forEach(formDef.fields, function (f) {
 					// Split into multiple if statements for legibility.
