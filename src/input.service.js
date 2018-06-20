@@ -2,127 +2,133 @@ plugin.service('wgnConfigInputs', [function () {
 	// This is just a centralized place to store the internal input type definitions and keep our main service cleaner.
 	var srv = this;
 
-	var _internalInputTypes = [
-		{
-			type: 'form',
-			template: 'wgn-config-input-form',
-			options: {
-				exclusive: {
-					required: false
-				}
+	var formInput = {
+		type: 'form',
+		template: 'wgn-config-input-form',
+		options: {
+			exclusive: {
+				required: false
+			}
+		}
+	};
+
+	var fieldInput = {
+		type: 'field',
+		options: {
+			belongsTo: {
+				required: true
+			},
+			restrict: {
+				required: false
+			},
+			exclusive: {
+				required: false
 			}
 		},
-		{
-			type: 'field',
-			options: {
-				belongsTo: {
-					required: true
-				},
-				restrict: {
-					required: false
-				},
-				exclusive: {
-					required: false
-				}
+		template: 'wgn-config-input-field'
+	};
+
+	var folderInput = {
+		type: 'folder',
+		options: {
+			belongsTo: {
+				required: true
 			},
-			template: 'wgn-config-input-field'
+			exclusive: {
+				required: false
+			}
 		},
-		{
-			type: 'folder',
+		template: 'wgn-config-input-folder'
+	};
+
+	var textInput = {
+		type: 'text',
+		options: {
+			placeholder: {
+				required: false
+			}
+		},
+		template: 'wgn-config-input-text'
+	};
+
+	var numberInput = {
+		type: 'number',
+		options: {
+			placeholder: {
+				required: false
+			}
+		},
+		template: 'wgn-config-input-number'
+	};
+
+	var textareaInput = {
+		type: 'textarea',
+		template: 'wgn-config-input-textarea'
+	};
+
+	var dropdownInput = {
+		type: 'dropdown',
+		options: {
 			options: {
-				belongsTo: {
-					required: true
-				},
-				exclusive: {
-					required: false
-				}
-			},
-			template: 'wgn-config-input-folder'
-		},
-		{
-			type: 'text',
-			options: {
-				placeholder: {
-					required: false
-				}
-			},
-			template: 'wgn-config-input-text'
-		},
-		{
-			type: 'number',
-			options: {
-				placeholder: {
-					required: false
-				}
-			},
-			template: 'wgn-config-input-number'
-		},
-		{
-			type: 'textarea',
-			template: 'wgn-config-input-textarea'
-		},
-		{
-			type: 'dropdown',
-			options: {
-				options: {
-					required: true,
-					validate: function (opts) {
-						if (!Array.isArray(opts)) {
+				required: true,
+				validate: function (opts) {
+					if (!Array.isArray(opts)) {
+						return false;
+					}
+
+					var valid = true;
+
+					angular.forEach(opts, function (o) {
+						if (!angular.isObject(o)) {
 							return false;
 						}
 
-						var valid = true;
+						if (!('value' in o) || !('label' in o)) {
+							return false;
+						}
+					});
 
-						angular.forEach(opts, function (o) {
-							if (!angular.isObject(o)) {
-								return false;
-							}
-
-							if (!('value' in o) || !('label' in o)) {
-								return false;
-							}
-						});
-
-						return valid;
-					}
+					return valid;
 				}
-			},
-			template: 'wgn-config-input-dropdown'
+			}
 		},
-		{
-			type: 'markup',
-			options: {
-				value: {
-					required: true
-				}
-			},
-			template: 'wgn-config-input-markup'
+		template: 'wgn-config-input-dropdown'
+	};
+
+	var markupInput = {
+		type: 'markup',
+		options: {
+			value: {
+				required: true
+			}
 		},
-		{
-			type: 'choice',
-			options: {
-				belongsTo: {
-					required: true
-				},
-				mode: {
-					required: true,
-					validate: function (m) {
-						return m === 'select' || m === 'score';
-					}
-				},
-				restrict: {
-					required: false,
-					validate: function (r) {
-						return checkAllowedItems(r, ['radio', 'checkbox', 'dropdown']);
-					}
-				},
-				exclusive: {
-					required: false
+		template: 'wgn-config-input-markup'
+	};
+
+	var choiceInput = {
+		type: 'choice',
+		options: {
+			belongsTo: {
+				required: true
+			},
+			mode: {
+				required: true,
+				validate: function (m) {
+					return m === 'select' || m === 'score';
 				}
 			},
-			template: 'wgn-config-input-choice'
-		}
-	];
+			restrict: {
+				required: false,
+				validate: function (r) {
+					return checkAllowedItems(r, ['radio', 'checkbox', 'dropdown']);
+				}
+			},
+			exclusive: {
+				required: false
+			}
+		},
+		template: 'wgn-config-input-choice'
+	};
 
 	/**
 	 * Returns all internal input types.
@@ -130,7 +136,17 @@ plugin.service('wgnConfigInputs', [function () {
 	 * @return {Array<Object>}
 	 */
 	srv.all = function () {
-		return _internalInputTypes;
+		return [
+			formInput,
+			fieldInput,
+			folderInput,
+			textInput,
+			numberInput,
+			textareaInput,
+			dropdownInput,
+			markupInput,
+			choiceInput
+		];
 	};
 
 	/**
