@@ -23,7 +23,7 @@
 					<label class="form-label">{{ val }}</label>
 
 					<div class="controls">
-						<input type="text" class="form-control"
+						<input type="text" class="form-control" ng-required="field.required"
 							   ng-model="editing.config[field.id + '_opt_' + key]">
 					</div>
 				</div>
@@ -31,7 +31,7 @@
 				<div ng-if="field.mode === 'select'" class="radio">
 					<label>
 						<input type="radio" class="form-control" value="{{ key }}"
-							   ng-model="editing.config[field.id + '_val']" name="{{ field.id }}">
+							   ng-model="editing.config[field.id + '_val']" name="{{ field.id }}" ng-required="field.required">
 						{{ val }}
 					</label>
 				</div>
