@@ -258,11 +258,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Loads all forms for a given input.
 		 * If a type is passed, it hides forms set for other form inputs in the list.
 		 *
-		 * @param {string} fieldId The form input id.
+		 * @param {Object} fieldDef The field input definition.
 		 *
 		 * @return {Array<Object>}
 		 */
-		$scope.getForms = function (fieldId) {
+		$scope.getForms = function (fieldDef) {
 			if (!$scope.editing.config) {
 				return _forms;
 			}
@@ -271,7 +271,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			angular.forEach($scope.settings.pages, function (page) {
 				angular.forEach(page.fields, function (field) {
-					if (field.type === 'form' && field.id !== fieldId) {
+					if (field.type === 'form' && field.id !== fieldDef.id) {
+						// Split into 2 ifs for legibility.
 						if (field.id in $scope.editing.config && $scope.editing.config[field.id]) {
 							filterForms.push($scope.editing.config[field.id]);
 						}
@@ -545,7 +546,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				switch (input.type) {
 					case 'form':
-						var form = $scope.getForms(input.id).filter(function (f) {
+						var form = $scope.getForms(input).filter(function (f) {
 							return f.id === $scope.editing.config[input.id];
 						})[0];
 
