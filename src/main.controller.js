@@ -660,6 +660,28 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		}
 
 		/**
+		 * Creates and returns a shallow copy of an object.
+		 * This is an alternative to angular.copy() for turning Firebase references into plain objects.
+		 *
+		 * @param {Object} obj
+		 *
+		 * @return {Object}
+		 */
+		function shallowCopy (obj) {
+			var newObj = {};
+
+			if (angular.isObject(obj)) {
+				angular.forEach(Object.keys(obj), function (key) {
+					if (key.indexOf('$') === -1) {
+						newObj[key] = obj[key];
+					}
+				});
+			}
+
+			return newObj;
+		}
+
+		/**
 		 * Runs a Config hook.
 		 *
 		 * @param {string} hook
