@@ -171,11 +171,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			$scope.editing.config.enabled = false;
 
 			return doRunHook('disable', $scope.editing.config).then(function (data) {
-				if (data && angular.isObject(data)) {
-					angular.extend($scope.editing.config, data);
-				}
-
 				return doSaveConfig($scope.editing.config);
+			}).catch(function () {
+				$scope.editing.config.enabled = true;
+				znMessage('There was an error disabling the configuration!', 'error');
 			}).then(function () {
 				znMessage('Configuration disabled!', 'saved');
 			});
@@ -188,11 +187,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			$scope.editing.config.enabled = true;
 
 			doRunHook('enable', $scope.editing.config).then(function (data) {
-				if (data && angular.isObject(data)) {
-					angular.extend($scope.editing.config, data);
-				}
-
 				return doSaveConfig($scope.editing.config);
+			}).catch(function () {
+				$scope.editing.config.enabled = false;
+				znMessage('There was an error enabling the configuration!', 'error');
 			}).then(function () {
 				znMessage('Configuration enabled!', 'saved');
 			});
