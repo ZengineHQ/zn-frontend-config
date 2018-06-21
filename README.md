@@ -19,7 +19,7 @@
 npm i @zenginehq/frontend-config --save
 ```
 
-It's crucial that this gets run inside the `src` directory alongside your plugin's other code, if not Maya won't build it properly.
+It's crucial that this gets run inside the `plugins/myplugin/src` directory alongside your plugin's other code, if not Maya won't build it properly.
 
 ## Updating
 
