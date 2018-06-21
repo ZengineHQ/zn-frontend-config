@@ -170,7 +170,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.onDisableConfig = function () {
 			$scope.editing.config.enabled = false;
 
-			return doRunHook('disable', $scope.editing.config).then(function (data) {
+			return doRunHook('disable', $scope.editing.config).then(function () {
 				return doSaveConfig($scope.editing.config);
 			}).catch(function () {
 				$scope.editing.config.enabled = true;
@@ -186,7 +186,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.onEnableConfig = function () {
 			$scope.editing.config.enabled = true;
 
-			doRunHook('enable', $scope.editing.config).then(function (data) {
+			doRunHook('enable', $scope.editing.config).then(function () {
 				return doSaveConfig($scope.editing.config);
 			}).catch(function () {
 				$scope.editing.config.enabled = false;
