@@ -474,7 +474,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			if ($scope.settings.multi) {
 				$scope.editing.config = false;
 			} else {
-				$scope.editing.config = _originalConfig;
+				angular.extend($scope.editing.config, _originalConfig);
 			}
 
 			$scope.wgnConfigForm.$setPristine();
