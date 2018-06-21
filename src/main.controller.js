@@ -95,7 +95,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.onDeleteConfig = function () {
 			znModal({
 				title: 'Are you sure?',
-				template: '<p>Are you sure you want to delete the <strong>' + $scope.editing.config.configName + '</strong> configuration?</p><p>This action is irreversible.</p>',
+				template: '<p>Are you sure you want to delete the <strong>' + $scope.editing.config.name + '</strong> configuration?</p><p>This action is irreversible.</p>',
 				classes: '',
 				closeButton: false,
 				btns: {
@@ -415,7 +415,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					}
 
 					return doSaveConfig(config).then(function () {
-						znMessage('Configuration ' + config.configName + ' enabled!', 'saved');
+						znMessage('Configuration ' + config.name + ' enabled!', 'saved');
 					});
 				});
 			} else {
@@ -425,7 +425,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					}
 
 					return doSaveConfig(config).then(function () {
-						znMessage('Configuration ' + config.configName + ' disabled!', 'saved');
+						znMessage('Configuration ' + config.name + ' disabled!', 'saved');
 					});
 				});
 			}
