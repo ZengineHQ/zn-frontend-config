@@ -124,7 +124,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		$scope.onSaveConfig = function () {
 			$scope.saving = true;
-			doProcessHighlighted();
+
+			// Single configs don't ever get to see the grid/list views.
+			if ($scope.settings.multi) {
+				doProcessHighlighted();
+			}
 
 			return doRunHook('save', $scope.editing.config).then(function (data) {
 				if (data && angular.isObject(data)) {
