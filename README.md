@@ -10,6 +10,8 @@
 - Toggling configurations on and off
 - Highly extensible via _events_ and _custom field types_   
 
+![Config Module](https://github.com/ZengineHQ/zn-frontend-config/blob/master/screenshots/view-grid.png)
+
 ## Installation
 
 ```shell
