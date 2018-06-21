@@ -106,7 +106,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						danger: true,
 						action: function () {
 							return configService.deleteConfig(_workspaceId, $scope.editing.config, $scope.configs).then(function () {
-								doRunHook('delete', angular.copy($scope.editing.config)).finally(function () {
+								doRunHook('delete', shallowCopy($scope.editing.config)).finally(function () {
 									doDiscardChanges();
 									znMessage('The configuration has been deleted!', 'info');
 								});
@@ -704,7 +704,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				if (!$scope.settings.multi) {
 					$scope.editing.config = configs;
-					_originalConfig = angular.copy(configs);
+					_originalConfig = shallowCopy(configs);
 				}
 
 				$scope.configs = configs;
