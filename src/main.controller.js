@@ -105,10 +105,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					'Yes': {
 						danger: true,
 						action: function () {
+							$scope.saving = true;
 							return configService.deleteConfig(_workspaceId, $scope.editing.config, $scope.configs).then(function () {
 								doRunHook('delete', shallowCopy($scope.editing.config)).finally(function () {
 									doDiscardChanges();
 									znMessage('The configuration has been deleted!', 'info');
+									$scope.saving = false;
 								});
 							}).catch(function (err) {
 								znMessage(err, 'error');
@@ -168,6 +170,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Disables the current configuration.
 		 */
 		$scope.onDisableConfig = function () {
+			$scope.saving = true;
 			$scope.editing.config.enabled = false;
 
 			return doRunHook('disable', $scope.editing.config).then(function () {
@@ -177,6 +180,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				znMessage('There was an error disabling the configuration!', 'error');
 			}).then(function () {
 				znMessage('Configuration disabled!', 'saved');
+			}).finally(function () {
+				$scope.saving = false;
 			});
 		};
 
@@ -184,6 +189,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Enables the current configuration.
 		 */
 		$scope.onEnableConfig = function () {
+			$scope.saving = true;
 			$scope.editing.config.enabled = true;
 
 			doRunHook('enable', $scope.editing.config).then(function () {
@@ -193,6 +199,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				znMessage('There was an error enabling the configuration!', 'error');
 			}).then(function () {
 				znMessage('Configuration enabled!', 'saved');
+			}).finally(function () {
+				$scope.saving = false;
 			});
 		};
 
