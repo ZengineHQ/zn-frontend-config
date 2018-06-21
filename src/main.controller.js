@@ -647,7 +647,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		}
 
 		/**
-		 * Helper to actually save changes to firebase.
+		 * Actually saves changes to Firebase.
 		 *
 		 * @param {Object} A config object.
 		 *
