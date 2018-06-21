@@ -256,7 +256,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			if (event in _hooks) {
 				return _hooks[event].reduce(function (promise, item, index) {
 					return promise.then(function(result) {
-						return $q.when(_hooks[event][index](angular.copy(result)));
+						return $q.when(_hooks[event][index](result));
 					});
 				}, $q.when(data));
 			}
