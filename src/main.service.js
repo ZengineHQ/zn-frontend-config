@@ -1,5 +1,4 @@
 plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $firebase, znData) {
-
 	var srv = this;
 
 	/**

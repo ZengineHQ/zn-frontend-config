@@ -89,7 +89,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			});
 
 			// Make sure reserved ids aren't used.
-			var reserved = ['configName'];
+			var reserved = ['name', 'enabled'];
 			if (reserved.indexOf(def.id) !== -1) {
 				throw new Error('Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.');
 			}
