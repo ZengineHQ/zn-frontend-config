@@ -153,12 +153,16 @@ plugin.service('wgnConfigInputs', [function () {
 	 * Checks whether an item is allowed in a list.
 	 * This is only used to check for allowed input types.
 	 *
-	 * @param {string} source
+	 * @param {string} target
 	 * @param {Array<string>} allowed
 	 *
 	 * @return {boolean}
 	 */
 	function checkAllowedItems (target, allowed) {
+		if (!target) {
+			return true;
+		}
+
 		// Allow concatenating multiple items with a pipe for consistency with znData.
 		var items = target.split('|');
 		var valid = true;
