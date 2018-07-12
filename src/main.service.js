@@ -35,6 +35,14 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	var connect = function (plugin, workspaceId, multi) {
 		multi = multi || false;
 
+		// Make sure we have valid Firebase settings.
+		if (!('firebaseUrl' in plugin) || !plugin.firebaseUrl) {
+			return $q.reject('Config: Plugin missing Firebase URL.');
+		}
+		if (!('firebaseAuthToken' in plugin) || !plugin.firebaseAuthToken) {
+			return $q.reject('Config: Plugin missing Firebase Secret.');
+		}
+
 		var q = $q.defer();
 		var path = '';
 
