@@ -705,6 +705,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Bootstraps plugin.
 		 */
 		function init () {
+			// Sanity.
+			if (!angular.isObject($scope.options) || !('getConfig' in $scope.options) || typeof $scope.options.getConfig !== "function") {
+				throw new Error('Config: Missing or invalid options object');
+			}
+
 			$scope.settings = $scope.options.getConfig();
 			doResetTab();
 
