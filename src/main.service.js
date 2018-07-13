@@ -33,6 +33,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 * @return {Promise<Object>} Plugin settings.
 	 */
 	var connect = function (plugin, workspaceId, multi) {
+		/*jshint maxcomplexity:8 */
 		multi = multi || false;
 
 		// Make sure we have valid Firebase settings.
