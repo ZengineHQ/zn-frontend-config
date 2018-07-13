@@ -32,7 +32,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 *
 	 * @return {Promise<Object>} Plugin settings.
 	 */
-	var connect = function (plugin, workspaceId, multi) {
+	var getFirebase = function (plugin, workspaceId, multi) {
 		/*jshint maxcomplexity:8 */
 		multi = multi || false;
 
@@ -85,8 +85,8 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 * @return {Promise<Object>} Plugin settings.
 	 */
 	srv.load = function (workspaceId, multi) {
-			return connect(plugin, workspaceId, multi);
 		return getPlugin().then(function (plugin) {
+			return getFirebase(plugin, workspaceId, multi);
 		});
 	};
 
