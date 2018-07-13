@@ -77,7 +77,38 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	}
 
 	/**
-	 * Connects to Firebase and retrieves plugins settings for this workspace.
+	 * Saves a multi config plugin configuration.
+	 *
+	 * @param {number} workspaceId
+	 * @param {Object} $ref A Firebase reference.
+	 * @param {Object} config The configuration object to save.
+	 *
+	 * @return {Promise<*>}
+	 */
+	function saveMulti (workspaceId, $ref, config) {
+		if (config.$id) {
+			var index = $ref.$indexFor(config.$id);
+			$ref[index] = config;
+			return $ref.$save(index);
+		}
+
+		return $ref.$add(config);
+	}
+
+	/**
+	 * Saves a single (non multi) plugin configuration.
+	 *
+	 * @param {number} workspaceId
+	 * @param {Object} $ref A Firebase reference.
+	 *
+	 * @return {Promise<Object>}
+	 */
+	function saveSingle (workspaceId, $ref) {
+		return $ref.$save();
+	}
+
+	/**
+	 * Connects to Firebase and retrieves plugins configurations for the given workspace.
 	 *
 	 * @param {number} workspaceId The workspace id.
 	 * @param {boolean} multi Whether this plugin supports multiple configurations.
@@ -91,34 +122,17 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	};
 
 	/**
-	 * Saves a multi config plugin configuration.
+	 * Saves a plugin configuration for the given workspace.
 	 *
 	 * @param {number} workspaceId
+	 * @param {boolean} multi Whether this plugin supports multiple configurations.
 	 * @param {Object} $ref A Firebase reference.
 	 * @param {Object} config The configuration object to save.
 	 *
 	 * @return {Promise<*>}
 	 */
-	srv.save = function (workspaceId, $ref, config) {
-		if (config.$id) {
-			var index = $ref.$indexFor(config.$id);
-			$ref[index] = config;
-			return $ref.$save(index);
-		}
-
-		return $ref.$add(config);
-	};
-
-	/**
-	 * Saves a single (non multi) plugin configuration.
-	 *
-	 * @param {number} workspaceId
-	 * @param {Object} $ref A Firebase reference.
-	 *
-	 * @return {Promise<Object>}
-	 */
-	srv.saveSingle = function (workspaceId, $ref) {
-		return $ref.$save();
+	srv.save = function (workspaceId, multi, $ref, config) {
+		return multi ? saveMulti(workspaceId, $ref, config) : saveSingle(workspaceId, $ref);
 	};
 
 	/**

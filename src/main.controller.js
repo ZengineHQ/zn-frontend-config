@@ -664,9 +664,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @return {Promise}
 		 */
 		function doSaveConfig (config) {
-			return $scope.settings.multi ?
-				configService.save(_workspaceId, $scope.configs, config) :
-				configService.saveSingle(_workspaceId, config);
+			return configService.save(_workspaceId, $scope.settings.multi, $scope.configs, config);
 		}
 
 		/**
