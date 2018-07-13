@@ -24,7 +24,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	};
 
 	/**
-	 * Connects to Firebase and retrieves plugins settings for this workspace.
+	 * Connects to Firebase and retrieves any plugin settings for this workspace.
 	 *
 	 * @param {Object} plugin The plugins data.
 	 * @param {number} workspaceId The workspace id.
@@ -46,7 +46,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 		var q = $q.defer();
 		var path = '';
 
-		// Sanity.
+		// Sanity, always ensure we have a trailing slash.
 		if (plugin.firebaseUrl.substring(plugin.firebaseUrl.length - 1, plugin.firebaseUrl.length) !== '/') {
 			path += '/';
 		}
