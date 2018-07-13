@@ -6,7 +6,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 *
 	 * @return {Promise<Object>} Plugin data.
 	 */
-	var getPlugin = function () {
+	function getPlugin () {
 		var q = $q.defer();
 
 		znData('Plugins').get({
@@ -21,7 +21,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 		);
 
 		return q.promise;
-	};
+	}
 
 	/**
 	 * Connects to Firebase and retrieves any plugin settings for this workspace.
@@ -32,7 +32,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 *
 	 * @return {Promise<Object>} Plugin settings.
 	 */
-	var getFirebase = function (plugin, workspaceId, multi) {
+	function getFirebase (plugin, workspaceId, multi) {
 		/*jshint maxcomplexity:8 */
 		multi = multi || false;
 
@@ -74,7 +74,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 		});
 
 		return q.promise;
-	};
+	}
 
 	/**
 	 * Connects to Firebase and retrieves plugins settings for this workspace.
