@@ -6,7 +6,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 *
 	 * @return {Promise<Object>} Plugin data.
 	 */
-	var loadPlugin = function () {
+	var getPlugin = function () {
 		var q = $q.defer();
 
 		znData('Plugins').get({
@@ -82,8 +82,8 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 * @return {Promise<Object>} Plugin settings.
 	 */
 	srv.load = function (workspaceId, multi) {
-		return loadPlugin().then(function (plugin) {
 			return connect(plugin, workspaceId, multi);
+		return getPlugin().then(function (plugin) {
 		});
 	};
 
