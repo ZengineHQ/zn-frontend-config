@@ -91,7 +91,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	};
 
 	/**
-	 * Saves a config plugin configuration.
+	 * Saves a multi config plugin configuration.
 	 *
 	 * @param {number} workspaceId
 	 * @param {Object} $ref A Firebase reference.
@@ -110,7 +110,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	};
 
 	/**
-	 * Saves a single config plugin configuration.
+	 * Saves a single (non multi) plugin configuration.
 	 *
 	 * @param {number} workspaceId
 	 * @param {Object} $ref A Firebase reference.
@@ -122,7 +122,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	};
 
 	/**
-	 * Completely deletes a given configuration.
+	 * Completely deletes a given multi configuration.
 	 *
 	 * @param {number} workspaceId
 	 * @param {Object} config
