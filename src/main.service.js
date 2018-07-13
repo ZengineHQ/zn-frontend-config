@@ -63,8 +63,10 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 			if (err) {
 				q.reject(err);
 			}
+
 			var $ref = $firebase(ref);
 			var sync = multi ? $ref.$asArray() : $ref.$asObject();
+
 			sync.$loaded().then(function (settings) {
 				q.resolve(settings);
 			});
