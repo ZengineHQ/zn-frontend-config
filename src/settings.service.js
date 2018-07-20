@@ -84,7 +84,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			// Validate required properties.
 			['id', 'name', 'type'].forEach(function (p) {
 				if (!(p in def) || !def[p]) {
-					throw new Error('Config: Missing required field property: "' + p + '"');
+					throw new Error('Config: Missing required field property: "' + p + '" for ' + def.id || def.name);
 				}
 			});
 
