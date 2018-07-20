@@ -155,6 +155,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					});
 				}
 
+				var savedConfig = $scope.editing.config;
+
 				if ($scope.settings.multi) {
 					doDiscardChanges();
 				} else {
@@ -163,6 +165,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 
 				$scope.saving = false;
+
+				return doRunHook('postSave', savedConfig);
 			});
 		};
 
@@ -659,14 +663,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Actually saves changes to Firebase.
 		 *
-		 * @param {Object} A config object.
+		 * @param {Object} config A config object.
 		 *
 		 * @return {Promise}
 		 */
 		function doSaveConfig (config) {
-			return $scope.settings.multi ?
-				configService.save(_workspaceId, $scope.configs, config) :
-				configService.saveSingle(_workspaceId, config);
+			return configService.save(_workspaceId, $scope.settings.multi, $scope.configs, config);
 		}
 
 		/**
@@ -705,6 +707,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Bootstraps plugin.
 		 */
 		function init () {
+			// Sanity.
+			if (!angular.isObject($scope.options) || !('getConfig' in $scope.options) || typeof $scope.options.getConfig !== "function") {
+				throw new Error('Config: Missing or invalid options object');
+			}
+
 			$scope.settings = $scope.options.getConfig();
 			doResetTab();
 
