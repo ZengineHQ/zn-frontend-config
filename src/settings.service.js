@@ -232,7 +232,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				'disable',
 				'discard',
 				'init',
-				'save'
+				'save',
+				'postSave'
 			];
 
 			if (allowedEvents.indexOf(event) === -1) {

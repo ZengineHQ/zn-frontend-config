@@ -155,6 +155,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					});
 				}
 
+				var savedConfig = $scope.editing.config;
+
 				if ($scope.settings.multi) {
 					doDiscardChanges();
 				} else {
@@ -163,6 +165,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 
 				$scope.saving = false;
+
+				return doRunHook('postSave', savedConfig);
 			});
 		};
 
