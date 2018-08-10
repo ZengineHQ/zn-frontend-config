@@ -11,6 +11,6 @@
 			<option value=""></option>
 		</select>
 
-		<span ng-show="!field.belongsTo || isFormLoading(field.belongsTo)" class="throbber inline throbber"></span>
+		<span ng-show="field.belongsTo && isFormLoading(field.belongsTo)" class="throbber inline throbber"></span>
 	</div>
 </script>
