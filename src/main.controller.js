@@ -132,13 +132,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				doProcessHighlighted();
 			}
 
-			return doRunHook('save', $scope.editing.config).then(function (data) {
-				if (data && angular.isObject(data)) {
-					angular.extend($scope.editing.config, data);
-				}
-
-				return doSaveConfig($scope.editing.config);
-			}).then(function () {
+			return doSaveConfig($scope.editing.config).then(function () {
 				znMessage('Configuration saved!', 'saved');
 
 				if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
@@ -155,8 +149,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					});
 				}
 
-				var savedConfig = $scope.editing.config;
-
 				if ($scope.settings.multi) {
 					doDiscardChanges();
 				} else {
@@ -165,8 +157,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 
 				$scope.saving = false;
-
-				return doRunHook('postSave', savedConfig);
+				return doRunHook('save', $scope.editing.config);
 			});
 		};
 
