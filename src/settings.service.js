@@ -1,8 +1,8 @@
 plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, configInputs) {
-	return function (args) {
+	return function (title) {
 		var srv = this;
 		var _defaults = {
-			title: 'My Plugin',
+			title: title || 'My Plugin',
 			icon: 'icon-puzzle',
 			help: 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.',
 			multi: false,
@@ -17,14 +17,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		var _highlightedFields = [];
 		var _hooks = {};
 
-		// Accept either a configuration object or a string for the title.
-		if (!angular.isObject(args)) {
-			args = {
-				title: args ? args.toString() : ''
-			};
-		}
-
-		var _settings = angular.extend({}, _defaults, args);
+		var _settings = angular.extend({}, _defaults);
 
 		// Ensure pages is always an empty array.
 		_settings.pages = [];
