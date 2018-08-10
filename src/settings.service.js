@@ -359,16 +359,16 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		/**
 		 * Returns field definitions that belong to a certain form.
 		 *
-		 * @param {string} formDefId
+		 * @param {string} defId
 		 *
 		 * @return {Array<Object>}
 		 */
-		srv.getDependentFields = function (formDefId) {
+		srv.getDependentFields = function (defId) {
 			var fields = [];
 
 			angular.forEach(_settings.pages, function (p) {
 				angular.forEach(p.fields, function (f) {
-					if ('belongsTo' in f && f.belongsTo === formDefId) {
+					if ('belongsTo' in f && f.belongsTo === defId) {
 						fields.push(f);
 					}
 				});

@@ -253,14 +253,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Loads fields for the selected form.
 		 *
-		 * @param {string} fieldDefId The field definition id.
+		 * @param {string} defId The field definition id.
 		 */
-		$scope.onSelectForm = function (fieldDefId) {
+		$scope.onSelectForm = function (defId) {
 			/*jshint maxcomplexity:6 */
-			var formId = $scope.editing.config[fieldDefId];
+			var formId = $scope.editing.config[defId];
 
 			if (formId && (!(formId in _fields) || !_fields[formId].length)) {
-				loadFields(formId, fieldDefId);
+				loadFields(formId, defId);
 			}
 
 			if (formId && (!(formId in _folders) || !_folders[formId].length)) {
@@ -271,15 +271,15 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Initializes a form input.
 		 *
-		 * @param {string} fieldDefId The field definition id.
+		 * @param {string} defId The field definition id.
 		 */
-		$scope.initFormInput = function (fieldDefId) {
+		$scope.initFormInput = function (defId) {
 			if ($scope.loading) {
 				$scope.options.on('init', function () {
-					$scope.onSelectForm(fieldDefId);
+					$scope.onSelectForm(defId);
 				});
 			} else {
-				$scope.onSelectForm(fieldDefId);
+				$scope.onSelectForm(defId);
 			}
 		};
 
@@ -561,9 +561,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Loads field data for the given form.
 		 *
 		 * @param {number} formId The actual form id.
-		 * @param {string} fieldDefId The field definition id.
+		 * @param {string} defId The field definition id.
 		 */
-		function loadFields (formId, fieldDefId) {
+		function loadFields (formId, defId) {
 			_fieldsLoading[formId] = true;
 
 			// Find all Zengine field types being used in our form.
@@ -573,7 +573,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				limit: 200,
 			};
 
-			angular.forEach($scope.options.getDependentFields(fieldDefId), function (f) {
+			angular.forEach($scope.options.getDependentFields(defId), function (f) {
 				if (f.restrict) {
 					var res = f.restrict.split('|');
 
