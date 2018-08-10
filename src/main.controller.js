@@ -7,6 +7,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		var _forms = {};
 		var _fields = {};
 		var _folders = {};
+		var _formsLoading = {};
 		var _fieldsLoading = {};
 		var _foldersLoading = {};
 		var _originalConfig;
@@ -563,10 +564,16 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {number} workspaceId
 		 */
 		function loadForms (workspaceId) {
+			_formsLoading[workspaceId] = true;
+
 			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200 }).then(function (forms) {
-				console.warn(forms);
-				// @TODO here
-				_forms = forms;
+				_forms[workspaceId] = []
+//@TODO
+
+			}).catch(function (err) {
+				znMessage(err, 'error');
+			}).finally(function () {
+				_formsLoading[workspaceId] = false;
 			});
 		};
 
