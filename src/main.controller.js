@@ -328,7 +328,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			angular.forEach($scope.settings.pages, function (page) {
 				angular.forEach(page.fields, function (f) {
 					// Split into two if statements for legibility.
-					if (f.type === 'workspace' && f.id !== fieldDef.id && f.exclusive) {
+					if (f.type === 'workspace' && f.id !== def.id && f.exclusive) {
 						if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
 							filterWorkspaces.push($scope.editing.config[f.id]);
 						}
