@@ -284,6 +284,37 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		};
 
 		/**
+		 * Loads forms for the selected workspace.
+		 *
+		 * @param {string} defId The field definition id.
+		 */
+		$scope.onSelectWorkspace = function (defId) {
+			var wsid = $scope.editing.config[defId];
+
+			console.warn('wsid', wsid);
+
+			// @TODO come back to this.
+			// if (wsid && (!(wsid in _forms) || !_forms[wsid].length)) {
+			// 	loadForms(wsid, defId);
+			// }
+		};
+
+		/**
+		 * Initializes a workspace input.
+		 *
+		 * @param {string} defId The field definition id.
+		 */
+		$scope.initWorkspaceInput = function (defId) {
+			if ($scope.loading) {
+				$scope.options.on('init', function () {
+					$scope.onSelectWorkspace(defId);
+				});
+			} else {
+				$scope.onSelectWorkspace(defId);
+			}
+		};
+
+		/**
 		 * Loads all workspaces for a given input.
 		 *
 		 * @param {Object} fieldDef The workspace input definition.
