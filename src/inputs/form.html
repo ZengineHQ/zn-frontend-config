@@ -4,7 +4,7 @@
 			ng-options="form.id as form.name for form in getForms(field)"
 			ng-model="editing.config[field.id]"
 			ng-change="onSelectForm(field.id)"
-			ng-init="initFormField(field.id)"
+			ng-init="initFormInput(field.id)"
 			ng-required="field.required">
 		<option value=""></option>
 	</select>

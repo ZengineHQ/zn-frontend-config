@@ -273,7 +273,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @param {string} fieldDefId The field definition id.
 		 */
-		$scope.initFormField = function (fieldDefId) {
+		$scope.initFormInput = function (fieldDefId) {
 			if ($scope.loading) {
 				$scope.options.on('init', function () {
 					$scope.onSelectForm(fieldDefId);
