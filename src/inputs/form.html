@@ -5,7 +5,7 @@
 				ng-options="form.id as form.name for form in getForms(field, field.belongsTo)"
 				ng-model="editing.config[field.id]"
 				ng-change="onSelectForm(field.id)"
-				ng-init="!field.belongsTo && initFormInput(field.id)"
+				ng-init="(!field.belongsTo || editing.config[field.belongsTo]) && initFormInput(field.id)"
 				ng-disabled="field.belongsTo && (isFormLoading(field.belongsTo) || !editing.config[field.belongsTo])"
 				ng-required="field.required">
 			<option value=""></option>
