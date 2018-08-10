@@ -15,11 +15,11 @@
 ## Installation
 
 ```shell
-# Run this from your frontend plugin's src diretory.
 npm i @zenginehq/frontend-config --save
 ```
 
-It's crucial that this gets run inside the `plugins/myplugin/src` directory alongside your plugin's other code to get built properly.
+Note: when using maya, it's crucial that this gets run inside the `plugins/myplugin/src` directory alongside your plugin's other code to get built properly.
+If you are using the newer [mayan](https://github.com/ZengineHQ/mayan) then you can just run the install from your frontend plugin's root.
 
 ## Updating
 
