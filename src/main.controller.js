@@ -558,6 +558,19 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		}
 
 		/**
+		 * Loads form data for the given workspace.
+		 *
+		 * @param {number} workspaceId
+		 */
+		function loadForms (workspaceId) {
+			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200 }).then(function (forms) {
+				console.warn(forms);
+				
+				_forms = forms;
+			});
+		};
+
+		/**
 		 * Loads field data for the given form.
 		 *
 		 * @param {number} formId The actual form id.
@@ -786,10 +799,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				return def.promise;
 			}).then(function () {
-				// Load available forms.
-				return znData('Forms').get({ 'workspace.id': _workspaceId, 'limit': 200 });
-			}).then(function (forms) {
-				_forms = forms;
+				return loadForms(_workspaceId);
 			});
 		}
 	}]);
