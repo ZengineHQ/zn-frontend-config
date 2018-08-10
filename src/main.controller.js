@@ -269,7 +269,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		};
 
 		/**
-		 * Initializes a form field.
+		 * Initializes a form input.
 		 *
 		 * @param {string} fieldDefId The field definition id.
 		 */
