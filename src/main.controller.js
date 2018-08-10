@@ -4,7 +4,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		// No need to pollute the scope.
 		var _workspaceId = $routeParams.workspace_id;
 		var _workspaces = [];
-		var _forms = [];
+		var _forms = {};
 		var _fields = {};
 		var _folders = {};
 		var _fieldsLoading = {};
@@ -346,20 +346,23 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Loads all forms for a given input.
 		 * If a type is passed, it hides forms set for other form inputs in the list.
 		 *
-		 * @param {Object} fieldDef The form input definition.
+		 * @param {Object} def The form input definition.
 		 *
 		 * @return {Array<Object>}
 		 */
-		$scope.getForms = function (fieldDef) {
+		$scope.getForms = function (def, workspaceId) {
+			// Allow overidding workspaceId but default to current one.
+			workspaceId = workspaceId || _workspaceId;
+
 			if (!$scope.editing.config) {
-				return _forms;
+				return _forms[workspaceId];
 			}
 
 			var filterForms = [];
 			angular.forEach($scope.settings.pages, function (page) {
 				angular.forEach(page.fields, function (f) {
 					// Split into two if statements for legibility.
-					if (f.type === 'form' && f.id !== fieldDef.id && f.exclusive) {
+					if (f.type === 'form' && f.id !== def.id && f.exclusive) {
 						if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
 							filterForms.push($scope.editing.config[f.id]);
 						}
@@ -368,7 +371,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			});
 
 			// Filter values used in other inputs.
-			return _forms.filter(function (f) {
+			return _forms[workspaceId].filter(function (f) {
 				return filterForms.indexOf(f.id) === -1;
 			});
 		};
@@ -562,7 +565,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		function loadForms (workspaceId) {
 			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200 }).then(function (forms) {
 				console.warn(forms);
-
+				// @TODO here
 				_forms = forms;
 			});
 		};
