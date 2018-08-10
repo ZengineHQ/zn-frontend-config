@@ -379,9 +379,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			});
 
 			// Filter values used in other inputs.
-			return _forms[workspaceId].filter(function (f) {
+			return _forms[workspaceId] ? _forms[workspaceId].filter(function (f) {
 				return filterForms.indexOf(f.id) === -1;
-			});
+			}) : [];
 		};
 
 		/**
