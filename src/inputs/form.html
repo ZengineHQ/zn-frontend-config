@@ -1,11 +1,16 @@
 <!--Form picker input-->
 <script type="text/ng-template" id="wgn-config-input-form">
-	<select class="form-control" name="input"
-			ng-options="form.id as form.name for form in getForms(field)"
-			ng-model="editing.config[field.id]"
-			ng-change="onSelectForm(field.id)"
-			ng-init="initFormInput(field.id)"
-			ng-required="field.required">
-		<option value=""></option>
-	</select>
+	<div>
+		<select class="form-control" name="input"
+				ng-options="form.id as form.name for form in getForms(field, field.belongsTo)"
+				ng-model="editing.config[field.id]"
+				ng-change="onSelectForm(field.id)"
+				ng-init="initFormInput(field.id)"
+				ng-disabled="field.belongsTo && (isFormLoading(field.belongsTo) || !editing.config[field.belongsTo])"
+				ng-required="field.required">
+			<option value=""></option>
+		</select>
+
+		<span ng-show="!field.belongsTo || isFormLoading(field.belongsTo)" class="throbber inline throbber"></span>
+	</div>
 </script>
