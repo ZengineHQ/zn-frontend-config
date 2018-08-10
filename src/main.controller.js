@@ -274,13 +274,15 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @param {string} defId The field definition id.
 		 */
-		$scope.initFormInput = function (defId) {
-			if ($scope.loading) {
-				$scope.options.on('init', function () {
-					$scope.onSelectForm(defId);
-				});
-			} else {
-				$scope.onSelectForm(defId);
+		$scope.initFormInput = function (def) {
+			if (!def.belongsTo || $scope.editing.config[def.belongsTo]) {
+				if ($scope.loading) {
+					$scope.options.on('init', function () {
+						$scope.onSelectForm(def.id);
+					});
+				} else {
+					$scope.onSelectForm(def.id);
+				}
 			}
 		};
 
