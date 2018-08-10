@@ -665,6 +665,18 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				var inputTypeFormatted = input.type.charAt(0).toUpperCase() + input.type.substr(1);
 
 				switch (input.type) {
+					case 'workspace':
+						var workspace = $scope.getWorkspaces(input).filter(function (w) {
+							return w.id === $scope.editing.config[input.id];
+						})[0];
+
+						if (workspace) {
+							formatedHighligts.push({
+								type: inputTypeFormatted,
+								value: workspace.name
+							})
+						}
+						break;
 					case 'form':
 						var form = $scope.getForms(input).filter(function (f) {
 							return f.id === $scope.editing.config[input.id];
