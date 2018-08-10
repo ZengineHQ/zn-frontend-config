@@ -3,6 +3,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 		// No need to pollute the scope.
 		var _workspaceId = $routeParams.workspace_id;
+		var _workspaces = [];
 		var _forms = [];
 		var _fields = {};
 		var _folders = {};
@@ -283,10 +284,41 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		};
 
 		/**
+		 * Loads all workspaces for a given input.
+		 *
+		 * @param {Object} fieldDef The workspace input definition.
+		 *
+		 * @return {Array<Object>}
+		 */
+		$scope.getWorkspaces = function (def) {
+			if (!$scope.editing.config) {
+				return _workspaces;
+			}
+
+			var filterWorkspaces = [];
+			angular.forEach($scope.settings.pages, function (page) {
+				angular.forEach(page.fields, function (f) {
+					// Split into two if statements for legibility.
+					if (f.type === 'workspace' && f.id !== fieldDef.id && f.exclusive) {
+						if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
+							filterWorkspaces.push($scope.editing.config[f.id]);
+						}
+					}
+				});
+			});
+
+
+			// Filter values used in other inputs.
+			return _workspaces.filter(function (f) {
+				return filterWorkspaces.indexOf(f.id) === -1;
+			});
+		};
+
+		/**
 		 * Loads all forms for a given input.
 		 * If a type is passed, it hides forms set for other form inputs in the list.
 		 *
-		 * @param {Object} fieldDef The field input definition.
+		 * @param {Object} fieldDef The form input definition.
 		 *
 		 * @return {Array<Object>}
 		 */

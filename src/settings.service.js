@@ -11,8 +11,10 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 
 		var _currentPage = false;
 		var _currentForm = false;
+		var _currentWorkspace = false;
 		var _fieldIds = [];
 		var _formInputs = [];
+		var _workspaceInputs = [];
 		var _fieldTypes = {};
 		var _highlightedFields = [];
 		var _hooks = {};
@@ -146,12 +148,23 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			if (def.type === 'form') {
 				_formInputs.push(def.id);
 				_currentForm = _formInputs.length - 1;
+			} else if (def.type === 'workspace') {
+				_workspaceInputs.push(def.id);
+				_currentWorkspace = _workspaceInputs.length - 1;
 			}
 
 			// Finally if the field has the special "belongsTo" option, validate its target exists.
 			if ('belongsTo' in def) {
-				if (_formInputs.indexOf(def.belongsTo) === -1) {
-					throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
+				if (def.type === 'field' || def.type === 'folder' || def.type === 'choice') {
+					if (_formInputs.indexOf(def.belongsTo) === -1) {
+						throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
+					}
+				} else if (def.type === 'form') {
+					if (_workspaceInputs.indexOf(def.belongsTo) === -1) {
+						throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no workspace field exists with id "' + def.belongsTo + '"');
+					}
+				} else {
+					throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", the "' + def.type + '" field type doesn\'t support it.');
 				}
 			}
 
