@@ -291,12 +291,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.onSelectWorkspace = function (defId) {
 			var wsid = $scope.editing.config[defId];
 
-			console.warn('wsid', wsid);
-
-			// @TODO come back to this.
-			// if (wsid && (!(wsid in _forms) || !_forms[wsid].length)) {
-			// 	loadForms(wsid, defId);
-			// }
+			if (wsid && (!(wsid in _forms) || !_forms[wsid].length)) {
+				loadForms(wsid);
+			}
 		};
 
 		/**
@@ -565,7 +562,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		function loadForms (workspaceId) {
 			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200 }).then(function (forms) {
 				console.warn(forms);
-				
+
 				_forms = forms;
 			});
 		};

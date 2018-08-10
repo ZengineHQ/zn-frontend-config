@@ -357,7 +357,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		};
 
 		/**
-		 * Returns field definitions that belong to a certain form.
+		 * Returns field definitions that belong to a certain form or workspace.
 		 *
 		 * @param {string} defId
 		 *
