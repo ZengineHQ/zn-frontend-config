@@ -355,6 +355,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			// Allow overidding workspaceId but default to current one.
 			workspaceId = workspaceId || _workspaceId;
 
+			// Sanity when dealing with forms belonging to a workspace.
+			if (!workspaceId in _forms) {
+				return [];
+			}
+
 			if (!$scope.editing.config) {
 				return _forms[workspaceId];
 			}
