@@ -378,6 +378,24 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		};
 
 		/**
+		 * Returns whether there are any form inputs in the defined config fields.
+		 *
+		 * @returns {boolean}
+		 */
+		srv.hasFormField = function () {
+			return _formInputs.length > 0;
+		};
+
+		/**
+		 * Returns whether there are any workspace inputs in the defined config fields.
+		 *
+		 * @returns {boolean}
+		 */
+		srv.hasWorkspaceField = function () {
+			return _workspaceInputs.length > 0;
+		};
+
+		/**
 		 * Returns a config settings object.
 		 * This is the final product of this service.
 		 *
