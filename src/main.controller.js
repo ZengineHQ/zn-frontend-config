@@ -338,7 +338,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				});
 			});
 
-
 			// Filter values used in other inputs.
 			return _workspaces.filter(function (f) {
 				return filterWorkspaces.indexOf(f.id) === -1;
@@ -563,6 +562,18 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			if ($scope.settings.pages.length) {
 				$scope.view = $scope.settings.pages[0].id;
 			}
+		}
+
+		/**
+		 * Loads data on all available workspaces.
+		 */
+		function loadWorkspaces () {
+			return znData('Workspaces').get({ limit: 200 }).then(function (workspaces) {
+				console.warn('worlspaces', workspaces);
+				_workspaces = workspaces.slice();
+			}).catch(function (err) {
+				znMessage(err, 'error');
+			})
 		}
 
 		/**
@@ -823,7 +834,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				return def.promise;
 			}).then(function () {
-				return loadForms(_workspaceId);
+				if ($scope.options.hasWorkspaceField) {
+					return loadWorkspaces();
+				} else if ($scope.options.hasFormField) {
+					return loadForms(_workspaceId);
+				}
 			});
 		}
 	}]);
