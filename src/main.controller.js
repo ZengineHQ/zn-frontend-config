@@ -569,7 +569,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		function loadWorkspaces () {
 			return znData('Workspaces').get({ limit: 200 }).then(function (workspaces) {
-				console.warn('worlspaces', workspaces);
 				_workspaces = workspaces.slice();
 			}).catch(function (err) {
 				znMessage(err, 'error');
