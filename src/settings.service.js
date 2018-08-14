@@ -118,8 +118,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			var opts = _fieldTypes[def.type].options;
 
 			// For convenience, if we have defined a form on the current page, set a default "belongsTo" value for
-			// field types that require it.
-			if ('belongsTo' in opts && !('belongsTo' in def) && _currentForm !== false) {
+			// field types that require it (field and folder, but not other form fields)
+			if (!def.type !== 'form' && 'belongsTo' in opts && !('belongsTo' in def) && _currentForm !== false) {
 				def.belongsTo = _formInputs[_currentForm];
 			}
 
