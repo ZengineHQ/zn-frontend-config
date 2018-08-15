@@ -18,6 +18,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		var _fieldTypes = {};
 		var _highlightedFields = [];
 		var _hooks = {};
+		var _webhook = false;
 
 		var _settings = angular.extend({}, _defaults);
 
@@ -221,6 +222,29 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			};
 
 			return srv;
+		};
+
+		/**
+		 * Enable Webhook support form configurations.
+		 *
+		 * @param {wgnWebhook} A webhook service instance
+		 * @param {Object} options Options to pass to the webhook service
+		 */
+		srv.webhook = function (webhook, options) {
+			_webhook = {
+				v: webhook,
+				options: options
+			}
+			return srv;
+		};
+
+		/**
+		 * Returns webhook configs if they exist.
+		 *
+		 * @returns {{webhook: wgnWebhook, options: Object} | false}
+		 */
+		srv.getWebhook = function () {
+			return _webhook;
 		};
 
 		/**
