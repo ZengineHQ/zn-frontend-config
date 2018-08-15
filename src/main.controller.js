@@ -56,11 +56,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					enabled: false
 				};
 
-				doRunHook('add', $scope.editing.config).then(function (data) {
-					if (data && angular.isObject(data)) {
-						angular.extend($scope.editing.config, data);
-					}
-
+				doRunHook('add', $scope.editing.config).finally(function () {
 					doResetTab();
 					$scope.wgnConfigForm.$setPristine();
 				});
@@ -80,11 +76,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					return config.$id === id;
 				})[0];
 
-				doRunHook('edit', $scope.editing.config).then(function (data) {
-					if (data && angular.isObject(data)) {
-						angular.extend($scope.editing.config, data);
-					}
-
+				doRunHook('edit', $scope.editing.config).finally(function () {
 					doResetTab();
 					$scope.wgnConfigForm.$setPristine();
 				});
@@ -474,21 +466,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		$scope.onConfigToggle = function (config) {
 			if (config.enabled) {
-				doRunHook('enable', config).then(function (data) {
-					if (data && angular.isObject(data)) {
-						angular.extend(config, data);
-					}
-
+				doRunHook('enable', config).finally(function () {
 					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.name + ' enabled!', 'saved');
 					});
 				});
 			} else {
-				doRunHook('disable', config).then(function (data) {
-					if (data && angular.isObject(data)) {
-						angular.extend(config, data);
-					}
-
+				doRunHook('disable', config).finally(function () {
 					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.name + ' disabled!', 'saved');
 					});
