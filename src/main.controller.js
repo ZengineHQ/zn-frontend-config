@@ -130,8 +130,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}
 
 			return doSaveConfig($scope.editing.config).then(function () {
-				znMessage('Configuration saved!', 'saved');
-
 				if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
 					znModal({
 						title: '',
@@ -153,8 +151,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					$scope.wgnConfigForm.$setPristine();
 				}
 
-				$scope.saving = false;
-				return doRunHook('save', $scope.editing.config);
+				return doRunHook('save', $scope.editing.config).finally(function () {
+					znMessage('Configuration saved!', 'saved');
+					$scope.saving = false;
+				});
 			});
 		};
 
