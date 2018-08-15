@@ -11,6 +11,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		var _fieldsLoading = {};
 		var _foldersLoading = {};
 		var _originalConfig;
+		var _webhook = false;
 
 		/**
 		 * Whether the plugin is loading or not, displays a throbber.
@@ -101,7 +102,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						action: function () {
 							$scope.saving = true;
 							return configService.deleteConfig(_workspaceId, $scope.editing.config, $scope.configs).then(function () {
-								doRunHook('delete', shallowCopy($scope.editing.config)).finally(function () {
+								return doRunHook('delete', shallowCopy($scope.editing.config)).finally(function () {
+									return _webhook ? _webhook.service.delete($scope.editing.config.webhookId) : $q.when();
+								}).then(function () {
 									doDiscardChanges();
 									znMessage('The configuration has been deleted!', 'info');
 									$scope.saving = false;
@@ -162,8 +165,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			$scope.saving = true;
 			$scope.editing.config.enabled = false;
 
-			return doRunHook('disable', $scope.editing.config).then(function () {
-				return doSaveConfig($scope.editing.config);
+			return doRunHook('disable', $scope.editing.config).finally(function () {
+				return doSaveConfig($scope.editing.config).then(function () {
+					return _webhook ? _webhook.service.disable($scope.editing.config.webhookId) : $q.when();
+				});
 			}).catch(function () {
 				$scope.editing.config.enabled = true;
 				znMessage('There was an error disabling the configuration!', 'error');
@@ -181,8 +186,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			$scope.saving = true;
 			$scope.editing.config.enabled = true;
 
-			doRunHook('enable', $scope.editing.config).then(function () {
-				return doSaveConfig($scope.editing.config);
+			return doRunHook('enable', $scope.editing.config).finally(function () {
+				return doSaveConfig($scope.editing.config).then(function () {
+					return _webhook ? _webhook.service.enable($scope.editing.config.webhookId) : $q.when();
+				});
 			}).catch(function () {
 				$scope.editing.config.enabled = false;
 				znMessage('There was an error enabling the configuration!', 'error');
@@ -469,12 +476,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				doRunHook('enable', config).finally(function () {
 					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.name + ' enabled!', 'saved');
+						return _webhook ? _webhook.service.enable($scope.editing.config.webhookId) : $q.when();
 					});
 				});
 			} else {
 				doRunHook('disable', config).finally(function () {
 					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.name + ' disabled!', 'saved');
+						return _webhook ? _webhook.service.disable($scope.editing.config.webhookId) : $q.when();
 					});
 				});
 			}
@@ -798,6 +807,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}
 
 			$scope.settings = $scope.options.getConfig();
+			_webhook = $scope.options.getWebhook();
 			doResetTab();
 
 			// Load settings.
