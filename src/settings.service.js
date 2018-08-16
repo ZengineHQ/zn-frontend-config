@@ -232,7 +232,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 */
 		srv.webhook = function (webhook, options) {
 			_webhook = {
-				v: webhook,
+				service: webhook,
 				options: options
 			}
 			return srv;
