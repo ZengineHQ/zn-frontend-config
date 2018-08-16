@@ -1,17 +1,15 @@
 <!--Choice input (this is a complex one, read tbe docs if confused!)-->
 <script type="text/ng-template" id="wgn-config-input-choice">
 	<div>
-		<div>
-			<select class="form-control" name="input"
-					ng-model="editing.config[field.id + '_source']"
-					ng-options="f.id as f.name for f in getFields(field, specs)"
-					ng-disabled="isFieldLoading(field.belongsTo) || !editing.config[field.belongsTo]"
-					ng-required="field.required">
-				<option value=""></option>
-			</select>
+		<select class="form-control" name="input"
+				ng-model="editing.config[field.id + '_source']"
+				ng-options="f.id as f.name for f in getFields(field, specs)"
+				ng-disabled="isFieldLoading(field.belongsTo) || !editing.config[field.belongsTo]"
+				ng-required="field.required">
+			<option value=""></option>
+		</select>
 
-			<span ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
-		</div>
+		<span ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
 
 		<div ng-show="editing.config[field.id + '_source']">
 			<p ng-if="field.mode === 'select'">Select a choice</p>
