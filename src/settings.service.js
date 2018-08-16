@@ -186,6 +186,28 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				});
 			}
 
+			if ('customShow' in def) {
+
+				var customShow = def.customShow;
+
+				def.customShow = function(config, field) {
+
+					var show = customShow(config,field);
+
+					// remove values if field not shown
+					if (!show) {
+						angular.forEach(config, function(value, key) {
+							if (key.indexOf(field.id) === 0) {
+								delete config[key];
+							}
+						});
+					}
+
+					return show;
+
+				}
+			}
+
 			_settings.pages[_currentPage].fields.push(def);
 			_fieldIds.push(def.id);
 
