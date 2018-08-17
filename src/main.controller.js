@@ -865,9 +865,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				return def.promise;
 			}).then(function () {
-				if ($scope.options.hasWorkspaceField) {
+				if ($scope.options.hasWorkspaceField()) {
 					return loadWorkspaces();
-				} else if ($scope.options.hasFormField) {
+				} else if ($scope.options.hasFormField()) {
 					return loadForms(_workspaceId);
 				}
 			});
