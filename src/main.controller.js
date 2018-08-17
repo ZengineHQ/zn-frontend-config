@@ -476,14 +476,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				doRunHook('enable', config).finally(function () {
 					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.name + ' enabled!', 'saved');
-						return _webhook ? _webhook.service.enable($scope.editing.config.webhookId) : $q.when();
+						return _webhook ? _webhook.service.enable(config.webhookId) : $q.when();
 					});
 				});
 			} else {
 				doRunHook('disable', config).finally(function () {
 					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.name + ' disabled!', 'saved');
-						return _webhook ? _webhook.service.disable($scope.editing.config.webhookId) : $q.when();
+						return _webhook ? _webhook.service.disable(config.webhookId) : $q.when();
 					});
 				});
 			}
@@ -762,7 +762,45 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @return {Promise}
 		 */
 		function doSaveConfig (config) {
-			return configService.save(_workspaceId, $scope.settings.multi, $scope.configs, config);
+			var promise = $q.when(config);
+
+			if (_webhook && !('webhookId' in config)) {
+				var options = Object.assign({}, _webhook.options);
+
+				if (!options['form.id'] in config) {
+					throw new Error('Config: Invalid form.id for webhook');
+				}
+
+				options['form.id'] = config[options['form.id']];
+
+				promise = _webhook.service.create(options).then(function (webhook) {
+					config.webhookId = webhook.id;
+					config.webhookKey = webhook.secretKey;
+					return config;
+				}).catch(function (err) {
+					znMessage('There was an error creating the webhook.', 'error');
+					return config;
+				});
+			}
+
+			return promise.then(function (cfg) {
+				return configService.save(_workspaceId, $scope.settings.multi, $scope.configs, cfg).then(function () {
+					return cfg;
+				})
+			}).then(function (cfg) {
+				// Now that we know the config id, update the webhook URL to add it when using multi configs.
+				if ($scope.settings.multi) {
+					return _webhook.service.load(cfg.webhookId).then(function (wh) {
+						if (wh.url.indexOf('config=') === -1) {
+							var separator = wh.url.indexOf('?') === -1 ? '?' : '&';
+							return _webhook.service.update({
+								id: wh.id,
+								url: wh.url + separator + 'config=' + encodeURI(cfg.$id)
+							});
+						}
+					});
+				}
+			});
 		}
 
 		/**
