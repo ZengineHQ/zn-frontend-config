@@ -1,6 +1,6 @@
 {
   "name": "@zenginehq/frontend-config",
-  "version": "3.5.0",
+  "version": "3.6.0",
   "description": "Helper module for implementing Zengine plugin configuration forms.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
