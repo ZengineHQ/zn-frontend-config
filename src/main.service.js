@@ -92,7 +92,10 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 			return $ref.$save(index);
 		}
 
-		return $ref.$add(config);
+		return $ref.$add(config).then(function (ref) {
+			var id = 'key' in ref && angular.isFunction(ref.key) ? ref.key() : ref.path.n.pop();
+			config.$id = id;
+		});
 	}
 
 	/**
