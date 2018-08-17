@@ -2,6 +2,16 @@ plugin.service('wgnConfigInputs', [function () {
 	// This is just a centralized place to store the internal input type definitions and keep our main service cleaner.
 	var srv = this;
 
+	var workspaceInput = {
+		type: 'workspace',
+		template: 'wgn-config-input-workspace',
+		options: {
+			exclusive: {
+				required: false
+			}
+		}
+	};
+
 	var formInput = {
 		type: 'form',
 		template: 'wgn-config-input-form',
@@ -137,6 +147,7 @@ plugin.service('wgnConfigInputs', [function () {
 	 */
 	srv.all = function () {
 		return [
+			workspaceInput,
 			formInput,
 			fieldInput,
 			folderInput,

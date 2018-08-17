@@ -4,7 +4,7 @@
 			ng-model="editing.config[field.id]"
 			ng-required="field.required">
 
-		<option ng-repeat="opt in field.options" value="opt.value">
+		<option ng-repeat="opt in field.options" ng-value="opt.value">
 			{{ opt.label }}
 		</option>
 	</select>

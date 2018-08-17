@@ -1,8 +1,8 @@
 plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, configInputs) {
-	return function (args) {
+	return function (title) {
 		var srv = this;
 		var _defaults = {
-			title: 'My Plugin',
+			title: title || 'My Plugin',
 			icon: 'icon-puzzle',
 			help: 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.',
 			multi: false,
@@ -11,20 +11,16 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 
 		var _currentPage = false;
 		var _currentForm = false;
+		var _currentWorkspace = false;
 		var _fieldIds = [];
 		var _formInputs = [];
+		var _workspaceInputs = [];
 		var _fieldTypes = {};
 		var _highlightedFields = [];
 		var _hooks = {};
+		var _webhook = false;
 
-		// Accept either a configuration object or a string for the title.
-		if (!angular.isObject(args)) {
-			args = {
-				title: args ? args.toString() : ''
-			};
-		}
-
-		var _settings = angular.extend({}, _defaults, args);
+		var _settings = angular.extend({}, _defaults);
 
 		// Ensure pages is always an empty array.
 		_settings.pages = [];
@@ -123,8 +119,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			var opts = _fieldTypes[def.type].options;
 
 			// For convenience, if we have defined a form on the current page, set a default "belongsTo" value for
-			// field types that require it.
-			if ('belongsTo' in opts && !('belongsTo' in def) && _currentForm !== false) {
+			// field types that require it (field and folder, but not other form fields)
+			if (!def.type !== 'form' && 'belongsTo' in opts && !('belongsTo' in def) && _currentForm !== false) {
 				def.belongsTo = _formInputs[_currentForm];
 			}
 
@@ -153,12 +149,23 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			if (def.type === 'form') {
 				_formInputs.push(def.id);
 				_currentForm = _formInputs.length - 1;
+			} else if (def.type === 'workspace') {
+				_workspaceInputs.push(def.id);
+				_currentWorkspace = _workspaceInputs.length - 1;
 			}
 
 			// Finally if the field has the special "belongsTo" option, validate its target exists.
 			if ('belongsTo' in def) {
-				if (_formInputs.indexOf(def.belongsTo) === -1) {
-					throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
+				if (def.type === 'field' || def.type === 'folder' || def.type === 'choice') {
+					if (_formInputs.indexOf(def.belongsTo) === -1) {
+						throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
+					}
+				} else if (def.type === 'form') {
+					if (_workspaceInputs.indexOf(def.belongsTo) === -1) {
+						throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no workspace field exists with id "' + def.belongsTo + '"');
+					}
+				} else {
+					throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", the "' + def.type + '" field type doesn\'t support it.');
 				}
 			}
 
@@ -218,6 +225,43 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		};
 
 		/**
+		 * Enable Webhook support form configurations.
+		 *
+		 * @param {wgnWebhook} A webhook service instance
+		 * @param {Object} options Options to pass to the webhook service
+		 */
+		srv.webhook = function (webhook, options) {
+			// Validate required options.
+			if (!('url' in options)) {
+				throw new Error('Config: Missing required param "url" in webhook options.');
+			}
+
+			if (!('form.id' in options)) {
+				throw new Error('Config: Missing required param "form.id" in webhook options.');
+			}
+
+			// Finally make sure the form.id acually exists.
+			if (_formInputs.indexOf(options['form.id']) === -1) {
+				throw new Error('Config: Inexistent form id specified in param "form.id" in webhook options.');
+			}
+
+			_webhook = {
+				service: webhook,
+				options: options
+			}
+			return srv;
+		};
+
+		/**
+		 * Returns webhook configs if they exist.
+		 *
+		 * @returns {{webhook: wgnWebhook, options: Object} | false}
+		 */
+		srv.getWebhook = function () {
+			return _webhook;
+		};
+
+		/**
 		 * Registers a callback to run when a certain hook is fired.
 		 *
 		 * @param {string} event
@@ -232,8 +276,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				'disable',
 				'discard',
 				'init',
-				'save',
-				'postSave'
+				'save'
 			];
 
 			if (allowedEvents.indexOf(event) === -1) {
@@ -352,24 +395,42 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		};
 
 		/**
-		 * Returns field definitions that belong to a certain form.
+		 * Returns field definitions that belong to a certain form or workspace.
 		 *
-		 * @param {string} formDefId
+		 * @param {string} defId
 		 *
 		 * @return {Array<Object>}
 		 */
-		srv.getDependentFields = function (formDefId) {
+		srv.getDependentFields = function (defId) {
 			var fields = [];
 
 			angular.forEach(_settings.pages, function (p) {
 				angular.forEach(p.fields, function (f) {
-					if ('belongsTo' in f && f.belongsTo === formDefId) {
+					if ('belongsTo' in f && f.belongsTo === defId) {
 						fields.push(f);
 					}
 				});
 			});
 
 			return fields;
+		};
+
+		/**
+		 * Returns whether there are any form inputs in the defined config fields.
+		 *
+		 * @returns {boolean}
+		 */
+		srv.hasFormField = function () {
+			return _formInputs.length > 0;
+		};
+
+		/**
+		 * Returns whether there are any workspace inputs in the defined config fields.
+		 *
+		 * @returns {boolean}
+		 */
+		srv.hasWorkspaceField = function () {
+			return _workspaceInputs.length > 0;
 		};
 
 		/**
