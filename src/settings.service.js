@@ -231,6 +231,20 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 * @param {Object} options Options to pass to the webhook service
 		 */
 		srv.webhook = function (webhook, options) {
+			// Validate required options.
+			if (!('url' in options)) {
+				throw new Error('Config: Missing required param "url" in webhook options.');
+			}
+
+			if (!('form.id' in options)) {
+				throw new Error('Config: Missing required param "form.id" in webhook options.');
+			}
+
+			// Finally make sure the form.id acually exists.
+			if (_formInputs.indexOf(options['form.id']) === -1) {
+				throw new Error('Config: Inexistent form id specified in param "form.id" in webhook options.');
+			}
+
 			_webhook = {
 				service: webhook,
 				options: options
