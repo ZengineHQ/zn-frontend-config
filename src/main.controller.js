@@ -356,7 +356,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			workspaceId = workspaceId || _workspaceId;
 
 			// Sanity when dealing with forms belonging to a workspace.
-			if (!workspaceId in _forms) {
+			if (!(workspaceId in _forms)) {
 				return [];
 			}
 
@@ -565,7 +565,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				_workspaces = workspaces.slice();
 			}).catch(function (err) {
 				znMessage(err, 'error');
-			})
+			});
 		}
 
 		/**
@@ -577,13 +577,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			_formsLoading[workspaceId] = true;
 
 			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200 }).then(function (forms) {
-				_forms[workspaceId] = forms
+				_forms[workspaceId] = forms;
 			}).catch(function (err) {
 				znMessage(err, 'error');
 			}).finally(function () {
 				_formsLoading[workspaceId] = false;
 			});
-		};
+		}
 
 		/**
 		 * Loads field data for the given form.
@@ -676,7 +676,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			// Extract info from each one and save it for display.
 			angular.forEach(highlighted, function (input) {
-				/*jshint maxcomplexity:9 */
+				/*jshint maxcomplexity:11 */
 				var inputTypeFormatted = input.type.charAt(0).toUpperCase() + input.type.substr(1);
 
 				switch (input.type) {
@@ -689,7 +689,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							formatedHighligts.push({
 								type: inputTypeFormatted,
 								value: workspace.name
-							})
+							});
 						}
 						break;
 					case 'form':
@@ -767,7 +767,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			if (_webhook && !('webhookId' in config)) {
 				var options = Object.assign({}, _webhook.options);
 
-				if (!options['form.id'] in config) {
+				if (!(options['form.id'] in config)) {
 					throw new Error('Config: Invalid form.id for webhook');
 				}
 
@@ -786,7 +786,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			return promise.then(function (cfg) {
 				return configService.save(_workspaceId, $scope.settings.multi, $scope.configs, cfg).then(function () {
 					return cfg;
-				})
+				});
 			}).then(function (cfg) {
 				// Now that we know the config id, update the webhook URL to add it when using multi configs.
 				if ($scope.settings.multi) {

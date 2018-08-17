@@ -71,7 +71,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 * @param {Object} def The field definition.
 		 */
 		srv.field = function (def) {
-			/*jshint maxcomplexity:14 */
+			/*jshint maxcomplexity:22 */
 			// Make sure we have a page, this will only be false if a field is added before a page.
 			if (_currentPage === false) {
 				throw new Error('Config: No page exists to add fields to');
@@ -248,7 +248,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			_webhook = {
 				service: webhook,
 				options: options
-			}
+			};
+
 			return srv;
 		};
 
