@@ -118,10 +118,15 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			// Validate field type specific options.
 			var opts = _fieldTypes[def.type].options;
 
-			// For convenience, if we have defined a form on the current page, set a default "belongsTo" value for
-			// field types that require it (field and folder, but not other form fields)
-			if (!def.type !== 'form' && 'belongsTo' in opts && !('belongsTo' in def) && _currentForm !== false) {
-				def.belongsTo = _formInputs[_currentForm];
+			// Try to auto-fill the belongsTo option if it's required but not set.
+			if ('belongsTo' in opts && !('belongsTo' in def)) {
+				if (def.type !== 'form' && _currentForm !== false) {
+					// For non-form fields, belongsTo will require a forn.
+					def.belongsTo = _formInputs[_currentForm];
+				} else if (def.type === 'form' && _currentWorkspace !== false) {
+					// For form fields, belongsTo is always a workspace.
+					def.belongsTo = _workspaceInputs[_currentWorkspace];
+				}
 			}
 
 			// Iterate over field type option definitions and validate the given field definition.
