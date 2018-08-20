@@ -77,6 +77,12 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				throw new Error('Config: No page exists to add fields to');
 			}
 
+			var defaults = {
+				required: true
+			};
+
+			def = angular.extend({}, defaults, def);
+
 			// Validate required properties.
 			['id', 'name', 'type'].forEach(function (p) {
 				if (!(p in def) || !def[p]) {
@@ -108,12 +114,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				def.help = def.help.toString();
 			}
 
-			if ('required' in def) {
-				def.required = !!def.required;
-			} else {
-				// Default to true.
-				def.required = true;
-			}
+			def.required = !!def.required;
 
 			// Validate field type specific options.
 			var opts = _fieldTypes[def.type].options;
@@ -186,12 +187,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				});
 			}
 
-			if ('visible' in def) {
-
-				if (typeof def.visible !== 'function') {
-					throw new Error('Config: "visible" property must be a function');
-				}
-
+			if ('visible' in def && typeof def.visible !== 'function') {
+				throw new Error('Config: "visible" property must be a function');
 			}
 
 			_settings.pages[_currentPage].fields.push(def);
