@@ -186,26 +186,12 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				});
 			}
 
-			if ('customShow' in def) {
+			if ('visible' in def) {
 
-				var customShow = def.customShow;
-
-				def.customShow = function(config, field) {
-
-					var show = customShow(config,field);
-
-					// remove values if field not shown
-					if (!show) {
-						angular.forEach(config, function(value, key) {
-							if (key.indexOf(field.id) === 0) {
-								delete config[key];
-							}
-						});
-					}
-
-					return show;
-
+				if (typeof def.visible !== 'function') {
+					throw new Error('Config: "visible" property must be a function');
 				}
+
 			}
 
 			_settings.pages[_currentPage].fields.push(def);
@@ -390,10 +376,22 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		/**
 		 * Returns highlighted inputs.
 		 *
-		 * @return {Array<string>} An array of input ids.
+		 * @return {Array<string>} An array of input objects.
 		 */
 		srv.getHighlighted = function () {
 			return _highlightedFields;
+		};
+
+
+		/**
+		 * Returns all field definitions.
+		 *
+		 * @return {Array<string>} An array of objects.
+		 */
+		srv.getFields = function () {
+			return _.flatten(_.map(_settings.pages, function(page) {
+				return page.fields;
+			}));
 		};
 
 		/**

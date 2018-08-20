@@ -129,6 +129,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				doProcessHighlighted();
 			}
 
+			removeInvalidValues();
+
 			return doSaveConfig($scope.editing.config).then(function () {
 				if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
 					znModal({
@@ -664,6 +666,55 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}).finally(function () {
 				_foldersLoading[formId] = false;
 			});
+		}
+
+		/**
+		 * Processes fields and remove invalid values from the config object.
+		 */
+		function removeInvalidValues() {
+
+			var fieldDefs = $scope.options.getFields();
+
+			angular.forEach(fieldDefs, function(fieldDef) {
+
+				var validChoices = {},
+					choices,
+					choiceType = fieldDef.type === 'choice';
+
+				if (choiceType) {
+
+					choices = $scope.getChoices(fieldDef);
+					validChoices[fieldDef.id + '_source'] = true;
+
+					if (choices) {
+						angular.forEach(choices, function(value, key) {
+							if (fieldDef.mode === 'score') {
+								validChoices[fieldDef.id + '_opt_' + key] = true;
+							} else if (fieldDef.mode === 'select') {
+								validChoices[fieldDef.id + '_val'] = true;
+							}
+						});
+
+					}
+				}
+
+				var hidden = fieldDef.visible && !fieldDef.visible($scope.editing.config, fieldDef);
+
+
+				// Remove values from config
+				if (choiceType || hidden) {
+
+					angular.forEach($scope.editing.config, function(value, key) {
+						if (key.indexOf(fieldDef.id) === 0 &&
+							(hidden || !validChoices[key])) {
+							delete $scope.editing.config[key];
+						}
+					});
+
+				}
+
+			});
+
 		}
 
 		/**
