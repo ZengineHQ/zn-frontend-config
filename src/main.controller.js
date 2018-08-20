@@ -625,7 +625,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				angular.forEach(results, function (field) {
 					var f = {
 						id: field.id,
-						name: field.label,
+						name: field.name,
+						label: field.label,
 						type: field.type
 					};
 
