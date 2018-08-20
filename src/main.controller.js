@@ -701,8 +701,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				var hidden = fieldDef.visible && !fieldDef.visible($scope.editing.config, fieldDef);
 
-
-				// Remove values from config
+				// Remove invalid values from config
 				if (choiceType || hidden) {
 
 					angular.forEach($scope.editing.config, function(value, key) {
