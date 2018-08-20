@@ -389,10 +389,11 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 * @return {Array<string>} An array of objects.
 		 */
 		srv.getFields = function () {
-			return _.flatten(_.map(_settings.pages, function(page) {
+			return _settings.pages.map(function(page) {
 				return page.fields;
-			}));
+			}).reduce((acc, val) => acc.concat(val), []);
 		};
+
 
 		/**
 		 * Returns a field definition given an id.
