@@ -84,24 +84,27 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			def = angular.extend({}, defaults, def);
 
 			// Validate required properties.
-			['id', 'name', 'type'].forEach(function (p) {
-				if (!(p in def) || !def[p]) {
-					throw new Error('Config: Missing required field property: "' + p + '" for ' + def.id || def.name);
+			if (def.type !== 'markup') {
+				['id', 'name', 'type'].forEach(function (p) {
+					if (!(p in def) || !def[p]) {
+						throw new Error('Config: Missing required field property: "' + p + '" for ' + def.id || def.name);
+					}
+				});
+
+				// Make sure reserved ids aren't used.
+				var reserved = ['name', 'enabled'];
+				if (reserved.indexOf(def.id) !== -1) {
+					throw new Error('Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.');
 				}
-			});
+				if (def.id.indexOf('mch') === 0) {
+					throw new Error('Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.');
+				}
 
-			// Make sure reserved ids aren't used.
-			var reserved = ['name', 'enabled'];
-			if (reserved.indexOf(def.id) !== -1) {
-				throw new Error('Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.');
-			}
-			if (def.id.indexOf('mch') === 0) {
-				throw new Error('Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.');
-			}
+				// Make sure id is unique.
+				if (_fieldIds.indexOf(def.id) !== -1) {
+					throw new Error('Config: Field id "' + def.id + '" is already in use');
+				}
 
-			// Make sure id is unique.
-			if (_fieldIds.indexOf(def.id) !== -1) {
-				throw new Error('Config: Field id "' + def.id + '" is already in use');
 			}
 
 			// Make sure field type exists.
