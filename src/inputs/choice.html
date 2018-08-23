@@ -5,6 +5,7 @@
 				ng-model="editing.config[field.id + '_source']"
 				ng-options="f.id as f|formFieldTitle for f in getFields(field, specs)"
 				ng-disabled="isFieldLoading(field.belongsTo) || !editing.config[field.belongsTo]"
+				ng-change="resetChoiceValues(field.id)"
 				ng-required="field.required">
 			<option value=""></option>
 		</select>
@@ -14,6 +15,8 @@
 		<div ng-show="editing.config[field.id + '_source']">
 			<p ng-if="field.mode === 'select'">Select a choice</p>
 			<p ng-if="field.mode === 'score'">Score all choices</p>
+
+			<input ng-if="field.mode === 'multi-select'" style="display: none" type="text" ng-model="editing.config[field.id + '_val']" />
 
 			<!-- Display field choices -->
 			<div ng-repeat="(key, val) in getChoices(field)" class="form-group">
@@ -31,6 +34,13 @@
 						<input type="radio" class="form-control" value="{{ key }}"
 							   ng-model="editing.config[field.id + '_val']" name="{{ field.id }}" ng-required="field.required">
 						{{ val }}
+					</label>
+				</div>
+
+				<div ng-if="field.mode === 'multi-select'" class="checkbox">
+					<label class="checkbox-label no-padding">
+						<input type="checkbox" check-list="editing.config[field.id + '_val']" check-value="key">
+						{{val}}
 					</label>
 				</div>
 			</div>

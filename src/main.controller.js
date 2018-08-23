@@ -443,6 +443,22 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		};
 
 		/**
+		 * Reset choice values when source field changes
+		 *
+		 * @param {fieldId} fieldDef The choice input id
+		 *
+		 */
+		$scope.resetChoiceValues = function(fieldId) {
+			delete $scope.editing.config[fieldId + '_val'];
+
+			angular.forEach($scope.editing.config, function(value, key) {
+				if (key.indexOf(fieldId + '_opt_') === 0) {
+					delete $scope.editing.config[key];
+				}
+			});
+		};
+
+		/**
 		 * Returns whether a given form is loading its fields.
 		 *
 		 * @param {string} key A form config id.
@@ -678,35 +694,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			angular.forEach(fieldDefs, function(fieldDef) {
 
-				var validChoices = {},
-					choices,
-					choiceType = fieldDef.type === 'choice';
-
-				if (choiceType) {
-
-					choices = $scope.getChoices(fieldDef);
-					validChoices[fieldDef.id + '_source'] = true;
-
-					if (choices) {
-						angular.forEach(choices, function(value, key) {
-							if (fieldDef.mode === 'score') {
-								validChoices[fieldDef.id + '_opt_' + key] = true;
-							} else if (fieldDef.mode === 'select') {
-								validChoices[fieldDef.id + '_val'] = true;
-							}
-						});
-
-					}
-				}
-
 				var hidden = fieldDef.visible && !fieldDef.visible($scope.editing.config, fieldDef);
 
-				// Remove invalid values from config
-				if (choiceType || hidden) {
+				// Remove hidden values from config
+				if (hidden) {
 
 					angular.forEach($scope.editing.config, function(value, key) {
-						if (key.indexOf(fieldDef.id) === 0 &&
-							(hidden || !validChoices[key])) {
+						if (key.indexOf(fieldDef.id) === 0) {
 							delete $scope.editing.config[key];
 						}
 					});

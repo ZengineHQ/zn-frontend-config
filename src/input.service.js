@@ -124,7 +124,7 @@ plugin.service('wgnConfigInputs', [function () {
 			mode: {
 				required: true,
 				validate: function (m) {
-					return m === 'select' || m === 'score';
+					return ['select', 'multi-select', 'score'].indexOf(m) !== -1;
 				}
 			},
 			restrict: {
