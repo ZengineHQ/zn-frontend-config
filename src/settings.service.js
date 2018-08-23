@@ -78,7 +78,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			}
 
 			var defaults = {
-				required: true
+				required: true,
+				help: ''
 			};
 
 			def = angular.extend({}, defaults, def);
@@ -113,10 +114,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			}
 
 			// Type cast a couple optional common properties.
-			if ('help' in def) {
-				def.help = def.help.toString();
-			}
-
+			def.help = def.help.toString();
 			def.required = !!def.required;
 
 			// Validate field type specific options.
