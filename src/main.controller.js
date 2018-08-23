@@ -146,14 +146,15 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					});
 				}
 
-				if ($scope.settings.multi) {
-					doDiscardChanges();
-				} else {
-					doResetTab();
-					$scope.wgnConfigForm.$setPristine();
-				}
-
 				return doRunHook('save', $scope.editing.config).finally(function () {
+
+					if ($scope.settings.multi) {
+						doDiscardChanges();
+					} else {
+						doResetTab();
+						$scope.wgnConfigForm.$setPristine();
+					}
+
 					znMessage('Configuration saved!', 'saved');
 					$scope.saving = false;
 				});
@@ -834,7 +835,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				});
 			}).then(function (cfg) {
 				// Now that we know the config id, update the webhook URL to add it when using multi configs.
-				if ($scope.settings.multi) {
+				if ($scope.settings.multi && _webhook) {
 					return _webhook.service.load(cfg.webhookId).then(function (wh) {
 						if (wh.url.indexOf('config=') === -1) {
 							var separator = wh.url.indexOf('?') === -1 ? '?' : '&';
