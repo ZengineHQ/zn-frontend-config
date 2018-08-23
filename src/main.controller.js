@@ -90,8 +90,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.onDeleteConfig = function () {
 			znModal({
 				title: 'Are you sure?',
-				template: '<p>Are you sure you want to delete the <strong>' + $scope.editing.config.name + '</strong> configuration?</p><p>This action is irreversible.</p>',
+				template: '<p>Are you sure you want to delete the <strong>{{name}}</strong> configuration?</p><p>This action is irreversible.</p>',
 				classes: '',
+				scope: {
+					name: $scope.editing.config.name
+				},
 				closeButton: false,
 				btns: {
 					'No': {
