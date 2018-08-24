@@ -773,6 +773,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				options['form.id'] = config[options['form.id']];
 
+				if (options.filter) {
+					options.filter = updateFilter(options.filter, config);
+				}
+
 				promise = _webhook.service.create(options).then(function (webhook) {
 					config.webhookId = webhook.id;
 					config.webhookKey = webhook.secretKey;
@@ -801,6 +805,65 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					});
 				}
 			});
+		}
+
+		/**
+		 * This function will take a filter object and update all attribute and value properties
+		 * with the data from the config object.
+		 *
+		 * @param {Object} filter The filter to update
+		 * @param {Object} config The config to reference while updating
+		 *
+		 * @returns {Object} the updated (and now valid) filter
+		 */
+		function updateFilter (filter, config) {
+			/**
+			 * Check for attribute prop, which will tell the function to return a filter formula
+			 * otherwise, for each new layer of the filter
+			 * (represented by {and: [filters]} or {or: [filters]})
+			 * recursively call the function on each filter in that layer.
+			 */
+			if (filter.attribute) {
+				if (filter.attribute.replaceField) {
+					// Update attribute prop to actual input value (as a field Id)
+					filter.attribute = 'field' + config[filter.attribute.replaceField];
+				}
+
+				if (filter.attribute.replaceValue) {
+					// Update attribute prop to actual input value
+					filter.attribute = config[filter.attribute.replaceValue];
+				}
+
+				if (filter.value.replaceField) {
+					// Update value prop to actual input value (as a field Id)
+					filter.value = 'field' + config[filter.value.replaceField];
+				}
+
+				if (filter.value.replaceValue) {
+					// Update value prop to actual input value
+					filter.value = config[filter.value.replaceValue];
+				}
+
+				if (filter.filter) {
+					// If there is a filter instead of a value, recursively update that filter
+					filter.filter = updateFilter(filter.filter, config);
+				}
+
+				// If all of the props were strings/numbers, no update would be necessary
+				return filter;
+			} else if (filter.and) {
+				var newAnd = filter.and.map(function (nextFilter) {
+					return updateFilter(nextFilter, config);
+				});
+
+				return { and: newAnd };
+			} else if (filter.or) {
+				var newOr = filter.or.map(function (nextFilter) {
+					return updateFilter(nextFilter, config);
+				});
+
+				return { or: newOr };
+			}
 		}
 
 		/**
