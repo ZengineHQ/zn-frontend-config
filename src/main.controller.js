@@ -844,6 +844,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					filter.value = config[filter.value.replaceValue];
 				}
 
+				if (filter.prefix.replaceValue) {
+					// Prefix cannot be a fieldID, so only replaceValue is handled
+					filter.prefix = config[filter.prefix.replaceValue];
+				}
+
 				if (filter.filter) {
 					// If there is a filter instead of a value, recursively update that filter
 					filter.filter = updateFilter(filter.filter, config);
