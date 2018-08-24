@@ -774,7 +774,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				options['form.id'] = config[options['form.id']];
 
 				if (options.filter) {
-					options.filter = updateFilter(options.filter, config);
+					options.filter = reconstructFilter(options.filter, config);
 				}
 
 				promise = _webhook.service.create(options).then(function (webhook) {
@@ -816,7 +816,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @returns {Object} the updated (and now valid) filter
 		 */
-		function updateFilter (filter, config) {
+		function reconstructFilter (filter, config) {
+			let newFilter = angular.extend({}, filter);
 			/**
 			 * Check for attribute prop, which will tell the function to return a filter formula
 			 * otherwise, for each new layer of the filter
@@ -826,45 +827,45 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			if (filter.attribute) {
 				if (filter.attribute.replaceField) {
 					// Update attribute prop to actual input value (as a field Id)
-					filter.attribute = 'field' + config[filter.attribute.replaceField];
+					newFilter.attribute = 'field' + config[filter.attribute.replaceField];
 				}
 
 				if (filter.attribute.replaceValue) {
 					// Update attribute prop to actual input value
-					filter.attribute = config[filter.attribute.replaceValue];
+					newFilter.attribute = config[filter.attribute.replaceValue];
 				}
 
 				if (filter.value.replaceField) {
 					// Update value prop to actual input value (as a field Id)
-					filter.value = 'field' + config[filter.value.replaceField];
+					newFilter.value = 'field' + config[filter.value.replaceField];
 				}
 
 				if (filter.value.replaceValue) {
 					// Update value prop to actual input value
-					filter.value = config[filter.value.replaceValue];
+					newFilter.value = config[filter.value.replaceValue];
 				}
 
 				if (filter.prefix.replaceValue) {
 					// Prefix cannot be a fieldID, so only replaceValue is handled
-					filter.prefix = config[filter.prefix.replaceValue];
+					newFilter.prefix = config[filter.prefix.replaceValue];
 				}
 
 				if (filter.filter) {
 					// If there is a filter instead of a value, recursively update that filter
-					filter.filter = updateFilter(filter.filter, config);
+					newFilter.filter = reconstructFilter(filter.filter, config);
 				}
 
 				// If all of the props were strings/numbers, no update would be necessary
-				return filter;
+				return newFilter;
 			} else if (filter.and) {
-				var newAnd = filter.and.map(function (nextFilter) {
-					return updateFilter(nextFilter, config);
+				var newAnd = newFilter.and.map(function (nextFilter) {
+					return reconstructFilter(nextFilter, config);
 				});
 
 				return { and: newAnd };
 			} else if (filter.or) {
-				var newOr = filter.or.map(function (nextFilter) {
-					return updateFilter(nextFilter, config);
+				var newOr = newFilter.or.map(function (nextFilter) {
+					return reconstructFilter(nextFilter, config);
 				});
 
 				return { or: newOr };
