@@ -78,6 +78,9 @@ plugin.service('wgnConfigInputs', [function () {
 			},
 			max: {
 				required: false
+			},
+			step: {
+				required: false
 			}
 		},
 		template: 'wgn-config-input-number'
