@@ -56,6 +56,12 @@ plugin.service('wgnConfigInputs', [function () {
 		options: {
 			placeholder: {
 				required: false
+			},
+			minlength: {
+				required: false
+			},
+			maxlength: {
+				required: false
 			}
 		},
 		template: 'wgn-config-input-text'
