@@ -785,6 +785,18 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					znMessage('There was an error creating the webhook.', 'error');
 					return config;
 				});
+			} else if (_webhook && _webhook.options.filter) {
+				var options = Object.assign({}, _webhook.options);
+				options.filter = reconstructFilter(options.filter, config);
+				promise = _webhook.service.update({
+					id: config.webhookId,
+					filter: options.filter
+				}).then(function (webhook) {
+					return config;
+				}).catch(function (err) {
+					znMessage('There was an error creating the webhook.', 'error');
+					return config;
+				});
 			}
 
 			return promise.then(function (cfg) {
