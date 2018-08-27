@@ -5,3 +5,4 @@ npm-debug.log
 .DS_Store
 /nbproject/private/
 node_modules
+.vscode
