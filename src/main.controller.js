@@ -786,11 +786,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					return config;
 				});
 			} else if (_webhook && _webhook.options.filter) {
-				var options = Object.assign({}, _webhook.options);
-				options.filter = reconstructFilter(options.filter, config);
+				var updateOptions = Object.assign({}, _webhook.options);
+				updateOptions.filter = reconstructFilter(updateOptions.filter, config);
+
 				promise = _webhook.service.update({
 					id: config.webhookId,
-					filter: options.filter
+					filter: updateOptions.filter
 				}).then(function (webhook) {
 					return config;
 				}).catch(function (err) {
