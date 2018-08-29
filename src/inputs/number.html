@@ -1,8 +1,11 @@
 <!--Number input-->
 <script type="text/ng-template" id="wgn-config-input-number">
-	<input type="number" class="form-control" name="{{ field.id }}"
-		   ng-model="editing.config[field.id]"
-		   ng-required="field.required"
-		   placeholder="{{ field.placeholder }}"
+	<input type="number" class="form-control"
+		name="{{ field.id }}"
+		ng-model="editing.config[field.id]"
+		ng-required="field.required"
+		placeholder="{{ field.placeholder }}"
+		min="{{ field.min }}"
+		max="{{ field.max }}"
 	>
 </script>
