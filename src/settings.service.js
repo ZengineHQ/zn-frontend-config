@@ -71,7 +71,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 * @param {Object} def The field definition.
 		 */
 		srv.field = function (def) {
-			/*jshint maxcomplexity:22 */
+			/*jshint maxcomplexity:23 */
 			// Make sure we have a page, this will only be false if a field is added before a page.
 			if (_currentPage === false) {
 				throw new Error('Config: No page exists to add fields to');
@@ -99,6 +99,10 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				}
 				if (def.id.indexOf('mch') === 0) {
 					throw new Error('Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.');
+				}
+
+				if (def.id.indexOf('_') !== -1) {
+					throw new Error('Config: The id "' + def.id + '" can\'t be used because "_" is reserved for internal use.');
 				}
 
 				// Make sure id is unique.

@@ -132,7 +132,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				doProcessHighlighted();
 			}
 
-			removeInvalidValues();
+			removeHiddenValues();
 
 			return doSaveConfig($scope.editing.config).then(function () {
 				if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
@@ -690,9 +690,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		}
 
 		/**
-		 * Processes fields and remove invalid values from the config object.
+		 * Processes fields and remove hidden values from the config object.
 		 */
-		function removeInvalidValues() {
+		function removeHiddenValues() {
 
 			var fieldDefs = $scope.options.getFields();
 
@@ -704,7 +704,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				if (hidden) {
 
 					angular.forEach($scope.editing.config, function(value, key) {
-						if (key.indexOf(fieldDef.id) === 0) {
+						if (key.indexOf(fieldDef.id + '_') === 0 ||
+							key === fieldDef.id) {
 							delete $scope.editing.config[key];
 						}
 					});
