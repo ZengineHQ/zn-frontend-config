@@ -378,7 +378,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		/**
 		 * Returns highlighted inputs.
 		 *
-		 * @return {Array<string>} An array of input objects.
+		 * @return {Array<Object>} An array of input objects.
 		 */
 		srv.getHighlighted = function () {
 			return _highlightedFields;
