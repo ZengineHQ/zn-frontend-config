@@ -90,8 +90,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.onDeleteConfig = function () {
 			znModal({
 				title: 'Are you sure?',
-				template: '<p>Are you sure you want to delete the <strong>' + $scope.editing.config.name + '</strong> configuration?</p><p>This action is irreversible.</p>',
+				template: '<p>Are you sure you want to delete the <strong>{{name}}</strong> configuration?</p><p>This action is irreversible.</p>',
 				classes: '',
+				scope: {
+					name: $scope.editing.config.name
+				},
 				closeButton: false,
 				btns: {
 					'No': {
@@ -129,6 +132,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				doProcessHighlighted();
 			}
 
+			removeHiddenValues();
+
 			return doSaveConfig($scope.editing.config).then(function () {
 				if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
 					znModal({
@@ -144,14 +149,15 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					});
 				}
 
-				if ($scope.settings.multi) {
-					doDiscardChanges();
-				} else {
-					doResetTab();
-					$scope.wgnConfigForm.$setPristine();
-				}
-
 				return doRunHook('save', $scope.editing.config).finally(function () {
+
+					if ($scope.settings.multi) {
+						doDiscardChanges();
+					} else {
+						doResetTab();
+						$scope.wgnConfigForm.$setPristine();
+					}
+
 					znMessage('Configuration saved!', 'saved');
 					$scope.saving = false;
 				});
@@ -441,6 +447,22 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		};
 
 		/**
+		 * Reset choice values when source field changes
+		 *
+		 * @param {fieldId} fieldDef The choice input id
+		 *
+		 */
+		$scope.resetChoiceValues = function(fieldId) {
+			delete $scope.editing.config[fieldId + '_val'];
+
+			angular.forEach($scope.editing.config, function(value, key) {
+				if (key.indexOf(fieldId + '_opt_') === 0) {
+					delete $scope.editing.config[key];
+				}
+			});
+		};
+
+		/**
 		 * Returns whether a given form is loading its fields.
 		 *
 		 * @param {string} key A form config id.
@@ -623,7 +645,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				angular.forEach(results, function (field) {
 					var f = {
 						id: field.id,
-						name: field.label,
+						name: field.name,
+						label: field.label,
 						type: field.type
 					};
 
@@ -664,6 +687,33 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}).finally(function () {
 				_foldersLoading[formId] = false;
 			});
+		}
+
+		/**
+		 * Processes fields and remove hidden values from the config object.
+		 */
+		function removeHiddenValues() {
+
+			var fieldDefs = $scope.options.getFields();
+
+			angular.forEach(fieldDefs, function(fieldDef) {
+
+				var hidden = fieldDef.visible && !fieldDef.visible($scope.editing.config, fieldDef);
+
+				// Remove hidden values from config
+				if (hidden) {
+
+					angular.forEach($scope.editing.config, function(value, key) {
+						if (key.indexOf(fieldDef.id + '_') === 0 ||
+							key === fieldDef.id) {
+							delete $scope.editing.config[key];
+						}
+					});
+
+				}
+
+			});
+
 		}
 
 		/**
@@ -806,7 +856,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				});
 			}).then(function (cfg) {
 				// Now that we know the config id, update the webhook URL to add it when using multi configs.
-				if ($scope.settings.multi) {
+				if ($scope.settings.multi && _webhook) {
 					return _webhook.service.load(cfg.webhookId).then(function (wh) {
 						if (wh.url.indexOf('config=') === -1) {
 							var separator = wh.url.indexOf('?') === -1 ? '?' : '&';

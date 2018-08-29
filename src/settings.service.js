@@ -71,31 +71,45 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 * @param {Object} def The field definition.
 		 */
 		srv.field = function (def) {
-			/*jshint maxcomplexity:22 */
+			/*jshint maxcomplexity:23 */
 			// Make sure we have a page, this will only be false if a field is added before a page.
 			if (_currentPage === false) {
 				throw new Error('Config: No page exists to add fields to');
 			}
 
+			var defaults = {
+				required: true,
+				help: ''
+			};
+
+			def = angular.extend({}, defaults, def);
+
 			// Validate required properties.
-			['id', 'name', 'type'].forEach(function (p) {
-				if (!(p in def) || !def[p]) {
-					throw new Error('Config: Missing required field property: "' + p + '" for ' + def.id || def.name);
+			if (def.type !== 'markup') {
+				['id', 'name', 'type'].forEach(function (p) {
+					if (!(p in def) || !def[p]) {
+						throw new Error('Config: Missing required field property: "' + p + '" for ' + def.id || def.name);
+					}
+				});
+
+				// Make sure reserved ids aren't used.
+				var reserved = ['name', 'enabled'];
+				if (reserved.indexOf(def.id) !== -1) {
+					throw new Error('Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.');
 				}
-			});
+				if (def.id.indexOf('mch') === 0) {
+					throw new Error('Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.');
+				}
 
-			// Make sure reserved ids aren't used.
-			var reserved = ['name', 'enabled'];
-			if (reserved.indexOf(def.id) !== -1) {
-				throw new Error('Config: The id "' + def.id + '" is reserved for internal use and can\'t be assigned to inputs.');
-			}
-			if (def.id.indexOf('mch') === 0) {
-				throw new Error('Config: The id prefix "mch" is reserved for internal use and can\'t be used for inputs.');
-			}
+				if (def.id.indexOf('_') !== -1) {
+					throw new Error('Config: The id "' + def.id + '" can\'t be used because "_" is reserved for internal use.');
+				}
 
-			// Make sure id is unique.
-			if (_fieldIds.indexOf(def.id) !== -1) {
-				throw new Error('Config: Field id "' + def.id + '" is already in use');
+				// Make sure id is unique.
+				if (_fieldIds.indexOf(def.id) !== -1) {
+					throw new Error('Config: Field id "' + def.id + '" is already in use');
+				}
+
 			}
 
 			// Make sure field type exists.
@@ -104,16 +118,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			}
 
 			// Type cast a couple optional common properties.
-			if ('help' in def) {
-				def.help = def.help.toString();
-			}
-
-			if ('required' in def) {
-				def.required = !!def.required;
-			} else {
-				// Default to true.
-				def.required = true;
-			}
+			def.help = def.help.toString();
+			def.required = !!def.required;
 
 			// Validate field type specific options.
 			var opts = _fieldTypes[def.type].options;
@@ -184,6 +190,10 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 					type: def.type,
 					name: def.name
 				});
+			}
+
+			if ('visible' in def && typeof def.visible !== 'function') {
+				throw new Error('Config: "visible" property must be a function');
 			}
 
 			_settings.pages[_currentPage].fields.push(def);
@@ -368,11 +378,26 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		/**
 		 * Returns highlighted inputs.
 		 *
-		 * @return {Array<string>} An array of input ids.
+		 * @return {Array<Object>} An array of input objects.
 		 */
 		srv.getHighlighted = function () {
 			return _highlightedFields;
 		};
+
+
+		/**
+		 * Returns all field definitions.
+		 *
+		 * @return {Array<Object>} An array of objects.
+		 */
+		srv.getFields = function () {
+			return _settings.pages.map(function(page) {
+				return page.fields;
+			}).reduce(function(acc, val) {
+				return acc.concat(val);
+			}, []);
+		};
+
 
 		/**
 		 * Returns a field definition given an id.

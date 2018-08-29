@@ -2,10 +2,7 @@
 <script type="text/ng-template" id="wgn-config-input-dropdown">
 	<select class="form-control" name="{{ field.id }}"
 			ng-model="editing.config[field.id]"
-			ng-required="field.required">
-
-		<option ng-repeat="opt in field.options" ng-value="opt.value">
-			{{ opt.label }}
-		</option>
+			ng-required="field.required"
+			ng-options="opt.value as opt.label for opt in field.options">
 	</select>
 </script>
