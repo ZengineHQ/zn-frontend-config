@@ -880,6 +880,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @returns {Object} the updated (and now valid) filter
 		 */
 		function reconstructFilter (filter, config) {
+			/*jshint maxcomplexity:10 */
 			var newFilter = angular.extend({}, filter);
 			/**
 			 * Check for attribute prop, which will tell the function to return a filter formula
