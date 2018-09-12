@@ -14,10 +14,10 @@
 
 		<span ng-show="loading" class="throbber"></span>
 
-		<div class="config-container" ng-hide="loading">
+		<div class="config-container" ng-if="!loading">
 			<wgn-config-list ng-show="!editing.config && settings.multi"></wgn-config-list>
 
-			<form class="form" name="wgnConfigForm" ng-submit="onSaveConfig()" ng-show="editing.config" novalidate>
+			<form class="form" name="editing.form" ng-submit="onSaveConfig()" ng-show="editing.config" novalidate>
 				<a href="javascript:" ng-click="onDiscardChanges()" ng-show="settings.multi">
 					<i class="icon icon-left-circled"></i> Back
 				</a>
@@ -26,7 +26,7 @@
 					<div class="form-actions">
 						<button type="button" class="btn btn-success pull-right" ng-click="onEnableConfig()"
 								ng-show="settings.toggle && editing.config.$id && !editing.config.enabled"
-								ng-disabled="wgnConfigForm.$invalid || saving">
+								ng-disabled="editing.form.$invalid || saving">
 							Enable
 						</button>
 
@@ -50,17 +50,17 @@
 
 				<div class="form-actions bottom-actions">
 					<button type="submit" class="btn btn-primary pull-right"
-							ng-disabled="!wgnConfigForm.$dirty || wgnConfigForm.$invalid || saving">
+							ng-disabled="!editing.form.$dirty || editing.form.$invalid || saving">
 						Save configuration
 					</button>
 
 					<button type="button" class="btn pull-right" ng-click="onDiscardChanges()"
-							ng-show="settings.multi || wgnConfigForm.$dirty">
+							ng-show="settings.multi || editing.form.$dirty">
 						<span ng-show="settings.multi">Cancel</span>
 						<span ng-hide="settings.multi">Discard changes</span>
 					</button>
 
-					<div class="required-fields pull-right" ng-show="!wgnConfigForm.$pristine && wgnConfigForm.$error.required">
+					<div class="required-fields pull-right" ng-show="!editing.form.$pristine && editing.form.$error.required">
 						Please fill all required fields
 					</div>
 				</div>
