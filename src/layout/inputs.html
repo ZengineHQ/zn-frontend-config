@@ -1,5 +1,5 @@
 <script type="text/ng-template" id="wgn-config-inputs">
-	<div ng-if="!settings.multi || (settings.multi && editing.config.name && !wgnConfigForm.$error.configName)">
+	<div ng-if="!settings.multi || (settings.multi && editing.config.name && !editing.form.$error.configName)">
 		<div ng-if="settings.pages.length === 1" class="single-page">
 			<wgn-config-page specs="settings.pages[0]"></wgn-config-page>
 		</div>

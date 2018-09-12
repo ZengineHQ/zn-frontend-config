@@ -1,6 +1,8 @@
 plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $firebase, znData) {
 	var srv = this;
 
+	var authData = {};
+
 	/**
 	 * Loads plugins data.
 	 *
@@ -33,14 +35,13 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 * @return {Promise<Object>} Plugin settings.
 	 */
 	function getFirebase (plugin, workspaceId, multi) {
-		/*jshint maxcomplexity:8 */
-		multi = multi || false;
+		/*jshint maxcomplexity:6 */
 
 		// Make sure we have valid Firebase settings.
-		if (!('firebaseUrl' in plugin) || !plugin.firebaseUrl) {
+		if (!plugin.firebaseUrl) {
 			return $q.reject('Config: Plugin missing Firebase URL.');
 		}
-		if (!('firebaseAuthToken' in plugin) || !plugin.firebaseAuthToken) {
+		if (!plugin.firebaseAuthToken) {
 			return $q.reject('Config: Plugin missing Firebase Secret.');
 		}
 
@@ -60,20 +61,32 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 
 		var ref = new Firebase(plugin.firebaseUrl + path);
 
-		ref.auth(plugin.firebaseAuthToken, function (err) {
-			if (err) {
-				q.reject(err);
-			}
+		var loadSettings = function() {
 
 			var $ref = $firebase(ref);
 			var sync = multi ? $ref.$asArray() : $ref.$asObject();
 
-			sync.$loaded().then(function (settings) {
-				q.resolve(settings);
-			});
+			return sync.$loaded();
+
+		};
+
+		// no need to authenticate twice for same database
+		if (authData[plugin.firebaseAuthToken]) {
+			return authData[plugin.firebaseAuthToken].then(loadSettings);
+		}
+
+		authData[plugin.firebaseAuthToken] = q.promise;
+
+		ref.auth(plugin.firebaseAuthToken, function (err, auth) {
+
+			if (err) {
+				return q.reject(err);
+			}
+
+			q.resolve(auth);
 		});
 
-		return q.promise;
+		return q.promise.then(loadSettings);
 	}
 
 	/**
