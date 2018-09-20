@@ -32,7 +32,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @type {Object<Object|boolean>}
 		 */
-		$scope.editing = { config: false };
+		$scope.editing = {
+			config: false,
+			form: null
+		};
 
 		/**
 		 * The current display mode, one of 'grid' or 'list'.
@@ -59,7 +62,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				doRunHook('add', $scope.editing.config).finally(function () {
 					doResetTab();
-					$scope.wgnConfigForm.$setPristine();
+					$scope.editing.form.$setPristine();
 				});
 			});
 		};
@@ -79,7 +82,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				doRunHook('edit', $scope.editing.config).finally(function () {
 					doResetTab();
-					$scope.wgnConfigForm.$setPristine();
+					$scope.editing.form.$setPristine();
 				});
 			});
 		};
@@ -155,7 +158,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						doDiscardChanges();
 					} else {
 						doResetTab();
-						$scope.wgnConfigForm.$setPristine();
+						$scope.editing.form.$setPristine();
 					}
 
 					znMessage('Configuration saved!', 'saved');
@@ -215,7 +218,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			var def = $q.defer();
 
 			// Only prompt if form has been changed.
-			if (!$scope.wgnConfigForm.$dirty) {
+			if (!$scope.editing.form.$dirty) {
 				doDiscardChanges();
 				return $q.when(true);
 			}
@@ -567,7 +570,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				angular.extend($scope.editing.config, _originalConfig);
 			}
 
-			$scope.wgnConfigForm.$setPristine();
+			$scope.editing.form.$setPristine();
 		}
 
 		/**
