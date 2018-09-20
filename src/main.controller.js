@@ -452,10 +452,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {fieldId} fieldDef The choice input id
 		 *
 		 */
-		$scope.resetChoiceValues = function(fieldId) {
+		$scope.resetChoiceValues = function (fieldId) {
 			delete $scope.editing.config[fieldId + '_val'];
 
-			angular.forEach($scope.editing.config, function(value, key) {
+			angular.forEach($scope.editing.config, function (value, key) {
 				if (key.indexOf(fieldId + '_opt_') === 0) {
 					delete $scope.editing.config[key];
 				}
@@ -639,7 +639,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				params.type = fieldTypes.join('|');
 			}
 
-			return znData('FormFields').query(params).then(function (results) {
+			return getFormFields(params).then(function (results) {
 				_fields[formId] = [];
 
 				angular.forEach(results, function (field) {
@@ -661,6 +661,40 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}).finally(function () {
 				_fieldsLoading[formId] = false;
 			});
+		}
+
+		/**
+		 * This method fetches all form fields, even if the total is above the request limit
+		 * This ensures that all fields will be present, which seems reasonable and desireable.
+		 *
+		 * @param {Object} params params object passed to a znData get request
+		 * @param {string} params.formId this is required, obviously
+		 * @param {number} params.limit this is recommended to be 200
+		 */
+		function getFormFields (params) {
+			var deferred = $q.defer();
+			znData('FormFields').get(params, function (data, metadata) {
+				if (metadata.totalCount > metadata.limit) {
+					var iterations = Math.ceil(metadata.totalCount / metadata.limit);
+					var promises = [];
+					for (var page = 2; page <= iterations; page++) {
+						var adjustedParams = {
+							formId: params.formId,
+							page: page,
+							limit: metadata.limit // if limit was adjusted by the api for any reason
+						};
+						promises.push(znData('FormFields').get(adjustedParams));
+					}
+					return $q.all(promises).then(function (remainingdata) {
+						return deferred.resolve(remainingdata.reduce(function (fullList, page) {
+							return fullList.concat(page);
+						}, data));
+					});
+				} else {
+					return deferred.resolve(data);
+				}
+			});
+			return deferred.promise;
 		}
 
 		/**
@@ -692,18 +726,18 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Processes fields and remove hidden values from the config object.
 		 */
-		function removeHiddenValues() {
+		function removeHiddenValues () {
 
 			var fieldDefs = $scope.options.getFields();
 
-			angular.forEach(fieldDefs, function(fieldDef) {
+			angular.forEach(fieldDefs, function (fieldDef) {
 
 				var hidden = fieldDef.visible && !fieldDef.visible($scope.editing.config, fieldDef);
 
 				// Remove hidden values from config
 				if (hidden) {
 
-					angular.forEach($scope.editing.config, function(value, key) {
+					angular.forEach($scope.editing.config, function (value, key) {
 						if (key.indexOf(fieldDef.id + '_') === 0 ||
 							key === fieldDef.id) {
 							delete $scope.editing.config[key];
