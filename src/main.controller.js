@@ -601,8 +601,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		function loadForms (workspaceId) {
 			_formsLoading[workspaceId] = true;
 
-			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200 }).then(function (forms) {
+			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields' }).then(function (forms) {
 				_forms[workspaceId] = forms;
+				forms.forEach(function (form) {
+					_fields[form.id] = form.fields;
+				});
 			}).catch(function (err) {
 				znMessage(err, 'error');
 			}).finally(function () {
