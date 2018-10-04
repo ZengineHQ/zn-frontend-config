@@ -606,7 +606,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				forms.forEach(function (form) {
 					_fields[form.id] = [];
 
-					angular.forEach(results, function (field) {
+					angular.forEach(form.fields, function (field) {
 						var f = {
 							id: field.id,
 							name: field.name,
@@ -623,7 +623,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 					_folders[form.id] = [];
 
-					angular.forEach(results, function (folder) {
+					angular.forEach(form.folders, function (folder) {
 						_folders[form.id].push({
 							id: folder.id,
 							name: folder.name
