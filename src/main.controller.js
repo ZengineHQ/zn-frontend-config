@@ -260,41 +260,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		};
 
 		/**
-		 * Loads fields for the selected form.
-		 *
-		 * @param {string} defId The field definition id.
-		 */
-		$scope.onSelectForm = function (defId) {
-			/*jshint maxcomplexity:6 */
-			var formId = $scope.editing.config[defId];
-
-			if (formId && (!(formId in _fields) || !_fields[formId].length)) {
-				loadFields(formId, defId);
-			}
-
-			if (formId && (!(formId in _folders) || !_folders[formId].length)) {
-				loadFolders(formId);
-			}
-		};
-
-		/**
-		 * Initializes a form input.
-		 *
-		 * @param {string} defId The field definition id.
-		 */
-		$scope.initFormInput = function (def) {
-			if (!def.belongsTo || $scope.editing.config[def.belongsTo]) {
-				if ($scope.loading) {
-					$scope.options.on('init', function () {
-						$scope.onSelectForm(def.id);
-					});
-				} else {
-					$scope.onSelectForm(def.id);
-				}
-			}
-		};
-
-		/**
 		 * Loads forms for the selected workspace.
 		 *
 		 * @param {string} defId The field definition id.
@@ -455,10 +420,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {fieldId} fieldDef The choice input id
 		 *
 		 */
-		$scope.resetChoiceValues = function(fieldId) {
+		$scope.resetChoiceValues = function (fieldId) {
 			delete $scope.editing.config[fieldId + '_val'];
 
-			angular.forEach($scope.editing.config, function(value, key) {
+			angular.forEach($scope.editing.config, function (value, key) {
 				if (key.indexOf(fieldId + '_opt_') === 0) {
 					delete $scope.editing.config[key];
 				}
@@ -601,8 +566,35 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		function loadForms (workspaceId) {
 			_formsLoading[workspaceId] = true;
 
-			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200 }).then(function (forms) {
+			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders' }).then(function (forms) {
 				_forms[workspaceId] = forms;
+				forms.forEach(function (form) {
+					_fields[form.id] = [];
+
+					angular.forEach(form.fields, function (field) {
+						var f = {
+							id: field.id,
+							name: field.name,
+							label: field.label,
+							type: field.type
+						};
+
+						if ('settings' in field && 'properties' in field.settings && 'choices' in field.settings.properties) {
+							f.choices = field.settings.properties.choices;
+						}
+
+						_fields[form.id].push(f);
+					});
+
+					_folders[form.id] = [];
+
+					angular.forEach(form.folders, function (folder) {
+						_folders[form.id].push({
+							id: folder.id,
+							name: folder.name
+						});
+					});
+				});
 			}).catch(function (err) {
 				znMessage(err, 'error');
 			}).finally(function () {
@@ -611,102 +603,20 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		}
 
 		/**
-		 * Loads field data for the given form.
-		 *
-		 * @param {number} formId The actual form id.
-		 * @param {string} defId The field definition id.
-		 */
-		function loadFields (formId, defId) {
-			_fieldsLoading[formId] = true;
-
-			// Find all Zengine field types being used in our form.
-			var fieldTypes = [];
-			var params = {
-				formId: formId,
-				limit: 200,
-			};
-
-			angular.forEach($scope.options.getDependentFields(defId), function (f) {
-				if (f.restrict) {
-					var res = f.restrict.split('|');
-
-					angular.forEach(res, function (r) {
-						if (fieldTypes.indexOf(r) === -1) {
-							fieldTypes.push(r);
-						}
-					});
-				}
-			});
-
-			if (fieldTypes.length) {
-				params.type = fieldTypes.join('|');
-			}
-
-			return znData('FormFields').query(params).then(function (results) {
-				_fields[formId] = [];
-
-				angular.forEach(results, function (field) {
-					var f = {
-						id: field.id,
-						name: field.name,
-						label: field.label,
-						type: field.type
-					};
-
-					if ('settings' in field && 'properties' in field.settings && 'choices' in field.settings.properties) {
-						f.choices = field.settings.properties.choices;
-					}
-
-					_fields[formId].push(f);
-				});
-			}).catch(function (err) {
-				znMessage(err, 'error');
-			}).finally(function () {
-				_fieldsLoading[formId] = false;
-			});
-		}
-
-		/**
-		 * Loads folder data for the given form.
-		 *
-		 * @param {number} formId The actual form id.
-		 */
-		function loadFolders (formId) {
-			_foldersLoading[formId] = true;
-
-			return znData('FormFolders').get({
-				formId: formId
-			}).then(function (results) {
-				_folders[formId] = [];
-
-				angular.forEach(results, function (folder) {
-					_folders[formId].push({
-						id: folder.id,
-						name: folder.name
-					});
-				});
-			}).catch(function (err) {
-				znMessage(err, 'error');
-			}).finally(function () {
-				_foldersLoading[formId] = false;
-			});
-		}
-
-		/**
 		 * Processes fields and remove hidden values from the config object.
 		 */
-		function removeHiddenValues() {
+		function removeHiddenValues () {
 
 			var fieldDefs = $scope.options.getFields();
 
-			angular.forEach(fieldDefs, function(fieldDef) {
+			angular.forEach(fieldDefs, function (fieldDef) {
 
 				var hidden = fieldDef.visible && !fieldDef.visible($scope.editing.config, fieldDef);
 
 				// Remove hidden values from config
 				if (hidden) {
 
-					angular.forEach($scope.editing.config, function(value, key) {
+					angular.forEach($scope.editing.config, function (value, key) {
 						if (key.indexOf(fieldDef.id + '_') === 0 ||
 							key === fieldDef.id) {
 							delete $scope.editing.config[key];
