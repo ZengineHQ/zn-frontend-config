@@ -605,6 +605,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				_forms[workspaceId] = forms;
 				forms.forEach(function (form) {
 					_fields[form.id] = form.fields;
+					_folders[form.id] = form.folders;
 				});
 			}).catch(function (err) {
 				znMessage(err, 'error');
