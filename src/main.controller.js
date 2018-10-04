@@ -601,7 +601,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		function loadForms (workspaceId) {
 			_formsLoading[workspaceId] = true;
 
-			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields' }).then(function (forms) {
+			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders' }).then(function (forms) {
 				_forms[workspaceId] = forms;
 				forms.forEach(function (form) {
 					_fields[form.id] = form.fields;
@@ -645,7 +645,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				params.type = fieldTypes.join('|');
 			}
 
-			return getFormFields(params).then(function (results) {
+			return getFormData('FormFields', params).then(function (results) {
 				_fields[formId] = [];
 
 				angular.forEach(results, function (field) {
@@ -676,10 +676,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {Object} params params object passed to a znData get request
 		 * @param {string} params.formId this is required, obviously
 		 * @param {number} params.limit this is recommended to be 200
+		 * @param {string} znType data type, like "FormFields" or "FormFolders"
+		 *
+		 * @returns {Object[]} Array of whatever znType was requested
 		 */
-		function getFormFields (params) {
+		function getFormData (znType, params) {
 			var deferred = $q.defer();
-			znData('FormFields').get(params, function (data, metadata) {
+			znData(znType).get(params, function (data, metadata) {
 				if (metadata.totalCount > metadata.limit) {
 					var iterations = Math.ceil(metadata.totalCount / metadata.limit);
 					var promises = [];
@@ -689,7 +692,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							page: page,
 							limit: metadata.limit // if limit was adjusted by the api for any reason
 						};
-						promises.push(znData('FormFields').get(adjustedParams));
+						promises.push(znData(znType).get(adjustedParams));
 					}
 					return $q.all(promises).then(function (remainingdata) {
 						return deferred.resolve(remainingdata.reduce(function (fullList, page) {
@@ -710,10 +713,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		function loadFolders (formId) {
 			_foldersLoading[formId] = true;
+			var params = {
+				formId: formId,
+				limit: 50
+			}
 
-			return znData('FormFolders').get({
-				formId: formId
-			}).then(function (results) {
+			return getFormData('FormFolders', params).then(function (results) {
 				_folders[formId] = [];
 
 				angular.forEach(results, function (folder) {
