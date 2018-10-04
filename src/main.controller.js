@@ -604,8 +604,31 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders' }).then(function (forms) {
 				_forms[workspaceId] = forms;
 				forms.forEach(function (form) {
-					_fields[form.id] = form.fields;
-					_folders[form.id] = form.folders;
+					_fields[form.id] = [];
+
+					angular.forEach(results, function (field) {
+						var f = {
+							id: field.id,
+							name: field.name,
+							label: field.label,
+							type: field.type
+						};
+
+						if ('settings' in field && 'properties' in field.settings && 'choices' in field.settings.properties) {
+							f.choices = field.settings.properties.choices;
+						}
+
+						_fields[form.id].push(f);
+					});
+
+					_folders[form.id] = [];
+
+					angular.forEach(results, function (folder) {
+						_folders[form.id].push({
+							id: folder.id,
+							name: folder.name
+						});
+					});
 				});
 			}).catch(function (err) {
 				znMessage(err, 'error');
