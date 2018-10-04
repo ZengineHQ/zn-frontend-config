@@ -2,12 +2,13 @@
 <script type="text/ng-template" id="wgn-config-input-form">
 	<div>
 		<select class="form-control" name="input"
-				ng-options="form.id as form.name for form in getForms(field, editing.config[field.belongsTo])"
+				ng-options="form.id as form.name for form in formValues"
 				ng-model="editing.config[field.id]"
 				ng-change="onSelectForm(field.id)"
-				ng-init="initFormInput(field)"
+				ng-init="initFormInput(field); formValues = []"
 				ng-disabled="field.belongsTo && (isFormLoading(field.belongsTo) || !editing.config[field.belongsTo])"
-				ng-required="field.required">
+				ng-required="field.required"
+				ng-focus="formValues = getForms(field, editing.config[field.belongsTo])">
 			<option value=""></option>
 		</select>
 
