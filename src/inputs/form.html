@@ -4,8 +4,7 @@
 		<select class="form-control" name="input"
 				ng-options="form.id as form.name for form in formValues"
 				ng-model="editing.config[field.id]"
-				ng-change="onSelectForm(field.id)"
-				ng-init="initFormInput(field); formValues = []"
+				ng-init="formValues = []"
 				ng-disabled="field.belongsTo && (isFormLoading(field.belongsTo) || !editing.config[field.belongsTo])"
 				ng-required="field.required"
 				ng-focus="formValues = getForms(field, editing.config[field.belongsTo])">
