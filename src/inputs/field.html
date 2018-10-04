@@ -2,10 +2,12 @@
 <script type="text/ng-template" id="wgn-config-input-field">
 	<div>
 		<select class="form-control" name="input"
+				ng-init="fieldValues = []"
 				ng-model="editing.config[field.id]"
-				ng-options="f.id as f|formFieldTitle for f in getFields(field, specs)"
+				ng-options="f.id as f|formFieldTitle for f in fieldValues"
 				ng-disabled="isFieldLoading(field.belongsTo) || !editing.config[field.belongsTo]"
-				ng-required="field.required">
+				ng-required="field.required"
+				ng-focus="fieldValues = getFields(field, specs)">
 			<option value=""></option>
 		</select>
 

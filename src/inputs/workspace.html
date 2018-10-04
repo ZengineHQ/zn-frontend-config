@@ -1,11 +1,12 @@
 <!--Workspace picker input-->
 <script type="text/ng-template" id="wgn-config-input-workspace">
 	<select class="form-control" name="input"
-			ng-options="ws.id as ws.name for ws in getWorkspaces(field)"
+			ng-options="ws.id as ws.name for ws in wsValues"
 			ng-model="editing.config[field.id]"
 			ng-change="onSelectWorkspace(field.id)"
-			ng-init="initWorkspaceInput(field.id)"
-			ng-required="field.required">
+			ng-init="initWorkspaceInput(field.id); wsValues = []"
+			ng-required="field.required"
+			ng-focus="wsValues = getWorkspaces(field)">
 		<option value=""></option>
 	</select>
 </script>

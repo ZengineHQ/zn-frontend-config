@@ -2,10 +2,12 @@
 <script type="text/ng-template" id="wgn-config-input-folder">
 	<div>
 		<select class="form-control" name="input"
+				ng-init="folderValues = []"
 				ng-model="editing.config[field.id]"
-				ng-options="f.id as f.name for f in getFolders(field, specs)"
+				ng-options="f.id as f.name for f in folderValues"
 				ng-disabled="isFolderLoading(field.belongsTo) || !editing.config[field.belongsTo]"
-				ng-required="field.required">
+				ng-required="field.required"
+				ng-focus="folderValues = getFolders(field, specs)">
 			<option value=""></option>
 		</select>
 
