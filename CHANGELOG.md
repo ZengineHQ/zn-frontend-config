@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.8.2"></a>
+## [3.8.2](https://github.com/ZengineHQ/zn-frontend-config/compare/v3.8.1...v3.8.2) (2018-10-05)
+
+
+### Bug Fixes
+
+* only show throbber if belongsTo field is set ([a235a51](https://github.com/ZengineHQ/zn-frontend-config/commit/a235a51))
+
+
+
 <a name="3.8.1"></a>
 ## 3.8.1 (2018-10-05)
 
