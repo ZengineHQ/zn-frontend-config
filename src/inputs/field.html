@@ -1,16 +1,15 @@
 <!--Field picker input-->
 <script type="text/ng-template" id="wgn-config-input-field">
-	<div>
+	<div ng-controller="wgnFieldInputCntrl">
 		<select class="form-control" name="input"
-				ng-init="fieldValues = []"
 				ng-model="editing.config[field.id]"
 				ng-options="f.id as f|formFieldTitle for f in fieldValues"
-				ng-disabled="isFieldLoading(field.belongsTo) || !editing.config[field.belongsTo]"
+				ng-disabled="!loaded || !editing.config[field.belongsTo]"
 				ng-required="field.required"
 				ng-focus="fieldValues = getFields(field, specs)">
 			<option value=""></option>
 		</select>
 
-		<span ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
+		<span ng-show="!loaded" class="throbber inline throbber"></span>
 	</div>
 </script>

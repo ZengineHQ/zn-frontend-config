@@ -7,9 +7,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		var _forms = {};
 		var _fields = {};
 		var _folders = {};
-		var _formsLoading = {};
-		var _fieldsLoading = {};
-		var _foldersLoading = {};
 		var _originalConfig;
 		var _webhook = false;
 
@@ -19,6 +16,21 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @type {boolean}
 		 */
 		$scope.loading = true;
+
+
+		/**
+		 * Whether the workspace has loaded
+		 *
+		 * @type {Object<boolean>}
+		 */
+		$scope.workspaceLoaded = {};
+
+		/**
+		 * Whether the form has loaded
+		 *
+		 * @type {Object<boolean>}
+		 */
+		$scope.formLoaded = {};
 
 		/**
 		 * Whether the plugin is saving or not, displays a throbber.
@@ -431,32 +443,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		};
 
 		/**
-		 * Returns whether a given form is loading its fields.
-		 *
-		 * @param {string} key A form config id.
-		 *
-		 * @return {boolean}
-		 */
-		$scope.isFieldLoading = function (key) {
-			if ($scope.editing.config && key in $scope.editing.config) {
-				return $scope.editing.config[key] in _fieldsLoading ? _fieldsLoading[$scope.editing.config[key]] : false;
-			}
-		};
-
-		/**
-		 * Returns whether a given form is loading its folders.
-		 *
-		 * @param {string} key A form config id.
-		 *
-		 * @return {boolean}
-		 */
-		$scope.isFolderLoading = function (key) {
-			if ($scope.editing.config && key in $scope.editing.config) {
-				return $scope.editing.config[key] in _foldersLoading ? _foldersLoading[$scope.editing.config[key]] : false;
-			}
-		};
-
-		/**
 		 * Saves after a configuration toggle.
 		 *
 		 * @param {Object} config
@@ -564,7 +550,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {number} workspaceId
 		 */
 		function loadForms (workspaceId) {
-			_formsLoading[workspaceId] = true;
+
 
 			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders' }).then(function (forms) {
 				_forms[workspaceId] = forms;
@@ -594,11 +580,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							name: folder.name
 						});
 					});
+
+					$scope.formLoaded[form.id] = true;
 				});
 			}).catch(function (err) {
 				znMessage(err, 'error');
 			}).finally(function () {
-				_formsLoading[workspaceId] = false;
+				$scope.workspaceLoaded[workspaceId] = true;
 			});
 		}
 
