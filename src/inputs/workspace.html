@@ -4,7 +4,7 @@
 			ng-options="ws.id as ws.name for ws in wsValues"
 			ng-model="editing.config[field.id]"
 			ng-change="onSelectWorkspace(field.id)"
-			ng-init="initWorkspaceInput(field.id); wsValues = []"
+			ng-init="initWorkspaceInput(field.id); wsValues = getWorkspaces(field)"
 			ng-required="field.required"
 			ng-focus="wsValues = getWorkspaces(field)">
 		<option value=""></option>

@@ -1,16 +1,15 @@
 <!--Folder picker input-->
 <script type="text/ng-template" id="wgn-config-input-folder">
-	<div>
+	<div ng-controller="wgnFolderInputCntrl">
 		<select class="form-control" name="input"
-				ng-init="folderValues = []"
 				ng-model="editing.config[field.id]"
 				ng-options="f.id as f.name for f in folderValues"
-				ng-disabled="isFolderLoading(field.belongsTo) || !editing.config[field.belongsTo]"
+				ng-disabled="!loaded || !editing.config[field.belongsTo]"
 				ng-required="field.required"
 				ng-focus="folderValues = getFolders(field, specs)">
 			<option value=""></option>
 		</select>
 
-		<span ng-show="isFolderLoading(field.belongsTo)" class="throbber inline throbber"></span>
+		<span ng-show="!loaded" class="throbber inline throbber"></span>
 	</div>
 </script>
