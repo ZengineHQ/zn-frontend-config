@@ -800,12 +800,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					newFilter.attribute = config[filter.attribute.replaceValue];
 				}
 
-				if (filter.value.replaceField) {
+				if (filter.value && filter.value.replaceField) {
 					// Update value prop to actual input value (as a field Id)
 					newFilter.value = 'field' + config[filter.value.replaceField];
 				}
 
-				if (filter.value.replaceValue) {
+				if (filter.value && filter.value.replaceValue) {
 					// Update value prop to actual input value
 					newFilter.value = config[filter.value.replaceValue];
 				}
