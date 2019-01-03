@@ -31,5 +31,6 @@
 	"jasmine": true,
 	"debug": true,
 	"node": true,
-	"devel": true
+	"devel": true,
+	"laxbreak": true
 }
