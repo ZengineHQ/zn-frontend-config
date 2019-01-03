@@ -121,7 +121,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							$scope.saving = true;
 							return configService.deleteConfig(_workspaceId, $scope.editing.config, $scope.configs).then(function () {
 								return doRunHook('delete', shallowCopy($scope.editing.config)).finally(function () {
-									return _webhook ? _webhook.service.delete($scope.editing.config.webhookId) : $q.when();
+									return _webhook
+										? Array.isArray(_webhook.options)
+											? $q.all(_webhook.options.map(function (opts, i) {
+												return _webhook.service.delete($scope.editing.config['webhook' + i + 'Id']);
+											}))
+											: _webhook.service.delete($scope.editing.config.webhookId)
+										: $q.when();
 								}).then(function () {
 									doDiscardChanges();
 									znMessage('The configuration has been deleted!', 'info');
@@ -188,7 +194,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			return doRunHook('disable', $scope.editing.config).finally(function () {
 				return doSaveConfig($scope.editing.config).then(function () {
-					return _webhook ? _webhook.service.disable($scope.editing.config.webhookId) : $q.when();
+					return _webhook
+						? Array.isArray(_webhook.options)
+							? $q.all(_webhook.options.map(function (opts, i) {
+								return _webhook.service.disable($scope.editing.config['webhook' + i + 'Id']);
+							}))
+							: _webhook.service.disable($scope.editing.config.webhookId)
+						: $q.when();
 				});
 			}).catch(function () {
 				$scope.editing.config.enabled = true;
@@ -209,7 +221,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			return doRunHook('enable', $scope.editing.config).finally(function () {
 				return doSaveConfig($scope.editing.config).then(function () {
-					return _webhook ? _webhook.service.enable($scope.editing.config.webhookId) : $q.when();
+					return _webhook
+						? Array.isArray(_webhook.options)
+							? $q.all(_webhook.options.map(function (opts, i) {
+								return _webhook.service.enable($scope.editing.config['webhook' + i + 'Id']);
+							}))
+							: _webhook.service.enable($scope.editing.config.webhookId)
+						: $q.when();
 				});
 			}).catch(function () {
 				$scope.editing.config.enabled = false;
@@ -452,14 +470,26 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				doRunHook('enable', config).finally(function () {
 					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.name + ' enabled!', 'saved');
-						return _webhook ? _webhook.service.enable(config.webhookId) : $q.when();
+						return _webhook
+							? Array.isArray(_webhook.options)
+								? $q.all(_webhook.options.map(function (opts, i) {
+									return _webhook.service.enable(config['webhook' + i + 'Id']);
+								}))
+								: _webhook.service.enable(config.webhookId)
+							: $q.when();
 					});
 				});
 			} else {
 				doRunHook('disable', config).finally(function () {
 					return doSaveConfig(config).then(function () {
 						znMessage('Configuration ' + config.name + ' disabled!', 'saved');
-						return _webhook ? _webhook.service.disable(config.webhookId) : $q.when();
+						return _webhook
+							? Array.isArray(_webhook.options)
+								? $q.all(_webhook.options.map(function (opts, i) {
+									return _webhook.service.disable(config['webhook' + i + 'Id']);
+								}))
+								: _webhook.service.disable(config.webhookId)
+							: $q.when();
 					});
 				});
 			}
@@ -715,40 +745,114 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		function doSaveConfig (config) {
 			var promise = $q.when(config);
 
-			if (_webhook && !('webhookId' in config)) {
-				var options = Object.assign({}, _webhook.options);
+			if (_webhook && !('webhookId' in config || 'webhook0Id' in config)) {
+				var multiWebhooks = Array.isArray(_webhook.options);
 
-				if (!(options['form.id'] in config)) {
-					throw new Error('Config: Invalid form.id for webhook');
+				var options = multiWebhooks
+					? _webhook.options.map(function (opts) {
+						return Object.assign({}, opts);
+					})
+					: Object.assign({}, _webhook.options);
+
+				if (multiWebhooks) {
+					promise = $q.all(options.map(function (opts) {
+						if (!(opts['form.id'] in config)) {
+							throw new Error('Config: Invalid form.id for webhook');
+						}
+
+						opts['form.id'] = config[opts['form.id']];
+
+						if (opts.filter) {
+							opts.filter = reconstructFilter(opts.filter, config);
+						}
+
+						return _webhook.service.create(opts)
+					}))
+						.then(function (webhooks) {
+							return webhooks.reduce(function (cfg, wh, i) {
+								cfg['webhook' + i + 'Id'] = wh.id;
+								cfg['webhook' + i + 'Key'] = wh.secretKey;
+								return cfg;
+							}, config)
+						})
+						.catch(function (err) {
+							znMessage('There was an error creating the webhook.', 'error');
+							return config;
+						});
+				} else {
+					if (!(options['form.id'] in config)) {
+						throw new Error('Config: Invalid form.id for webhook');
+					}
+
+					options['form.id'] = config[options['form.id']];
+
+					if (options.filter) {
+						options.filter = reconstructFilter(options.filter, config);
+					}
+
+					promise = _webhook.service.create(options)
+						.then(function (webhook) {
+							config.webhookId = webhook.id;
+							config.webhookKey = webhook.secretKey;
+							return config;
+						})
+						.catch(function (err) {
+							znMessage('There was an error creating the webhook.', 'error');
+							return config;
+						});
 				}
+			} else if (
+				_webhook && (
+					_webhook.options.filter || (
+						Array.isArray(_webhook.options) && _webhook.options.some(function (opts) {
+							return opts.filter;
+						})
+					)
+				)
+			) {
+				var multiWebhooks = Array.isArray(_webhook.options);
 
-				options['form.id'] = config[options['form.id']];
+				var updateOptions = multiWebhooks
+					? _webhook.options.map(function (opts) {
+						return Object.assign({}, opts);
+					})
+					: Object.assign({}, _webhook.options);
 
-				if (options.filter) {
-					options.filter = reconstructFilter(options.filter, config);
+				if (multiWebhooks) {
+					updateOptions.forEach(function (opts) {
+						if (opts.filter) {
+							opts.filter = reconstructFilter(opts.filter, config);
+						}
+					});
+
+					promise = $q.all(updateOptions.map(function (opts, i) {
+						return _webhook.service.update({
+							id: config['webhook' + i + 'Id'],
+							filter: opts.filter
+						});
+					}))
+						.then(function (webhooks) {
+							return config;
+						})
+						.catch(function (err) {
+							znMessage('There was an error creating the webhook.', 'error');
+							return config;
+						});
+				} else {
+					updateOptions.filter = reconstructFilter(updateOptions.filter, config);
+
+					promise = _webhook.service.update({
+						id: config.webhookId,
+						filter: updateOptions.filter
+					})
+						.then(function (webhook) {
+							return config;
+						})
+						.catch(function (err) {
+							znMessage('There was an error creating the webhook.', 'error');
+							return config;
+						});
 				}
-
-				promise = _webhook.service.create(options).then(function (webhook) {
-					config.webhookId = webhook.id;
-					config.webhookKey = webhook.secretKey;
-					return config;
-				}).catch(function (err) {
-					znMessage('There was an error creating the webhook.', 'error');
-					return config;
-				});
-			} else if (_webhook && _webhook.options.filter) {
-				var updateOptions = Object.assign({}, _webhook.options);
-				updateOptions.filter = reconstructFilter(updateOptions.filter, config);
-
-				promise = _webhook.service.update({
-					id: config.webhookId,
-					filter: updateOptions.filter
-				}).then(function (webhook) {
-					return config;
-				}).catch(function (err) {
-					znMessage('There was an error creating the webhook.', 'error');
-					return config;
-				});
 			}
 
 			return promise.then(function (cfg) {
@@ -758,15 +862,32 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}).then(function (cfg) {
 				// Now that we know the config id, update the webhook URL to add it when using multi configs.
 				if ($scope.settings.multi && _webhook) {
-					return _webhook.service.load(cfg.webhookId).then(function (wh) {
-						if (wh.url.indexOf('config=') === -1) {
-							var separator = wh.url.indexOf('?') === -1 ? '?' : '&';
-							return _webhook.service.update({
-								id: wh.id,
-								url: wh.url + separator + 'config=' + encodeURI(cfg.$id)
+					if (Array.isArray(_webhook.options)) {
+						return $q.all(_webhook.options.map(function (opts, i) {
+							return _webhook.service.load(cfg['webhook' + i + 'Id']).then(function (wh) {
+								if (wh.url.indexOf('config=') === -1) {
+									var separator = wh.url.indexOf('?') === -1 ? '?' : '&';
+
+									return _webhook.service.update({
+										id: wh.id,
+										url: wh.url + separator + 'config=' + encodeURI(cfg.$id)
+									});
+								}
 							});
-						}
-					});
+						}))
+					} else {
+						return _webhook.service.load(cfg.webhookId).then(function (wh) {
+							if (wh.url.indexOf('config=') === -1) {
+								var separator = wh.url.indexOf('?') === -1 ? '?' : '&';
+
+								return _webhook
+									service.update({
+									id: wh.id,
+									url: wh.url + separator + 'config=' + encodeURI(cfg.$id)
+								});
+							}
+						});
+					}
 				}
 			});
 		}
@@ -811,8 +932,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 
 				if (filter.prefix.replaceValue) {
+					var prefixValue = config[filter.prefix.replaceValue] === 'is' ? '' : config[filter.prefix.replaceValue];
 					// Prefix cannot be a fieldID, so only replaceValue is handled
-					newFilter.prefix = config[filter.prefix.replaceValue];
+					newFilter.prefix = prefixValue;
 				}
 
 				if (filter.filter) {
