@@ -932,8 +932,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 
 				if (filter.prefix.replaceValue) {
+					var prefixValue = config[filter.prefix.replaceValue] === 'is' ? '' : config[filter.prefix.replaceValue];
 					// Prefix cannot be a fieldID, so only replaceValue is handled
-					newFilter.prefix = config[filter.prefix.replaceValue];
+					newFilter.prefix = prefixValue;
 				}
 
 				if (filter.filter) {
