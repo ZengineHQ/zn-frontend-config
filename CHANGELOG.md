@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.9.0"></a>
+# [3.9.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.8.3...3.9.0) (2019-01-03)
+
+
+### Bug Fixes
+
+* filter accepts 'is' instead of '' ([138bab6](https://github.com/ZengineHQ/zn-frontend-config/commit/138bab6))
+
+
+### Features
+
+* multiple webhooks supported per configuration ([8440d9c](https://github.com/ZengineHQ/zn-frontend-config/commit/8440d9c))
+
+
+
 <a name="3.8.3"></a>
 ## [3.8.3](https://github.com/ZengineHQ/zn-frontend-config/compare/v3.8.2...v3.8.3) (2018-10-09)
 
