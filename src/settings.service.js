@@ -261,7 +261,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 					if (_formInputs.indexOf(opts['form.id']) === -1) {
 						throw new Error('Config: Inexistent form id specified in param "form.id" in webhook options.');
 					}
-				})
+				});
 			} else {
 				if (!('url' in options)) {
 					throw new Error('Config: Missing required param "url" in webhook options.');

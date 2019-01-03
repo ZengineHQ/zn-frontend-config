@@ -743,11 +743,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @return {Promise}
 		 */
 		function doSaveConfig (config) {
+			/*jshint maxcomplexity:11 */
 			var promise = $q.when(config);
+			var multiWebhooks = _webhook && Array.isArray(_webhook.options);
 
 			if (_webhook && !('webhookId' in config || 'webhook0Id' in config)) {
-				var multiWebhooks = Array.isArray(_webhook.options);
-
 				var options = multiWebhooks
 					? _webhook.options.map(function (opts) {
 						return Object.assign({}, opts);
@@ -766,14 +766,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							opts.filter = reconstructFilter(opts.filter, config);
 						}
 
-						return _webhook.service.create(opts)
+						return _webhook.service.create(opts);
 					}))
 						.then(function (webhooks) {
 							return webhooks.reduce(function (cfg, wh, i) {
 								cfg['webhook' + i + 'Id'] = wh.id;
 								cfg['webhook' + i + 'Key'] = wh.secretKey;
 								return cfg;
-							}, config)
+							}, config);
 						})
 						.catch(function (err) {
 							znMessage('There was an error creating the webhook.', 'error');
@@ -803,15 +803,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 			} else if (
 				_webhook && (
-					_webhook.options.filter || (
-						Array.isArray(_webhook.options) && _webhook.options.some(function (opts) {
-							return opts.filter;
-						})
-					)
+					_webhook.options.filter || Array.isArray(_webhook.options) && _webhook.options.some(function (opts) {
+						return opts.filter;
+					})
 				)
 			) {
-				var multiWebhooks = Array.isArray(_webhook.options);
-
 				var updateOptions = multiWebhooks
 					? _webhook.options.map(function (opts) {
 						return Object.assign({}, opts);
@@ -874,14 +870,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 									});
 								}
 							});
-						}))
+						}));
 					} else {
 						return _webhook.service.load(cfg.webhookId).then(function (wh) {
 							if (wh.url.indexOf('config=') === -1) {
 								var separator = wh.url.indexOf('?') === -1 ? '?' : '&';
 
-								return _webhook
-									service.update({
+								return _webhook.service.update({
 									id: wh.id,
 									url: wh.url + separator + 'config=' + encodeURI(cfg.$id)
 								});
@@ -902,7 +897,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @returns {Object} the updated (and now valid) filter
 		 */
 		function reconstructFilter (filter, config) {
-			/*jshint maxcomplexity:10 */
+			/*jshint maxcomplexity:11 */
 			var newFilter = angular.extend({}, filter);
 			/**
 			 * Check for attribute prop, which will tell the function to return a filter formula
