@@ -18,7 +18,7 @@
 		"moment": true
 	},
 	"latedef": false,
-	"maxcomplexity": 5,
+	"maxcomplexity": 50,
 	"maxdepth": 4,
 	"noarg": true,
 	"nocomma": true,

@@ -679,7 +679,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			// Extract info from each one and save it for display.
 			angular.forEach(highlighted, function (input) {
-				/*jshint maxcomplexity:11 */
 				var inputTypeFormatted = input.type.charAt(0).toUpperCase() + input.type.substr(1);
 
 				switch (input.type) {
@@ -779,7 +778,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @return {Promise}
 		 */
 		function doSaveConfig (config) {
-			/*jshint maxcomplexity:11 */
 			var promise = $q.when(config);
 			var multiWebhooks = _webhook && Array.isArray(_webhook.options);
 
@@ -933,7 +931,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @returns {Object} the updated (and now valid) filter
 		 */
 		function reconstructFilter (filter, config) {
-			/*jshint maxcomplexity:11 */
 			var newFilter = angular.extend({}, filter);
 			/**
 			 * Check for attribute prop, which will tell the function to return a filter formula

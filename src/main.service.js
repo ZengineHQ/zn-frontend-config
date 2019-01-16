@@ -15,8 +15,6 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 * @return {Promise<Object>} Plugin settings.
 	 */
 	function getFirebase (plugin, workspaceId, multi) {
-		/*jshint maxcomplexity:6 */
-
 		// Make sure we have valid Firebase settings.
 		if (!plugin.firebaseUrl) {
 			return $q.reject('Config: Plugin missing Firebase URL.');
