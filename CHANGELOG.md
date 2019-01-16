@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.10.0"></a>
+# [3.10.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.9.0...3.10.0) (2019-01-16)
+
+
+### Features
+
+* Added password input field ([e5ee51f](https://github.com/ZengineHQ/zn-frontend-config/commit/e5ee51f))
+
+
+
 <a name="3.9.0"></a>
 # [3.9.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.8.3...3.9.0) (2019-01-03)
 
