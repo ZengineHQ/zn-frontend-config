@@ -167,7 +167,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 
 			// Finally if the field has the special "belongsTo" option, validate its target exists.
 			if ('belongsTo' in def) {
-				if (def.type === 'field' || def.type === 'folder' || def.type === 'choice') {
+				if (def.type === 'field' || def.type === 'folder' || def.type === 'choice' || def.type === 'view') {
 					if (_formInputs.indexOf(def.belongsTo) === -1) {
 						throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
 					}

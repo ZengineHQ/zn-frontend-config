@@ -1,0 +1,15 @@
+<!--View picker input-->
+<script type="text/ng-template" id="wgn-config-input-view">
+	<div ng-controller="wgnViewInputCntrl">
+		<select class="form-control" name="input"
+				ng-model="editing.config[field.id]"
+				ng-options="f.id as f.name for f in viewValues"
+				ng-disabled="!loaded || !editing.config[field.belongsTo]"
+				ng-required="field.required"
+				ng-focus="viewValues = getViews(field, specs)">
+			<option value=""></option>
+		</select>
+
+		<span ng-show="editing.config[field.belongsTo] && !loaded" class="throbber inline throbber"></span>
+	</div>
+</script>

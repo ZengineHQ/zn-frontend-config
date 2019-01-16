@@ -51,6 +51,19 @@ plugin.service('wgnConfigInputs', [function () {
 		template: 'wgn-config-input-folder'
 	};
 
+	var viewInput = {
+		type: 'view',
+		options: {
+			belongsTo: {
+				required: true
+			},
+			exclusive: {
+				required: false
+			}
+		},
+		template: 'wgn-config-input-view'
+	};
+
 	var textInput = {
 		type: 'text',
 		options: {
@@ -65,6 +78,22 @@ plugin.service('wgnConfigInputs', [function () {
 			}
 		},
 		template: 'wgn-config-input-text'
+	};
+
+	var passwordInput = {
+		type: 'password',
+		options: {
+			placeholder: {
+				required: false
+			},
+			minlength: {
+				required: false
+			},
+			maxlength: {
+				required: false
+			}
+		},
+		template: 'wgn-config-input-password'
 	};
 
 	var numberInput = {
@@ -166,7 +195,9 @@ plugin.service('wgnConfigInputs', [function () {
 			formInput,
 			fieldInput,
 			folderInput,
+			viewInput,
 			textInput,
+			passwordInput,
 			numberInput,
 			textareaInput,
 			dropdownInput,

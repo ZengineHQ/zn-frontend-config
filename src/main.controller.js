@@ -7,6 +7,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		var _forms = {};
 		var _fields = {};
 		var _folders = {};
+		var _views = {};
 		var _originalConfig;
 		var _webhook = false;
 
@@ -419,6 +420,18 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		};
 
 		/**
+		 * Loads all views for a given form.
+		 *
+		 * @param {Object} fieldDef The folder input definition.
+		 * @param {Object} formDef The form this input belongs to.
+		 *
+		 * @return {Array<Object>}
+		 */
+		$scope.getViews = function (fieldDef, formDef) {
+			return getFiltered(fieldDef, formDef, _views);
+		};
+
+		/**
 		 * Loads all choices for a given field.
 		 * This only really applies to checkbox, dropdown and radio fields.
 		 *
@@ -582,7 +595,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		function loadForms (workspaceId) {
 
 
-			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders' }).then(function (forms) {
+			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders,dataViews' }).then(function (forms) {
 				_forms[workspaceId] = forms;
 				forms.forEach(function (form) {
 					_fields[form.id] = [];
@@ -608,6 +621,15 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						_folders[form.id].push({
 							id: folder.id,
 							name: folder.name
+						});
+					});
+
+					_views[form.id] = [];
+
+					angular.forEach(form.dataViews, function (view) {
+						_views[form.id].push({
+							id: view.id,
+							name: view.name
 						});
 					});
 
@@ -712,6 +734,20 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							formatedHighligts.push({
 								type: inputTypeFormatted,
 								value: folder.name
+							});
+						}
+						break;
+
+					case 'view':
+						var viewDef = $scope.options.getField(input.id);
+						var view = $scope.getViews(viewDef, false).filter(function (f) {
+							return f.id === $scope.editing.config[input.id];
+						})[0];
+
+						if (view) {
+							formatedHighligts.push({
+								type: inputTypeFormatted,
+								value: view.name
 							});
 						}
 						break;
