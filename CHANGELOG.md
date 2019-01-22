@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.10.1"></a>
+## [3.10.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.10.0...3.10.1) (2019-01-22)
+
+
+### Features
+
+* allow list/grid default setting and solve UX link color problem ([28b7c8e](https://github.com/ZengineHQ/zn-frontend-config/commit/28b7c8e))
+
+
+
 <a name="3.10.0"></a>
 # [3.10.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.9.0...3.10.0) (2019-01-16)
 
