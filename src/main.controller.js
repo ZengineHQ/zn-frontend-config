@@ -1029,6 +1029,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}
 
 			$scope.settings = $scope.options.getConfig();
+			$scope.display = $scope.settings.display || 'grid';
+
 			_webhook = $scope.options.getWebhook();
 			doResetTab();
 
