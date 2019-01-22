@@ -397,6 +397,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 * @param {'list' | 'grid' | string} display
 		 */
 		srv.display = function (display) {
+			// allowing "unnecessary grouping operators" for readability
+			/* jshint singleGroups: false */
 			_settings.display = (display === 'grid' && 'grid') || (display === 'list' && 'list') || 'grid';
 			return srv;
 		};
