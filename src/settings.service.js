@@ -392,6 +392,16 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		};
 
 		/**
+		 * Sets default view for multi configs.
+		 *
+		 * @param {'list' | 'grid' | string} display
+		 */
+		srv.display = function (display) {
+			_settings.display = (display === 'grid' && 'grid') || (display === 'list' && 'list') || 'grid';
+			return srv;
+		};
+
+		/**
 		 * Returns highlighted inputs.
 		 *
 		 * @return {Array<Object>} An array of input objects.

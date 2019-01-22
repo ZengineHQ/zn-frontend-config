@@ -93,14 +93,15 @@ $color-success: #3c763d;
 		float: right;
 
 		.switcher-link {
-			color: black;
+			color: #3a7297;
 			display: inline-block;
 			margin-left: .5em;
 			transition: .25s ease-in-out;
 
-			&.disabled {
-				opacity: 1;
-				color: #aaa;
+			&.selected {
+				color: #000;
+				pointer-events: none;
+				cursor: default;
 			}
 		}
 	}
