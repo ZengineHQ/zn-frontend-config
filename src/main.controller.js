@@ -931,7 +931,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @returns {Object} the updated (and now valid) filter
 		 */
 		function reconstructFilter (filter, config) {
-			if (typeof filter === 'string') return config[filter];
+			if (typeof filter === 'string') {
+				return config[filter];
+			}
 
 			var newFilter = angular.extend({}, filter);
 			/**
