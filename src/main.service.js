@@ -11,10 +11,11 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 * @param {Object} plugin The plugins data.
 	 * @param {number} workspaceId The workspace id.
 	 * @param {boolean} multi Whether this plugin supports multiple configurations.
+	 * @param {string} layer name of layer to nest settings in firebase
 	 *
 	 * @return {Promise<Object>} Plugin settings.
 	 */
-	function getFirebase (plugin, workspaceId, multi) {
+	function getFirebase (plugin, workspaceId, multi, layer) {
 		// Make sure we have valid Firebase settings.
 		if (!plugin.firebaseUrl) {
 			return $q.reject('Config: Plugin missing Firebase URL.');
@@ -35,6 +36,11 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 
 		if (multi) {
 			path += '/settings';
+		}
+
+		if (typeof layer === 'string') {
+			var trimmedLayer = layer.replace('/', '');
+			path += trimmedLayer ? '/' + trimmedLayer : '';
 		}
 
 		var ref = new Firebase(plugin.firebaseUrl + path);
@@ -86,6 +92,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 		return $ref.$add(config).then(function (ref) {
 			var id = 'key' in ref && angular.isFunction(ref.key) ? ref.key() : ref.path.n.pop();
 			config.$id = id;
+			return config;
 		});
 	}
 

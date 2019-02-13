@@ -404,6 +404,19 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		};
 
 		/**
+		 * Option to set the layer name in which to nest your config in firebase.
+		 * Works with or without multi enabled.
+		 * Example path with multi: /{workspaceId}/settings/{layer}/{array of config Ids}
+		 * Example path with single: /{workspaceId}/{layer}/{single config properties}
+		 *
+		 * @param {string} layer
+		 */
+		srv.layer = function (layer) {
+			_settings.layer = layer;
+			return srv;
+		};
+
+		/**
 		 * Returns highlighted inputs.
 		 *
 		 * @return {Array<Object>} An array of input objects.
