@@ -308,6 +308,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				'disable',
 				'discard',
 				'init',
+				'beforeSave',
 				'save'
 			];
 

@@ -155,34 +155,37 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}
 
 			removeHiddenValues();
-
-			return doSaveConfig($scope.editing.config).then(function () {
-				if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
-					znModal({
-						title: '',
-						template: '<p>Your new configuration was saved!</p><p>It must be manually enabled to be active.</p>',
-						classes: 'config-enable-message',
-						closeButton: false,
-						btns: {
-							'OK': {
-								primary: true
+			return doRunHook('beforeSave', $scope.editing.config).finally(function () {
+				return doSaveConfig($scope.editing.config).then(function () {
+					if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
+						znModal({
+							title: '',
+							template: '<p>Your new configuration was saved!</p><p>It must be manually enabled to be active.</p>',
+							classes: 'config-enable-message',
+							closeButton: false,
+							btns: {
+								'OK': {
+									primary: true
+								}
 							}
-						}
-					});
-				}
-
-				return doRunHook('save', $scope.editing.config).finally(function () {
-
-					if ($scope.settings.multi) {
-						doDiscardChanges();
-					} else {
-						doResetTab();
-						$scope.editing.form.$setPristine();
+						});
 					}
 
-					znMessage('Configuration saved!', 'saved');
-					$scope.saving = false;
+					return doRunHook('save', $scope.editing.config).finally(function () {
+
+						if ($scope.settings.multi) {
+							doDiscardChanges();
+						} else {
+							doResetTab();
+							$scope.editing.form.$setPristine();
+						}
+
+						znMessage('Configuration saved!', 'saved');
+						$scope.saving = false;
+					});
 				});
+			}).catch(function () {
+				znMessage('There was an error saving the configuration!', 'error');
 			});
 		};
 
