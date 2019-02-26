@@ -155,6 +155,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}
 
 			removeHiddenValues();
+			
 			return doRunHook('beforeSave', $scope.editing.config).finally(function () {
 				return doSaveConfig($scope.editing.config).then(function () {
 					if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
