@@ -708,7 +708,26 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							});
 						}
 						break;
-
+					case 'checkbox':
+						var checkDef = $scope.options.getField(input.id);
+						if ($scope.editing.config[input.id]) {
+							formatedHighligts.push({
+								type: checkDef.label,
+								value: "Yes"
+							});
+						}
+						break;
+					case 'radio':
+						var radioDef = $scope.options.getField(input.id);
+						if ($scope.editing.config[input.id]) {
+							console.log($scope.editing.config[input.id]);
+							console.log(radioDef.options);
+							formatedHighligts.push({
+								type: radioDef.label,
+								value: $scope.editing.config[input.id]
+							});
+						}
+						break;
 					case 'field':
 					case 'choice':
 						var fieldDef = $scope.options.getField(input.id);
@@ -766,6 +785,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						});
 				}
 			});
+
+			if ($scope.editing.config['mch1']) {
+				delete $scope.editing.config['mch1'];
+			}
+
+			if ($scope.editing.config['mch2']) {
+				delete $scope.editing.config['mch2'];
+			}
 
 			angular.forEach(formatedHighligts, function (h, i) {
 				$scope.editing.config['mch' + (i + 1)] = h;

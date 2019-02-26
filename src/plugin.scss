@@ -10,6 +10,7 @@ $color-success: #3c763d;
 		border-color: $color;
 		box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
 	}
+
 }
 
 .config-container {
@@ -137,7 +138,23 @@ $color-success: #3c763d;
 				width: auto;
 				height: auto;
 			}
+			line-height: initial;
+			font-size: .9em;
+			font-weight: 100;
 		}
+
+		.radio-inline {
+			line-height: initial;
+			font-size: .9em;
+			font-weight: 100;
+		}
+
+		.form-check-label {
+			line-height: initial;
+			font-size: .9em;
+			font-weight: 100;
+		}
+
 	}
 
 	.single-page {

@@ -7,12 +7,13 @@
 
 			<!-- Other inputs get created dynamically -->
 			<ng-form name="fieldForm" ng-if="field.type !== 'markup'">
-				<label class="form-label" ng-show="field.name">{{ field.name }}</label>
+				<label ng-if="field.type !== 'checkbox'" class="form-label" ng-show="field.name">{{ field.name }}</label>
+				<span ng-if="field.required && field.type === 'radio'" class="danger">Required</span>
 
 				<div class="controls">
 					<wgn-config-input definition="field"></wgn-config-input>
 
-					<span ng-if="field.required" class="danger">Required</span>
+					<span ng-if="field.required && field.type !== 'radio'" class="danger">Required</span>
 					<span ng-if="field.help" class="help-block">{{ field.help }}</span>
 
 					<span ng-if="fieldForm.input.$dirty && fieldForm.input.$error.required" class="help-block danger">
