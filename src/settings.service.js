@@ -47,7 +47,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 					do {
 						++counter;
 						id += counter.toString();
-					} while(!isIdUnique(_settings.pages, id));
+					} while (!isIdUnique(_settings.pages, id));
 				}
 			});
 
@@ -308,6 +308,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				'disable',
 				'discard',
 				'init',
+				'beforeSave',
 				'save'
 			];
 
@@ -331,7 +332,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		srv.run = function (event, data) {
 			if (event in _hooks) {
 				return _hooks[event].reduce(function (promise, item, index) {
-					return promise.then(function(result) {
+					return promise.then(function (result) {
 						return $q.when(_hooks[event][index](result));
 					});
 				}, $q.when(data));
@@ -419,9 +420,9 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 * @return {Array<Object>} An array of objects.
 		 */
 		srv.getFields = function () {
-			return _settings.pages.map(function(page) {
+			return _settings.pages.map(function (page) {
 				return page.fields;
-			}).reduce(function(acc, val) {
+			}).reduce(function (acc, val) {
 				return acc.concat(val);
 			}, []);
 		};
@@ -510,7 +511,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 *
 		 * Based on https://gist.github.com/eek/9c4887e80b3ede05c0e39fee4dce3747
 		 */
-		function slugify (text) {
+		function slugify(text) {
 			var slug = text.toString().trim()
 				.normalize('NFD') 				 // separate accent from letter
 				.replace(/[\u0300-\u036f]/g, '') // remove all separated accents
