@@ -185,8 +185,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						$scope.saving = false;
 					});
 				});
-			}).catch(function () {
-				znMessage('There was an error saving the configuration!', 'error');
 			});
 		};
 
