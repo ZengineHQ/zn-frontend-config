@@ -180,6 +180,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							doResetTab();
 							$scope.editing.form.$setPristine();
 						}
+						//@todo add this and test
+						//$scope.getForms()
 
 						znMessage('Configuration saved!', 'saved');
 						$scope.saving = false;
@@ -712,7 +714,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						var checkDef = $scope.options.getField(input.id);
 						if ($scope.editing.config[input.id]) {
 							formatedHighligts.push({
-								type: checkDef.label,
+								type: checkDef.highlightedLabel || checkDef.name,
 								value: "Yes"
 							});
 						}
@@ -721,7 +723,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						var radioDef = $scope.options.getField(input.id);
 						if ($scope.editing.config[input.id]) {
 							formatedHighligts.push({
-								type: radioDef.label,
+								type: radioDef.highlightedLabel || radioDef.name,
 								value: $scope.editing.config[input.id]
 							});
 						}
