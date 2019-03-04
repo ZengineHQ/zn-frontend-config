@@ -720,8 +720,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					case 'radio':
 						var radioDef = $scope.options.getField(input.id);
 						if ($scope.editing.config[input.id]) {
-							console.log($scope.editing.config[input.id]);
-							console.log(radioDef.options);
 							formatedHighligts.push({
 								type: radioDef.label,
 								value: $scope.editing.config[input.id]
