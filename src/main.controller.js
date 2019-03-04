@@ -180,8 +180,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							doResetTab();
 							$scope.editing.form.$setPristine();
 						}
-						//@todo add this and test
-						//$scope.getForms()
 
 						znMessage('Configuration saved!', 'saved');
 						$scope.saving = false;
@@ -598,7 +596,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		function loadForms (workspaceId) {
 
-
 			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders,dataViews' }).then(function (forms) {
 				_forms[workspaceId] = forms;
 				forms.forEach(function (form) {
@@ -698,6 +695,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							});
 						}
 						break;
+						
 					case 'form':
 						var form = $scope.getForms(input).filter(function (f) {
 							return f.id === $scope.editing.config[input.id];
@@ -710,6 +708,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							});
 						}
 						break;
+
 					case 'checkbox':
 						var checkDef = $scope.options.getField(input.id);
 						if ($scope.editing.config[input.id]) {
@@ -719,6 +718,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							});
 						}
 						break;
+
 					case 'radio':
 						var radioDef = $scope.options.getField(input.id);
 						if ($scope.editing.config[input.id]) {
@@ -728,6 +728,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							});
 						}
 						break;
+
 					case 'field':
 					case 'choice':
 						var fieldDef = $scope.options.getField(input.id);
