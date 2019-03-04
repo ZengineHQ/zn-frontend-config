@@ -695,7 +695,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							});
 						}
 						break;
-						
+
 					case 'form':
 						var form = $scope.getForms(input).filter(function (f) {
 							return f.id === $scope.editing.config[input.id];
