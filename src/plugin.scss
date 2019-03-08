@@ -131,18 +131,21 @@ $color-success: #3c763d;
 
 	.form-group {
 		max-width: 400px;
-
 		.radio {
 			input[type=radio] {
 				margin-top: 1px;
 				width: auto;
 				height: auto;
 			}
+
 			line-height: initial;
 			font-size: .9em;
 			font-weight: 100;
-		}
 
+			label {
+				padding-left:0;
+			}
+		}
 		.radio-inline {
 			line-height: initial;
 			font-size: .9em;
