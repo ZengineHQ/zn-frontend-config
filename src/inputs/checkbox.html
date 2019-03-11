@@ -1,5 +1,7 @@
 <!--Checkbox input-->
 <script type="text/ng-template" id="wgn-config-input-checkbox">
-	<input type="checkbox"  name="{{ field.id }}" ng-model="editing.config[field.id]">
-	<label class="form-check-label">{{field.name}}</label>
+	<label class="form-check-label">
+		<input type="checkbox"  name="{{ field.id }}" ng-model="editing.config[field.id]">
+		{{field.name}}
+	</label>
 </script>
