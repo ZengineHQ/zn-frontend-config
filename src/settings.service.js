@@ -78,6 +78,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 
 			var defaults = {
 				required: true,
+				highlightedLabel: null,
 				help: ''
 			};
 

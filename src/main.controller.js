@@ -596,7 +596,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		function loadForms (workspaceId) {
 
-
 			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders,dataViews' }).then(function (forms) {
 				_forms[workspaceId] = forms;
 				forms.forEach(function (form) {
@@ -696,6 +695,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							});
 						}
 						break;
+
 					case 'form':
 						var form = $scope.getForms(input).filter(function (f) {
 							return f.id === $scope.editing.config[input.id];
@@ -705,6 +705,26 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							formatedHighligts.push({
 								type: inputTypeFormatted,
 								value: form.name
+							});
+						}
+						break;
+
+					case 'checkbox':
+						var checkDef = $scope.options.getField(input.id);
+						if ($scope.editing.config[input.id]) {
+							formatedHighligts.push({
+								type: checkDef.highlightedLabel || checkDef.name,
+								value: "Yes"
+							});
+						}
+						break;
+
+					case 'radio':
+						var radioDef = $scope.options.getField(input.id);
+						if ($scope.editing.config[input.id]) {
+							formatedHighligts.push({
+								type: radioDef.highlightedLabel || radioDef.name,
+								value: $scope.editing.config[input.id]
 							});
 						}
 						break;
@@ -766,6 +786,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						});
 				}
 			});
+
+			if ($scope.editing.config['mch1']) {
+				delete $scope.editing.config['mch1'];
+			}
+
+			if ($scope.editing.config['mch2']) {
+				delete $scope.editing.config['mch2'];
+			}
 
 			angular.forEach(formatedHighligts, function (h, i) {
 				$scope.editing.config['mch' + (i + 1)] = h;
