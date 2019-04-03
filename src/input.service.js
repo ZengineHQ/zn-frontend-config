@@ -194,6 +194,32 @@ plugin.service('wgnConfigInputs', [function () {
 		template: 'wgn-config-input-choice'
 	};
 
+	var dateInput = {
+		type: 'date',
+		options: {
+			options: {
+				validate: function(opts) {
+					var valid = true;
+
+					valid = opts.format ? ['M/d/yyyy', 'yyyy', 'yy'].indexOf(opts.format) !== -1 :
+						valid;
+
+					valid = opts.mode ? ['day', 'month', 'year'].indexOf(opts.mode) !== -1 :
+						valid;
+
+					valid = opts.showWeeks ? opts.showWeeks.toString() === 'true' ||
+						opts.showWeeks.toString() === 'false' :
+						valid;
+
+					valid = opts.date ? opts.date instanceof Date : valid;
+
+					return valid;
+				}
+			}
+		},
+		template: 'wgn-config-input-date'
+	};
+
 	/**
 	 * Returns all internal input types.
 	 *
@@ -214,7 +240,8 @@ plugin.service('wgnConfigInputs', [function () {
 			markupInput,
 			choiceInput,
 			checkboxInput,
-			radioInput
+			radioInput,
+			dateInput
 		];
 	};
 
