@@ -1,0 +1,21 @@
+<script type="text/ng-template" id="wgn-config-input-date">
+<!-- UI Bootstrap Datepicker Popup directive https://angular-ui.github.io/bootstrap/ -->
+
+	<div ng-controller="wgnDateInputCtrl">
+
+		<input
+			class="form-control"
+			datepicker-options="{{picker.settings}}"
+			datepicker-popup="{{picker.format}}"
+			is-open="picker.opened"
+			maxlength="{{picker.format.length}}"
+			minlength="{{picker.format.length}}"
+			ng-change="setModel($event)"
+			ng-focus="picker.open($event)"
+			ng-model="picker.date"
+			type="text"
+		/>
+
+	</div>
+
+</script>
