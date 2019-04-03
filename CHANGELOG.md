@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.11.0"></a>
+# [3.11.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.10.1...3.11.0) (2019-04-03)
+
+
+### Bug Fixes
+
+* margin on radio label and not requiring checkbox display ([6096f6b](https://github.com/ZengineHQ/zn-frontend-config/commit/6096f6b))
+
+
+### Features
+
+* allow single checkbox and radio buttons as field options in configurations ([21fe97d](https://github.com/ZengineHQ/zn-frontend-config/commit/21fe97d))
+* enable before save ([73e95a6](https://github.com/ZengineHQ/zn-frontend-config/commit/73e95a6))
+* removed catch ([0dc3cb1](https://github.com/ZengineHQ/zn-frontend-config/commit/0dc3cb1))
+* sub filter object with config field ID, which is a filter object ([36ea8c8](https://github.com/ZengineHQ/zn-frontend-config/commit/36ea8c8))
+* **inputs:** date picker input ([a812f75](https://github.com/ZengineHQ/zn-frontend-config/commit/a812f75))
+
+
+
 <a name="3.10.1"></a>
 ## [3.10.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.10.0...3.10.1) (2019-01-22)
 
