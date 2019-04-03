@@ -22,22 +22,25 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 		var options = $scope.field.options;
 
 		for (var opt in options) {
+			if (options.hasOwnProperty(opt)) {
 
-			if ($scope.picker.hasOwnProperty(opt)) {
+				if ($scope.picker.hasOwnProperty(opt)) {
 
-				$scope.picker[opt] = options[opt];
+					$scope.picker[opt] = options[opt];
 
-			} else if ($scope.picker.settings.hasOwnProperty(opt)) {
+				} else if ($scope.picker.settings.hasOwnProperty(opt)) {
 
-				$scope.picker.settings[opt] = options[opt];
+					$scope.picker.settings[opt] = options[opt];
 
-			}
+				}
 
-			// datepickerMode and minMode need to be the same value
-			if (opt === 'mode') {
-				// datepickerMode needs to be a nested string; "'month'"
-				$scope.picker.settings.datepickerMode = '"'.concat(options[opt], '"');
-				$scope.picker.settings.minMode = options[opt];
+				// datepickerMode and minMode need to be the same value
+				if (opt === 'mode') {
+					// datepickerMode needs to be a nested string; "'month'"
+					$scope.picker.settings.datepickerMode = '"'.concat(options[opt], '"');
+					$scope.picker.settings.minMode = options[opt];
+				}
+
 			}
 
 		}

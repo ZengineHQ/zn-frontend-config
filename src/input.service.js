@@ -123,7 +123,7 @@ plugin.service('wgnConfigInputs', [function () {
 	var radioInput = {
 		type: 'radio',
 		template: 'wgn-config-input-radio'
-	}
+	};
 
 	var textareaInput = {
 		type: 'textarea',

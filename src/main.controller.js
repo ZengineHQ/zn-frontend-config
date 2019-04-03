@@ -787,12 +787,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 			});
 
-			if ($scope.editing.config['mch1']) {
-				delete $scope.editing.config['mch1'];
+			if ($scope.editing.config.mch1) {
+				delete $scope.editing.config.mch1;
 			}
 
-			if ($scope.editing.config['mch2']) {
-				delete $scope.editing.config['mch2'];
+			if ($scope.editing.config.mch2) {
+				delete $scope.editing.config.mch2;
 			}
 
 			angular.forEach(formatedHighligts, function (h, i) {
