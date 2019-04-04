@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.11.1"></a>
+## [3.11.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.11.0...3.11.1) (2019-04-04)
+
+
+### Bug Fixes
+
+* **date input:** options should be optional ([762ba53](https://github.com/ZengineHQ/zn-frontend-config/commit/762ba53))
+
+
+
 <a name="3.11.0"></a>
 # [3.11.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.10.1...3.11.0) (2019-04-03)
 
