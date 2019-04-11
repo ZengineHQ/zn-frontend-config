@@ -203,17 +203,19 @@ plugin.service('wgnConfigInputs', [function () {
 
 					if (!opts) { return valid; }
 
-					valid = opts.format ? ['M/d/yyyy', 'yyyy', 'yy'].indexOf(opts.format) !== -1 :
+					valid = valid && opts.format ?
+						['M/d/yyyy', 'yyyy', 'yy'].indexOf(opts.format) !== -1 :
 						valid;
 
-					valid = opts.mode ? ['day', 'month', 'year'].indexOf(opts.mode) !== -1 :
+					valid = valid && opts.mode ?
+						['day', 'month', 'year'].indexOf(opts.mode) !== -1 :
 						valid;
 
-					valid = opts.showWeeks ? opts.showWeeks.toString() === 'true' ||
+					valid = valid && opts.showWeeks ? opts.showWeeks.toString() === 'true' ||
 						opts.showWeeks.toString() === 'false' :
 						valid;
 
-					valid = opts.date ? opts.date instanceof Date : valid;
+					valid = valid && opts.date ? opts.date instanceof Date : valid;
 
 					return valid;
 				}
