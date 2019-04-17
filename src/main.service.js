@@ -14,7 +14,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 *
 	 * @return {Promise<Object>} Plugin settings.
 	 */
-	function getFirebase (plugin, workspaceId, multi) {
+	function getFirebase (plugin, workspaceId, multi, id) {
 		// Make sure we have valid Firebase settings.
 		if (!plugin.firebaseUrl) {
 			return $q.reject('Config: Plugin missing Firebase URL.');
@@ -32,6 +32,10 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 		}
 
 		path += workspaceId;
+
+		if (id) {
+			path += '/'.concat(id);
+		}
 
 		if (multi) {
 			path += '/settings';
@@ -136,9 +140,9 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 *
 	 * @return {Promise<Object>} Plugin settings.
 	 */
-	srv.load = function (workspaceId, multi) {
+	srv.load = function (workspaceId, multi, id) {
 		return srv.getPlugin().then(function (plugin) {
-			return getFirebase(plugin, workspaceId, multi);
+			return getFirebase(plugin, workspaceId, multi, id);
 		});
 	};
 

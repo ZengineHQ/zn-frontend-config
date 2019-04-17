@@ -1069,7 +1069,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			doResetTab();
 
 			// Load settings.
-			return configService.load(_workspaceId, $scope.settings.multi).then(function (configs) {
+			return configService.load(_workspaceId, $scope.settings.multi, $scope.settings.id).then(function (configs) {
 				var def = $q.defer();
 
 				if (!$scope.settings.multi) {
