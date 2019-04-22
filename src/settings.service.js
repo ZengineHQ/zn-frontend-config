@@ -515,7 +515,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		srv.id = function (id) {
 			_settings.id = slugify(id);
 			return srv;
-		}
+		};
 
 		/**
 		 * Transforms a string into a camelized slug.
