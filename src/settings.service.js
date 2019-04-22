@@ -6,7 +6,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			icon: 'icon-puzzle',
 			help: 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.',
 			multi: false,
-			toggle: true
+			toggle: true,
+			id: null
 		};
 
 		var _currentPage = false;
@@ -503,6 +504,18 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		srv.getConfig = function () {
 			return _settings;
 		};
+
+		/**
+		 * Sets an id for the configuration instance
+		 * Returns the service instance
+		 *
+		 * @param {string} id
+		 * @return {object}
+		 */
+		srv.id = function (id) {
+			_settings.id = slugify(id);
+			return srv;
+		}
 
 		/**
 		 * Transforms a string into a camelized slug.
