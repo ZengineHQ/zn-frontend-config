@@ -215,7 +215,9 @@ plugin.service('wgnConfigInputs', [function () {
 						opts.showWeeks.toString() === 'false' :
 						valid;
 
-					valid = valid && opts.date ? opts.date instanceof Date : valid;
+					Object.keys(opts).forEach(function(option) {
+						valid = valid && ['format', 'mode', 'showWeeks'].indexOf(option) !== -1;
+					});
 
 					return valid;
 				}
