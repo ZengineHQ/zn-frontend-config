@@ -5,11 +5,11 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 	 * Default options
 	 */
 	$scope.picker = {
-		date: new Date(),
+		date: null,
 		format: 'M/d/yyyy',
+		mode: 'day',
 		opened: false,
 		settings: {
-			datepickerMode: "'day'",
 			minMode: 'day',
 			showWeeks: 'true'
 		}
@@ -17,11 +17,15 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 
 	/**
 	 *  Add the provided settings to the default datepicker configuration.
+	 * 	Verify that the settings align with any previously stored value.
 	 */
 	var init = function init() {
+		var field = $scope.editing.config[$scope.field.id];
 		var options = $scope.field.options;
 
+		// merge the provided options with the default options
 		for (var opt in options) {
+
 			if (options.hasOwnProperty(opt)) {
 
 				if ($scope.picker.hasOwnProperty(opt)) {
@@ -34,16 +38,55 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 
 				}
 
-				// datepickerMode and minMode need to be the same value
-				if (opt === 'mode') {
-					// datepickerMode needs to be a nested string; "'month'"
-					$scope.picker.settings.datepickerMode = '"'.concat(options[opt], '"');
-					$scope.picker.settings.minMode = options[opt];
-				}
+			}
+
+		}
+
+		$scope.picker.settings.minMode = $scope.picker.mode;
+
+		if (field) {
+
+			field = field.toString();
+
+			if (field.length === 2 && $scope.picker.format === 'yy') {
+				// two digit year
+
+				$scope.picker.date = new Date();
+
+				$scope.picker.date.setFullYear(
+					$scope.picker.date
+						.getFullYear()
+						.toString()
+						.slice(0, 2)
+						.concat(field)
+				);
+
+			} else if (field.length === 4 && $scope.picker.format === 'yyyy') {
+				// 4 digit year
+
+				$scope.picker.date = new Date();
+
+				$scope.picker.date.setFullYear(field);
+
+			} else if (field.length <= 'mm/dd/yyyy'.length && $scope.picker.format === 'M/d/yyyy') {
+				// full date
+
+				$scope.picker.date = new Date(field);
+
+			} else {
+
+				throw new Error(
+					'Config: '.concat(
+						'Date picker options do not match the format of the stored value. ',
+						"\n",
+						'Clear the original value before modifying the options.'
+					)
+				);
 
 			}
 
 		}
+
 	};
 
 	/**
@@ -52,19 +95,23 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 	 * @returns {string} Formatted string of the currently selected date
 	 */
 	$scope.picker._format = function _format() {
+		var date = this.date;
+
 		var formats = {
 			'M/d/yyyy': function() {
-				return $scope.picker.date.toLocaleDateString('en-us', {
-					month: 'numeric',
-					day: 'numeric',
-					year: 'numeric'
-				});
+				return date ?
+					date.toLocaleDateString('en-us', {
+						month: 'numeric',
+						day: 'numeric',
+						year: 'numeric'
+					}) :
+					null;
 			},
 			'yyyy': function() {
-				return $scope.picker.date.getFullYear();
+				return date ? date.getFullYear().toString() : null;
 			},
 			'yy': function() {
-				return ($scope.picker.date.getFullYear() + '').slice(2, 4);
+				return date ? date.getFullYear().toString().slice(2, 4) : null;
 			}
 		};
 
