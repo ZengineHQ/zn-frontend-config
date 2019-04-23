@@ -204,7 +204,7 @@ plugin.service('wgnConfigInputs', [function () {
 					if (!opts) { return valid; }
 
 					valid = valid && opts.format ?
-						['M/d/yyyy', 'yyyy', 'yy'].indexOf(opts.format) !== -1 :
+						['MM/dd/yyyy', 'M/d/yyyy', 'yyyy', 'yy'].indexOf(opts.format) !== -1 :
 						valid;
 
 					valid = valid && opts.mode ?
