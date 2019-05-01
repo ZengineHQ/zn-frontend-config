@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.13.0"></a>
+# [3.13.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.10.1...3.13.0) (2019-05-01)
+
+
+### Bug Fixes
+
+* include instance ids in webhook url ([78fc418](https://github.com/ZengineHQ/zn-frontend-config/commit/78fc418))
+* **date input:** account for previously failed validation cases ([ff91ec6](https://github.com/ZengineHQ/zn-frontend-config/commit/ff91ec6))
+* **date input:** options should be optional ([762ba53](https://github.com/ZengineHQ/zn-frontend-config/commit/762ba53))
+* margin on radio label and not requiring checkbox display ([6096f6b](https://github.com/ZengineHQ/zn-frontend-config/commit/6096f6b))
+
+
+### Features
+
+* support multiple instances via id ([1bc1d85](https://github.com/ZengineHQ/zn-frontend-config/commit/1bc1d85))
+* **inputs:** date picker input ([a812f75](https://github.com/ZengineHQ/zn-frontend-config/commit/a812f75))
+* allow single checkbox and radio buttons as field options in configurations ([21fe97d](https://github.com/ZengineHQ/zn-frontend-config/commit/21fe97d))
+* enable before save ([73e95a6](https://github.com/ZengineHQ/zn-frontend-config/commit/73e95a6))
+* removed catch ([0dc3cb1](https://github.com/ZengineHQ/zn-frontend-config/commit/0dc3cb1))
+* sub filter object with config field ID, which is a filter object ([36ea8c8](https://github.com/ZengineHQ/zn-frontend-config/commit/36ea8c8))
+
+
+
 <a name="3.12.0"></a>
 # [3.12.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.11.2...3.12.0) (2019-04-22)
 
