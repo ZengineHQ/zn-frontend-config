@@ -957,7 +957,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 								separator = url.indexOf('?') === -1 ? '?' : '&';
 								url = url + separator + 'config=' + encodeURI(cfg.$id);
 							}
-							console.log('the url: ', url);
+
 							if (url !== wh.url) {
 								return _webhook.service.update({ id: wh.id, url: url });
 							}
