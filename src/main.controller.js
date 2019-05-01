@@ -925,25 +925,41 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					if (Array.isArray(_webhook.options)) {
 						return $q.all(_webhook.options.map(function (opts, i) {
 							return _webhook.service.load(cfg['webhook' + i + 'Id']).then(function (wh) {
-								if (wh.url.indexOf('config=') === -1) {
-									var separator = wh.url.indexOf('?') === -1 ? '?' : '&';
+								var separator;
+								var url = wh.url;
 
-									return _webhook.service.update({
-										id: wh.id,
-										url: wh.url + separator + 'config=' + encodeURI(cfg.$id)
-									});
+								if ($scope.settings.id && url.indexOf('id=') === -1) {
+									separator = url.indexOf('?') === -1 ? '?' : '&';
+									url = url + separator + 'id=' + encodeURI($scope.settings.id);
+								}
+
+								if (url.indexOf('config=') === -1) {
+									separator = url.indexOf('?') === -1 ? '?' : '&';
+									url = url + separator + 'config=' + encodeURI(cfg.$id);
+								}
+
+								if (url !== wh.url) {
+									return _webhook.service.update({ id: wh.id, url: url });
 								}
 							});
 						}));
 					} else {
 						return _webhook.service.load(cfg.webhookId).then(function (wh) {
-							if (wh.url.indexOf('config=') === -1) {
-								var separator = wh.url.indexOf('?') === -1 ? '?' : '&';
+							var separator;
+							var url = wh.url;
 
-								return _webhook.service.update({
-									id: wh.id,
-									url: wh.url + separator + 'config=' + encodeURI(cfg.$id)
-								});
+							if ($scope.settings.id && url.indexOf('id=') === -1) {
+								separator = url.indexOf('?') === -1 ? '?' : '&';
+								url = url + separator + 'id=' + encodeURI($scope.settings.id);
+							}
+
+							if (url.indexOf('config=') === -1) {
+								separator = url.indexOf('?') === -1 ? '?' : '&';
+								url = url + separator + 'config=' + encodeURI(cfg.$id);
+							}
+							console.log('the url: ', url);
+							if (url !== wh.url) {
+								return _webhook.service.update({ id: wh.id, url: url });
 							}
 						});
 					}
