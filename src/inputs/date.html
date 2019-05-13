@@ -1,21 +1,41 @@
 <script type="text/ng-template" id="wgn-config-input-date">
-<!-- UI Bootstrap Datepicker Popup directive https://angular-ui.github.io/bootstrap/ -->
+<!--
+	Zengine znDatetimepickerWrapper directive:
+	https://zenginehq.github.io/developers/plugins/api/directives/#zndatetimepickerwrapper
+
+	UI Bootstrap Datepicker Popup directive:
+	http://angular-ui.github.io/bootstrap/versioned-docs/0.12.1/#/datepicker
+-->
 
 	<div ng-controller="wgnDateInputCtrl">
 
-		<input
-			class="form-control"
-			datepicker-options="{{picker.settings}}"
-			datepicker-popup="{{picker.format}}"
-			is-open="picker.opened"
-			maxlength="{{picker.format.length}}"
-			minlength="{{picker.format.length}}"
-			ng-change="setModel($event)"
-			ng-focus="picker.open($event)"
-			ng-model="picker.date"
-			type="text"
-		/>
+		<div zn-datetimepicker-wrapper ng-if="!field.options" ng-model="editing.config[field.id]">
+			<input
+				class="form-control"
+				datepicker-options="dateOptions"
+				datepicker-popup="{{format}}"
+				is-open="opened"
+				ng-focus="open($event)"
+				ng-model="date"
+				placeholder="{{user.settings.dateFormat}}"
+				type="text"
+			/>
+		</div>
 
+		<div ng-if="field.options">
+			<input
+				class="form-control"
+				datepicker-mode="picker.mode"
+				datepicker-options="{{picker.settings}}"
+				datepicker-popup="{{picker.format}}"
+				is-open="picker.opened"
+				ng-change="setModel()"
+				ng-focus="picker.toggle()"
+				ng-model="picker.date"
+				placeholder="{{picker.format}}"
+				type="text"
+			/>
+		</div>
 	</div>
 
 </script>

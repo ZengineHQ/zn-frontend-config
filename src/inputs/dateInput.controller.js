@@ -1,27 +1,32 @@
 plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
-	// UI Bootstrap Datepicker Popup directive https://angular-ui.github.io/bootstrap/
+	// UI Bootstrap Datepicker Popup directive:
+	// http://angular-ui.github.io/bootstrap/versioned-docs/0.12.1/#/datepicker
 
 	/**
-	 * Default options
+	 * Configuration - only used if custom options are provided
 	 */
 	$scope.picker = {
-		date: new Date(),
-		format: 'M/d/yyyy',
+		date: null,
+		format: 'MM/dd/yyyy',
+		mode: 'day',
 		opened: false,
 		settings: {
-			datepickerMode: "'day'",
 			minMode: 'day',
-			showWeeks: 'true'
+			showWeeks: true
 		}
 	};
 
 	/**
 	 *  Add the provided settings to the default datepicker configuration.
+	 * 	Verify that the settings align with any previously stored value.
 	 */
-	var init = function init() {
+	var configureOptions = function configureOptions() {
+		var field = $scope.editing.config[$scope.field.id];
 		var options = $scope.field.options;
 
+		// implement the provided options
 		for (var opt in options) {
+
 			if (options.hasOwnProperty(opt)) {
 
 				if ($scope.picker.hasOwnProperty(opt)) {
@@ -34,16 +39,59 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 
 				}
 
-				// datepickerMode and minMode need to be the same value
-				if (opt === 'mode') {
-					// datepickerMode needs to be a nested string; "'month'"
-					$scope.picker.settings.datepickerMode = '"'.concat(options[opt], '"');
-					$scope.picker.settings.minMode = options[opt];
-				}
+			}
+
+		}
+
+		$scope.picker.settings.minMode = $scope.picker.mode;
+
+		if (field) {
+
+			field = field.toString();
+
+			if (field.length === 2 && $scope.picker.format === 'yy') {
+				// convert two digit year to full date
+
+				$scope.picker.date = new Date();
+
+				$scope.picker.date.setFullYear(
+					$scope.picker.date
+						.getFullYear()
+						.toString()
+						.slice(0, 2)
+						.concat(field)
+				);
+
+			} else if (field.length === 4 && $scope.picker.format === 'yyyy') {
+				// convert 4 digit year to full date
+
+				$scope.picker.date = new Date();
+
+				$scope.picker.date.setFullYear(field);
+
+			} else if (field.length === $scope.picker.format.length) {
+				// full date; 'MM/dd/yyyy' or 'M/d/yyyy'
+
+				$scope.picker.date = new Date(field);
+
+			} else {
+
+				throw new Error(
+					'Config: '.concat(
+						'Date picker options do not match the format of the stored value. ',
+						"\n",
+						'Clear the original value before modifying the options.'
+					)
+				);
 
 			}
 
 		}
+
+	};
+
+	var init = function init() {
+		if ($scope.field.options) { configureOptions(); }
 	};
 
 	/**
@@ -52,19 +100,30 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 	 * @returns {string} Formatted string of the currently selected date
 	 */
 	$scope.picker._format = function _format() {
+		var date = this.date;
+
 		var formats = {
-			'M/d/yyyy': function() {
-				return $scope.picker.date.toLocaleDateString('en-us', {
-					month: 'numeric',
-					day: 'numeric',
+			'MM/dd/yyyy': function() {
+				return date ? date.toLocaleDateString('en-us', {
+					day: '2-digit',
+					month: '2-digit',
 					year: 'numeric'
-				});
+				}) :
+				null;
+			},
+			'M/d/yyyy': function() {
+				return date ? date.toLocaleDateString('en-us', {
+					day: 'numeric',
+					month: 'numeric',
+					year: 'numeric'
+				}) :
+				null;
 			},
 			'yyyy': function() {
-				return $scope.picker.date.getFullYear();
+				return date ? date.getFullYear().toString() : null;
 			},
 			'yy': function() {
-				return ($scope.picker.date.getFullYear() + '').slice(2, 4);
+				return date ? date.getFullYear().toString().slice(2, 4) : null;
 			}
 		};
 
@@ -72,16 +131,16 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 	};
 
 	/**
-	 * Open the picker.
+	 * Toggle the picker
 	 */
-	$scope.picker.open = function open($event) {
+	$scope.picker.toggle = function toggle($event) {
 		this.opened = !this.opened;
 	};
 
 	/**
 	 * Set the formatted date value on the model.
 	 */
-	$scope.setModel = function setModel($event) {
+	$scope.setModel = function setModel() {
 		$scope.editing.config[$scope.field.id] = $scope.picker._format();
 	};
 

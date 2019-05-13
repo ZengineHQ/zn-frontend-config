@@ -204,7 +204,7 @@ plugin.service('wgnConfigInputs', [function () {
 					if (!opts) { return valid; }
 
 					valid = valid && opts.format ?
-						['M/d/yyyy', 'yyyy', 'yy'].indexOf(opts.format) !== -1 :
+						['MM/dd/yyyy', 'M/d/yyyy', 'yyyy', 'yy'].indexOf(opts.format) !== -1 :
 						valid;
 
 					valid = valid && opts.mode ?
@@ -215,7 +215,9 @@ plugin.service('wgnConfigInputs', [function () {
 						opts.showWeeks.toString() === 'false' :
 						valid;
 
-					valid = valid && opts.date ? opts.date instanceof Date : valid;
+					Object.keys(opts).forEach(function(option) {
+						valid = valid && ['format', 'mode', 'showWeeks'].indexOf(option) !== -1;
+					});
 
 					return valid;
 				}
