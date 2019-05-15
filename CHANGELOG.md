@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.14.0"></a>
+# [3.14.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.13.1...3.14.0) (2019-05-15)
+
+
+### Bug Fixes
+
+* **date-picker input:** changing mode throws error ([8b5a83c](https://github.com/ZengineHQ/zn-frontend-config/commit/8b5a83c))
+* **date-picker input:** model not reflecting updates ([bd88551](https://github.com/ZengineHQ/zn-frontend-config/commit/bd88551))
+* **date-picker input:** no longer allow user-provided Date instance ([5cb3b3c](https://github.com/ZengineHQ/zn-frontend-config/commit/5cb3b3c))
+
+
+### Features
+
+* **date-picker input:** default to znDatetimepickerWrapper ([00724bf](https://github.com/ZengineHQ/zn-frontend-config/commit/00724bf))
+
+
+
 <a name="3.13.1"></a>
 ## [3.13.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.13.0...3.13.1) (2019-05-01)
 
