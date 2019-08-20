@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.14.1"></a>
+## [3.14.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.14.0...3.14.1) (2019-08-20)
+
+
+### Bug Fixes
+
+* inputs nav overflow ([161764c](https://github.com/ZengineHQ/zn-frontend-config/commit/161764c))
+
+
+
 <a name="3.14.0"></a>
 # [3.14.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.13.1...3.14.0) (2019-05-15)
 
