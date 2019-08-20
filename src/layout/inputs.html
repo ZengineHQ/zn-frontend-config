@@ -5,7 +5,7 @@
 		</div>
 
 		<div ng-if="settings.pages.length > 1">
-			<ul class="nav nav-tabs">
+			<ul class="nav nav-tabs inputs-nav">
 				<li role="presentation" ng-repeat="page in settings.pages" ng-class="{active: view === page.id}">
 					<a href="javascript:" ng-click="onSelectPage(page.id)">{{ page.name }}</a>
 				</li>
