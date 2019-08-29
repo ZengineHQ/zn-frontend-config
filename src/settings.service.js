@@ -6,6 +6,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			icon: 'icon-puzzle',
 			help: 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.',
 			multi: false,
+			secure: false,
 			toggle: true,
 			id: null
 		};
@@ -109,6 +110,10 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				// Make sure id is unique.
 				if (_fieldIds.indexOf(def.id) !== -1) {
 					throw new Error('Config: Field id "' + def.id + '" is already in use');
+				}
+
+				if (def.type === 'secure' && !_settings.secure) {
+					throw new Error('Config: Secure must be enabled to use the "secure" field type');
 				}
 
 			}
@@ -381,6 +386,23 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 */
 		srv.multi = function (multi) {
 			_settings.multi = !!multi;
+			return srv;
+		};
+
+		/**
+		 * Sets whether to support secure settings.
+		 *
+		 * @param {boolean} secure
+		 */
+		srv.secure = function (secure) {
+
+			// Multi must be enabled because of the way single configs are stored in firebase.
+			// This can be changed if single is normalized to use the multi setting format.
+			if (secure && !_settings.multi) {
+				throw new Error('Config: Multi must be enabled to use secure!');
+			}
+
+			_settings.secure = !!secure;
 			return srv;
 		};
 
