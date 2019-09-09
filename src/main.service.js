@@ -163,13 +163,14 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', 'znPluginData', fun
 	/**
 	 * Saves a plugin's secure configuration settings for the given workspace.
 	 *
+	 * @param {string} endpoint
 	 * @param {number} workspaceId
-	 * @param {String} configId The config id for multi configurations
-	 * @param {Object} config The configuration object to save.
+	 * @param {string} configId The config id for multi configurations
+	 * @param {Object} secureConfig The configuration object to save.
 	 *
 	 * @return {Promise<*>}
 	 */
-	srv.saveSecure = function (workspaceId, configId, config) {
+	srv.saveSecure = function (endpoint, workspaceId, configId, secureConfig) {
 
 		var params = {
 			workspaceId: workspaceId,
@@ -178,7 +179,7 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', 'znPluginData', fun
 			}
 		};
 
-		return znPluginData('wgn').post('/settings', params, config);
+		return znPluginData('wgn').post(endpoint, params, secureConfig);
 
 	};
 

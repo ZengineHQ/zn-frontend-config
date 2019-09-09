@@ -1040,12 +1040,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			});
 		}
 
-		function doSaveSecure (secure) {
+		function doSaveSecure (secureConfig) {
 
 			var configId = $scope.settings.multi && $scope.editing.config.$id;
 
-			return configService.saveSecure(_workspaceId, configId, secure).then(function () {
-				return secure;
+			return configService.saveSecure($scope.settings.secureEndpoint, _workspaceId, configId, secureConfig).then(function () {
+				return secureConfig;
 			});
 
 		}

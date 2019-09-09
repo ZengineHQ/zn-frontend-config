@@ -7,6 +7,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			help: 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.',
 			multi: false,
 			secure: false,
+			secureEndpoint: '/settings',
 			toggle: true,
 			id: null
 		};
@@ -403,6 +404,16 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			}
 
 			_settings.secure = !!secure;
+			return srv;
+		};
+
+		/**
+		 * Sets a custom secure endpoint
+		 *
+		 * @param {string} secureEndpoint
+		 */
+		srv.secureEndpoint = function(secureEndpoint) {
+			_settings.secureEndpoint = secureEndpoint;
 			return srv;
 		};
 
