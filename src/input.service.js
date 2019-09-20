@@ -184,7 +184,7 @@ plugin.service('wgnConfigInputs', [function () {
 			restrict: {
 				required: false,
 				validate: function (r) {
-					return checkAllowedItems(r, ['radio', 'checkbox', 'dropdown']);
+					return checkAllowedItems(r, ['radio', 'checkbox', 'dropdown', 'folder']);
 				}
 			},
 			exclusive: {
