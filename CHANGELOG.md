@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.15.0"></a>
+# [3.15.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.14.1...3.15.0) (2019-09-30)
+
+
+### Features
+
+* choice input folder support ([8f65237](https://github.com/ZengineHQ/zn-frontend-config/commit/8f65237))
+
+
+
 <a name="3.14.1"></a>
 ## [3.14.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.14.0...3.14.1) (2019-08-20)
 
