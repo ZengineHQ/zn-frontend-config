@@ -435,7 +435,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 		/**
 		 * Loads all choices for a given field.
-		 * This only really applies to checkbox, dropdown and radio fields.
+		 * This applies to checkbox, dropdown and radio fields.
 		 *
 		 * @param {Object} fieldDef The choice input definition.
 		 *

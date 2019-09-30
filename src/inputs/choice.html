@@ -1,48 +1,80 @@
 <!--Choice input (this is a complex one, read the docs if confused!)-->
 <script type="text/ng-template" id="wgn-config-input-choice">
-	<div ng-controller="wgnFieldInputCntrl">
-		<select class="form-control" name="input"
-				ng-model="editing.config[field.id + '_source']"
-				ng-options="f.id as f|formFieldTitle for f in fieldValues"
-				ng-disabled="isFieldLoading(field.belongsTo) || !editing.config[field.belongsTo]"
-				ng-change="resetChoiceValues(field.id)"
-				ng-required="field.required"
-				ng-focus="fieldValues = getFields(field, specs)">
-			<option value=""></option>
-		</select>
 
-		<span ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
-
-		<div ng-show="editing.config[field.id + '_source']">
-			<p ng-if="field.mode === 'select'">Select a choice</p>
-			<p ng-if="field.mode === 'score'">Score all choices</p>
+	<div ng-if="field.restrict && field.restrict === 'folder'">
+		<div>
+			<p ng-if="field.mode === 'select'">Select a folder</p>
 
 			<input ng-if="field.mode === 'multi-select'" style="display: none" type="text" ng-model="editing.config[field.id + '_val']" />
 
-			<!-- Display field choices -->
-			<div ng-repeat="(key, val) in getChoices(field)" class="form-group">
-				<div ng-if="field.mode === 'score'" class="score-input">
-					<label class="form-label">{{ val }}</label>
-
-					<div class="controls">
-						<input type="text" class="form-control" ng-required="field.required"
-							   ng-model="editing.config[field.id + '_opt_' + key]">
-					</div>
-				</div>
-
+			<!-- Display folder choices -->
+			<div ng-repeat="(key, val) in getFolders(field, specs)" class="form-group">
 				<div ng-if="field.mode === 'select'" class="radio">
 					<label>
-						<input type="radio" class="form-control" value="{{ key }}"
-							   ng-model="editing.config[field.id + '_val']" name="{{ field.id }}" ng-required="field.required">
-						{{ val }}
+						<input type="radio" class="form-control" value="{{ val.id }}"
+							ng-model="editing.config[field.id + '_val']" name="{{ field.id }}" ng-required="field.required">
+						{{ val.name }}
 					</label>
 				</div>
 
 				<div ng-if="field.mode === 'multi-select'" class="checkbox">
 					<label class="checkbox-label no-padding">
-						<input type="checkbox" check-list="editing.config[field.id + '_val']" check-value="key">
-						{{val}}
+
+						<!-- Uncategorized folder id is 0, check-value directive breaks when passing 0 value -->
+						<input type="checkbox" ng-if="val.id === 0" check-list="editing.config[field.id + '_val']" check-value="'0'">
+						<input type="checkbox" ng-if="val.id !== 0" check-list="editing.config[field.id + '_val']" check-value="val.id">
+						{{ val.name }}
 					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div ng-if="!field.restrict || field.restrict !== 'folder'">
+		<div ng-controller="wgnFieldInputCntrl">
+			<select class="form-control" name="input"
+					ng-model="editing.config[field.id + '_source']"
+					ng-options="f.id as f|formFieldTitle for f in fieldValues"
+					ng-disabled="isFieldLoading(field.belongsTo) || !editing.config[field.belongsTo]"
+					ng-change="resetChoiceValues(field.id)"
+					ng-required="field.required"
+					ng-focus="fieldValues = getFields(field, specs)">
+				<option value=""></option>
+			</select>
+
+			<span ng-show="isFieldLoading(field.belongsTo)" class="throbber inline throbber"></span>
+
+			<div ng-show="editing.config[field.id + '_source']">
+				<p ng-if="field.mode === 'select'">Select a choice</p>
+				<p ng-if="field.mode === 'score'">Score all choices</p>
+
+				<input ng-if="field.mode === 'multi-select'" style="display: none" type="text" ng-model="editing.config[field.id + '_val']" />
+
+				<!-- Display field choices -->
+				<div ng-repeat="(key, val) in getChoices(field)" class="form-group">
+					<div ng-if="field.mode === 'score'" class="score-input">
+						<label class="form-label">{{ val }}</label>
+
+						<div class="controls">
+							<input type="text" class="form-control" ng-required="field.required"
+								ng-model="editing.config[field.id + '_opt_' + key]">
+						</div>
+					</div>
+
+					<div ng-if="field.mode === 'select'" class="radio">
+						<label>
+							<input type="radio" class="form-control" value="{{ key }}"
+								ng-model="editing.config[field.id + '_val']" name="{{ field.id }}" ng-required="field.required">
+							{{ val }}
+						</label>
+					</div>
+
+					<div ng-if="field.mode === 'multi-select'" class="checkbox">
+						<label class="checkbox-label no-padding">
+							<input type="checkbox" check-list="editing.config[field.id + '_val']" check-value="key">
+							{{val}}
+						</label>
+					</div>
 				</div>
 			</div>
 		</div>
