@@ -96,6 +96,16 @@ plugin.service('wgnConfigInputs', [function () {
 		template: 'wgn-config-input-password'
 	};
 
+	var secureInput = {
+		type: 'secure',
+		options: {
+			placeholder: {
+				required: false
+			}
+		},
+		template: 'wgn-config-input-secure'
+	};
+
 	var numberInput = {
 		type: 'number',
 		options: {
@@ -247,7 +257,8 @@ plugin.service('wgnConfigInputs', [function () {
 			choiceInput,
 			checkboxInput,
 			radioInput,
-			dateInput
+			dateInput,
+			secureInput
 		];
 	};
 

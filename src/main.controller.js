@@ -156,6 +156,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			removeHiddenValues();
 
+			var secureValues;
+
+			if ($scope.settings.secure) {
+				secureValues = getSecureValues();
+			}
+
+			blankSecureValues();
+
 			return doRunHook('beforeSave', $scope.editing.config).finally(function () {
 				return doSaveConfig($scope.editing.config).then(function () {
 					if ($scope.settings.toggle && !$scope.editing.config.enabled && !('$id' in $scope.editing.config)) {
@@ -171,7 +179,15 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							}
 						});
 					}
+				})
+				.then(function() {
 
+					if (secureValues) {
+						return doSaveSecure(secureValues);
+					}
+
+				})
+				.then(function() {
 					return doRunHook('save', $scope.editing.config).finally(function () {
 
 						if ($scope.settings.multi) {
@@ -671,6 +687,63 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		}
 
 		/**
+		 * Processes fields and remove secure values from the config object.
+		 */
+		function blankSecureValues () {
+
+			var fieldDefs = $scope.options.getFields();
+
+			angular.forEach(fieldDefs, function (fieldDef) {
+
+				// Blank secure values from config
+				if (fieldDef.type === 'secure') {
+
+					angular.forEach($scope.editing.config, function (value, key) {
+						if (key === fieldDef.id) {
+
+							// Store non-empty values as true so we know it was saved
+							if (value !== '') {
+								$scope.editing.config[key] = true;
+							}
+							else {
+								delete $scope.editing.config[key];
+							}
+
+						}
+					});
+
+				}
+
+			});
+
+		}
+
+		function getSecureValues () {
+
+			var fieldDefs = $scope.options.getFields();
+
+			var secure = {};
+
+			angular.forEach(fieldDefs, function (fieldDef) {
+
+				// Get secure values from config
+				if (fieldDef.type === 'secure') {
+
+					angular.forEach($scope.editing.config, function (value, key) {
+						if (key === fieldDef.id && value !== true) {
+							secure[key] = $scope.editing.config[key];
+						}
+					});
+
+				}
+
+			});
+
+			return !angular.equals(secure, {}) ? secure : null;
+
+		}
+
+		/**
 		 * Processes highlighted fields and adds additional keys to the config object.
 		 */
 		function doProcessHighlighted () {
@@ -965,6 +1038,16 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					}
 				}
 			});
+		}
+
+		function doSaveSecure (secureConfig) {
+
+			var configId = $scope.settings.multi && $scope.editing.config.$id;
+
+			return configService.saveSecure($scope.settings.secureEndpoint, _workspaceId, configId, secureConfig).then(function () {
+				return secureConfig;
+			});
+
 		}
 
 		/**

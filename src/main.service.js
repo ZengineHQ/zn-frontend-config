@@ -1,4 +1,4 @@
-plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $firebase, znData) {
+plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', 'znPluginData', function ($q, $firebase, znData, znPluginData) {
 	var srv = this;
 
 	var authData = {};
@@ -158,6 +158,29 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', function ($q, $fire
 	 */
 	srv.save = function (workspaceId, multi, $ref, config) {
 		return multi ? saveMulti(workspaceId, $ref, config) : saveSingle(workspaceId, $ref);
+	};
+
+	/**
+	 * Saves a plugin's secure configuration settings for the given workspace.
+	 *
+	 * @param {string} endpoint
+	 * @param {number} workspaceId
+	 * @param {string} configId The config id for multi configurations
+	 * @param {Object} secureConfig The configuration object to save.
+	 *
+	 * @return {Promise<*>}
+	 */
+	srv.saveSecure = function (endpoint, workspaceId, configId, secureConfig) {
+
+		var params = {
+			workspaceId: workspaceId,
+			params: {
+				configId: configId
+			}
+		};
+
+		return znPluginData('wgn').post(endpoint, params, secureConfig);
+
 	};
 
 	/**
