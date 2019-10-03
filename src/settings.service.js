@@ -17,6 +17,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		var _formInputs = [];
 		var _workspaceInputs = [];
 		var _fieldTypes = {};
+		var _customTypes = [];
 		var _highlightedFields = [];
 		var _hooks = {};
 		var _webhook = false;
@@ -168,7 +169,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 
 			// Finally if the field has the special "belongsTo" option, validate its target exists.
 			if ('belongsTo' in def) {
-				if (def.type === 'field' || def.type === 'folder' || def.type === 'choice' || def.type === 'view') {
+				if (def.type === 'field' || def.type === 'folder' || def.type === 'choice' || def.type === 'view' || _customTypes.indexOf(def.type) !== -1) {
 					if (_formInputs.indexOf(def.belongsTo) === -1) {
 						throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
 					}
@@ -222,7 +223,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			});
 
 			// Ensure field type doesn't already exit.
-			if (data.type in _fieldTypes) {
+			if (data.type in _fieldTypes || _customTypes.indexOf(data.type) !== -1) {
 				throw new Error('Config: Field types must be unique, trying to define "' + data.type + '" but it already exists.');
 			}
 
@@ -236,6 +237,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 				options: data.options || {},
 				template: data.template
 			};
+
+			_customTypes.push(data.type);
 
 			return srv;
 		};
