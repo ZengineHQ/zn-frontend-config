@@ -1,0 +1,11 @@
+<!--Textfield input-->
+<script type="text/ng-template" id="wgn-config-input-email">
+	<div ng-controller="wgnEmailInputCntrl">
+		<input type="email" class="form-control" name="{{ field.id }}"
+			ng-model="editing.config[field.id]"
+			ng-required="field.required"
+			placeholder="{{ field.placeholder }}"
+			ng-pattern="validation"
+		>
+	</div>
+</script>

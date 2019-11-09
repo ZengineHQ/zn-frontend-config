@@ -80,6 +80,16 @@ plugin.service('wgnConfigInputs', [function () {
 		template: 'wgn-config-input-text'
 	};
 
+	var emailInput = {
+		type: 'email',
+		options: {
+			placeholder: {
+				required: false
+			}
+		},
+		template: 'wgn-config-input-email'
+	};
+
 	var passwordInput = {
 		type: 'password',
 		options: {
@@ -244,6 +254,7 @@ plugin.service('wgnConfigInputs', [function () {
 	srv.all = function () {
 		return [
 			workspaceInput,
+			emailInput,
 			formInput,
 			fieldInput,
 			folderInput,
