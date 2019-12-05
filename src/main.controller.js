@@ -899,9 +899,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				/**
 				 * Delete current webhook
 				 * rest of the flow will automatically create a new webhook with updated formId
+				 * keep status of the webhook if it is enable or not
 				 */
+				var webhookStatus = $scope.editing.config.enabled;
+				var hasWebhookStatus = false;
 				if ('webhookId' in config || 'webhook0Id' in config) {
-					_webhook.service.delete(config.webhookId)
+					hasWebhookStatus = true;
+					_webhook.service.delete(config.webhookId);
 				}
 
 				if (multiWebhooks) {
@@ -911,6 +915,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						}
 
 						opts['form.id'] = config[opts['form.id']];
+
+						// if there was already a webhook in the settings, keep the status
+						if (hasWebhookStatus) {
+							opts['isActive'] = webhookStatus;
+						}
 
 						if (opts.filter) {
 							opts.filter = reconstructFilter(opts.filter, config);
@@ -935,6 +944,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					}
 
 					options['form.id'] = config[options['form.id']];
+
+					// if there was already a webhook in the settings, keep the status
+					if (hasWebhookStatus) {
+						options['isActive'] = webhookStatus;
+					}
 
 					if (options.filter) {
 						options.filter = reconstructFilter(options.filter, config);
