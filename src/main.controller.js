@@ -884,12 +884,25 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			var promise = $q.when(config);
 			var multiWebhooks = _webhook && Array.isArray(_webhook.options);
 
-			if (_webhook && !('webhookId' in config || 'webhook0Id' in config)) {
+			/**
+			 * UPDATE:check if the webhook exists inside the condition
+			 * this will help delete the webhook and create new one
+			 * to make sure form id is updated in the webhoook
+			 */
+			if (_webhook) {
 				var options = multiWebhooks
 					? _webhook.options.map(function (opts) {
 						return Object.assign({}, opts);
 					})
 					: Object.assign({}, _webhook.options);
+
+				/**
+				 * Delete current webhook
+				 * rest of the flow will automatically create a new webhook with updated formId
+				 */
+				if ('webhookId' in config || 'webhook0Id' in config) {
+					_webhook.service.delete(config.webhookId)
+				}
 
 				if (multiWebhooks) {
 					promise = $q.all(options.map(function (opts) {
