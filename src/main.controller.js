@@ -497,9 +497,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {Object} config
 		 */
 		$scope.onConfigToggle = function (config) {
+			var stateChange = true;
+
 			if (config.enabled) {
 				doRunHook('enable', config).finally(function () {
-					return doSaveConfig(config).then(function () {
+					return doSaveConfig(config, stateChange).then(function () {
 						znMessage('Configuration ' + config.name + ' enabled!', 'saved');
 						return _webhook
 							? Array.isArray(_webhook.options)
@@ -512,7 +514,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				});
 			} else {
 				doRunHook('disable', config).finally(function () {
-					return doSaveConfig(config).then(function () {
+					return doSaveConfig(config, stateChange).then(function () {
 						znMessage('Configuration ' + config.name + ' disabled!', 'saved');
 						return _webhook
 							? Array.isArray(_webhook.options)
@@ -880,7 +882,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Promise}
 		 */
-		function doSaveConfig (config) {
+		function doSaveConfig (config, stateChange) {
 			var promise = $q.when(config);
 			var multiWebhooks = _webhook && Array.isArray(_webhook.options);
 
@@ -889,7 +891,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			 * this will help delete the webhook and create new one
 			 * to make sure form id is updated in the webhoook
 			 */
-			if (_webhook) {
+			if (_webhook && !stateChange) {
 				var options = multiWebhooks
 					? _webhook.options.map(function (opts) {
 						return Object.assign({}, opts);
@@ -903,6 +905,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				 */
 				var webhookStatus = $scope.editing.config.enabled;
 				var hasWebhookStatus = false;
+
 				if ('webhookId' in config || 'webhook0Id' in config) {
 					hasWebhookStatus = true;
 					_webhook.service.delete(config.webhookId);
@@ -966,7 +969,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						});
 				}
 			} else if (
-				_webhook && (
+				_webhook &&
+				!stateChange &&
+				(
 					_webhook.options.filter || Array.isArray(_webhook.options) && _webhook.options.some(function (opts) {
 						return opts.filter;
 					})
