@@ -210,9 +210,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.onDisableConfig = function () {
 			$scope.saving = true;
 			$scope.editing.config.enabled = false;
+			var stateChange = true;
 
 			return doRunHook('disable', $scope.editing.config).finally(function () {
-				return doSaveConfig($scope.editing.config).then(function () {
+				return doSaveConfig($scope.editing.config, stateChange).then(function () {
 					return _webhook
 						? Array.isArray(_webhook.options)
 							? $q.all(_webhook.options.map(function (opts, i) {
@@ -237,9 +238,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.onEnableConfig = function () {
 			$scope.saving = true;
 			$scope.editing.config.enabled = true;
+			var stateChange = true;
 
 			return doRunHook('enable', $scope.editing.config).finally(function () {
-				return doSaveConfig($scope.editing.config).then(function () {
+				return doSaveConfig($scope.editing.config, stateChange).then(function () {
 					return _webhook
 						? Array.isArray(_webhook.options)
 							? $q.all(_webhook.options.map(function (opts, i) {
@@ -497,9 +499,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {Object} config
 		 */
 		$scope.onConfigToggle = function (config) {
+			var stateChange = true;
+
 			if (config.enabled) {
 				doRunHook('enable', config).finally(function () {
-					return doSaveConfig(config).then(function () {
+					return doSaveConfig(config, stateChange).then(function () {
 						znMessage('Configuration ' + config.name + ' enabled!', 'saved');
 						return _webhook
 							? Array.isArray(_webhook.options)
@@ -512,7 +516,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				});
 			} else {
 				doRunHook('disable', config).finally(function () {
-					return doSaveConfig(config).then(function () {
+					return doSaveConfig(config, stateChange).then(function () {
 						znMessage('Configuration ' + config.name + ' disabled!', 'saved');
 						return _webhook
 							? Array.isArray(_webhook.options)
@@ -880,16 +884,24 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Promise}
 		 */
-		function doSaveConfig (config) {
+		function doSaveConfig (config, stateChange) {
 			var promise = $q.when(config);
 			var multiWebhooks = _webhook && Array.isArray(_webhook.options);
 
-			if (_webhook && !('webhookId' in config || 'webhook0Id' in config)) {
+			if (_webhook && !stateChange) {
 				var options = multiWebhooks
 					? _webhook.options.map(function (opts) {
 						return Object.assign({}, opts);
 					})
 					: Object.assign({}, _webhook.options);
+
+				var webhookStatus = $scope.editing.config.enabled;
+				var hasWebhookStatus = false;
+
+				if ('webhookId' in config || 'webhook0Id' in config) {
+					hasWebhookStatus = true;
+					_webhook.service.delete(config.webhookId);
+				}
 
 				if (multiWebhooks) {
 					promise = $q.all(options.map(function (opts) {
@@ -898,6 +910,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						}
 
 						opts['form.id'] = config[opts['form.id']];
+
+						// if there was already a webhook in the settings, keep the status
+						if (hasWebhookStatus) {
+							opts['isActive'] = webhookStatus;
+						}
 
 						if (opts.filter) {
 							opts.filter = reconstructFilter(opts.filter, config);
@@ -923,6 +940,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 					options['form.id'] = config[options['form.id']];
 
+					// if there was already a webhook in the settings, keep the status
+					if (hasWebhookStatus) {
+						options['isActive'] = webhookStatus;
+					}
+
 					if (options.filter) {
 						options.filter = reconstructFilter(options.filter, config);
 					}
@@ -939,7 +961,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						});
 				}
 			} else if (
-				_webhook && (
+				_webhook &&
+				!stateChange && (
 					_webhook.options.filter || Array.isArray(_webhook.options) && _webhook.options.some(function (opts) {
 						return opts.filter;
 					})
