@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.17.1"></a>
+## [3.17.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.17.0...3.17.1) (2019-12-16)
+
+
+### Bug Fixes
+
+* Changed Form association with Webhook ([c565126](https://github.com/ZengineHQ/zn-frontend-config/commit/c565126))
+
+
+
 <a name="3.17.0"></a>
 # [3.17.0](https://github.com/ZengineHQ/zn-frontend-config/compare/3.16.0...3.17.0) (2019-11-11)
 

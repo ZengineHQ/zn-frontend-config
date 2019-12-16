@@ -1,6 +1,6 @@
 {
   "name": "@zenginehq/frontend-config",
-  "version": "3.17.0",
+  "version": "3.17.1",
   "description": "Helper module for implementing Zengine plugin configuration forms.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -25,7 +25,7 @@
   "homepage": "https://github.com/ZengineHQ/zn-frontend-config#readme",
   "devDependencies": {
     "jshint": "^2.9.6",
-    "node-sass": "^4.9.3",
+    "node-sass": "^4.13.0",
     "standard-version": "^4.4.0"
   }
 }
