@@ -562,21 +562,20 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 * Based on https://gist.github.com/codeguy/6684588
 		 */
 		function slugify(text) {
-			text = text.replace(/^\s+|\s+$/g, ''); // trim
-			text = text.toLowerCase();
+			var slug = text.toString().trim()
+				.replace(/(\-|\_)/g, '')        // remove hipens and underscores
+				.replace(/^\s+|\s+$/g, '')		// remove spaces
+				.replace(/&/g, '-and-')         // replace & with 'and'
+				.replace(/[^\w\-]+/g, '');       // remove all non-word chars
 
 			// remove accents, swap ñ for n, etc
 			var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
 			var to   = "aaaaeeeeiiiioooouuuunc------";
 			for (var i=0, l=from.length ; i<l ; i++) {
-				text = text.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+				slug = slug.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
 			}
 
-			text = text.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-				.replace(/\s+/g, '-') // collapse whitespace and replace by -
-				.replace(/-+/g, '-'); // collapse dashes
-
-			return text;
+			return slug.charAt(0).toLowerCase() + slug.substr(1);
 		}
 
 		/**
