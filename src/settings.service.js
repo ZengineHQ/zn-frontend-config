@@ -4,7 +4,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		var _defaults = {
 			title: title || 'My Plugin',
 			icon: 'icon-puzzle',
-			help: 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.',
+			help: 'This is some instructional text describing what this plugin is and how to use it. Please customize it.',
 			multi: false,
 			secure: false,
 			secureEndpoint: '/settings',
