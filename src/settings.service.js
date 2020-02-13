@@ -4,7 +4,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		var _defaults = {
 			title: title || 'My Plugin',
 			icon: 'icon-puzzle',
-			help: 'This is some instructional text decribing what this plugin is and how to use it. Please customize it.',
+			help: 'This is some instructional text describing what this plugin is and how to use it. Please customize it.',
 			multi: false,
 			secure: false,
 			secureEndpoint: '/settings',
@@ -554,21 +554,26 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		};
 
 		/**
-		 * Transforms a string into a camelized slug.
+		 * Transforms a string into a slug.
 		 *
 		 * @param {string} text
 		 * @return {string}
 		 *
-		 * Based on https://gist.github.com/eek/9c4887e80b3ede05c0e39fee4dce3747
+		 * Based on https://gist.github.com/codeguy/6684588
 		 */
 		function slugify(text) {
 			var slug = text.toString().trim()
-				.normalize('NFD') 				 // separate accent from letter
-				.replace(/[\u0300-\u036f]/g, '') // remove all separated accents
 				.replace(/(\-|\_)/g, '')        // remove hipens and underscores
-				.replace(/\s+/g, '')            // remove spaces
-				.replace(/&/g, '-and-')          // replace & with 'and'
-				.replace(/[^\w\-]+/g, '');        // remove all non-word chars
+				.replace(/^\s+|\s+$/g, '')		// remove spaces
+				.replace(/&/g, '-and-')         // replace & with 'and'
+				.replace(/[^\w\-]+/g, '');       // remove all non-word chars
+
+			// remove accents, swap ñ for n, etc
+			var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
+			var to   = "aaaaeeeeiiiioooouuuunc------";
+			for (var i=0, l=from.length ; i<l ; i++) {
+				slug = slug.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+			}
 
 			return slug.charAt(0).toLowerCase() + slug.substr(1);
 		}
