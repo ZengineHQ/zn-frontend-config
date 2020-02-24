@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.17.2"></a>
+## [3.17.2](https://github.com/ZengineHQ/zn-frontend-config/compare/3.17.0...3.17.2) (2020-02-24)
+
+
+### Bug Fixes
+
+* Changed Form association with Webhook ([c565126](https://github.com/ZengineHQ/zn-frontend-config/commit/c565126))
+* more backwards compatible ie fix :) ([7ede921](https://github.com/ZengineHQ/zn-frontend-config/commit/7ede921))
+* refactor slugify() to remove IE incompatibility with use of String.prototype.normalize('NFD') ([0cf018a](https://github.com/ZengineHQ/zn-frontend-config/commit/0cf018a))
+
+
+
 <a name="3.17.1"></a>
 ## [3.17.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.17.0...3.17.1) (2019-12-16)
 
