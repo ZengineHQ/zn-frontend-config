@@ -913,7 +913,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 						// if there was already a webhook in the settings, keep the status
 						if (hasWebhookStatus) {
-							opts['isActive'] = webhookStatus;
+							opts.isActive = webhookStatus;
 						}
 
 						if (opts.filter) {
@@ -942,7 +942,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 					// if there was already a webhook in the settings, keep the status
 					if (hasWebhookStatus) {
-						options['isActive'] = webhookStatus;
+						options.isActive = webhookStatus;
 					}
 
 					if (options.filter) {
