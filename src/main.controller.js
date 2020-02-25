@@ -630,7 +630,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						};
 
 						if ('settings' in field && 'properties' in field.settings && 'choices' in field.settings.properties) {
-							f.choices = field.settings.properties.choices;
+							var choices = [];
+							angular.forEach(field.settings.properties.choices, function (label, value) {
+								choices.push({
+									label: label,
+									value: value
+								})
+							});
+							f.choices = choices;
 						}
 
 						_fields[form.id].push(f);

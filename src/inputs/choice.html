@@ -51,28 +51,28 @@
 				<input ng-if="field.mode === 'multi-select'" style="display: none" type="text" ng-model="editing.config[field.id + '_val']" />
 
 				<!-- Display field choices -->
-				<div ng-repeat="(key, val) in getChoices(field)" class="form-group">
+				<div ng-repeat="choice in getChoices(field)" class="form-group">
 					<div ng-if="field.mode === 'score'" class="score-input">
-						<label class="form-label">{{ val }}</label>
+						<label class="form-label">{{ choice.label }}</label>
 
 						<div class="controls">
 							<input type="text" class="form-control" ng-required="field.required"
-								ng-model="editing.config[field.id + '_opt_' + key]">
+								ng-model="editing.config[field.id + '_opt_' + choice.value]">
 						</div>
 					</div>
 
 					<div ng-if="field.mode === 'select'" class="radio">
 						<label>
-							<input type="radio" class="form-control" value="{{ key }}"
+							<input type="radio" class="form-control" value="{{ choice.value }}"
 								ng-model="editing.config[field.id + '_val']" name="{{ field.id }}" ng-required="field.required">
-							{{ val }}
+							{{ choice.label }}
 						</label>
 					</div>
 
 					<div ng-if="field.mode === 'multi-select'" class="checkbox">
 						<label class="checkbox-label no-padding">
-							<input type="checkbox" check-list="editing.config[field.id + '_val']" check-value="key">
-							{{val}}
+							<input type="checkbox" check-list="editing.config[field.id + '_val']" check-value="choice.value">
+							{{ choice.label}}
 						</label>
 					</div>
 				</div>
