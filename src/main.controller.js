@@ -635,7 +635,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 								choices.push({
 									label: label,
 									value: value
-								})
+								});
 							});
 							f.choices = choices;
 						}
