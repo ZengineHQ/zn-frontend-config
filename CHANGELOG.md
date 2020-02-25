@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.17.3"></a>
+## [3.17.3](https://github.com/ZengineHQ/zn-frontend-config/compare/3.17.2...3.17.3) (2020-02-25)
+
+
+### Bug Fixes
+
+* choice field values containing "$" ([b1e135d](https://github.com/ZengineHQ/zn-frontend-config/commit/b1e135d))
+
+
+
 <a name="3.17.2"></a>
 ## [3.17.2](https://github.com/ZengineHQ/zn-frontend-config/compare/3.17.0...3.17.2) (2020-02-24)
 
