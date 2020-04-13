@@ -1163,7 +1163,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			if (angular.isObject(obj)) {
 				angular.forEach(Object.keys(obj), function (key) {
-					if (key.indexOf('$') === -1) {
+					if (key.indexOf('$') === -1 || key === '$id') {
 						newObj[key] = obj[key];
 					}
 				});
