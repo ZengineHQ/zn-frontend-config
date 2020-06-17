@@ -905,9 +905,16 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				var webhookStatus = $scope.editing.config.enabled;
 				var hasWebhookStatus = false;
 
-				if ('webhookId' in config || 'webhook0Id' in config) {
+				if ('webhookId' in config) {
 					hasWebhookStatus = true;
 					_webhook.service.delete(config.webhookId);
+				}
+
+				if ('webhook0Id' in config) {
+					hasWebhookStatus = true;
+					for (var i = 0; config['webhook' + i + 'Id']; i++) {
+						_webhook.service.delete(config['webhook' + i + 'Id']);
+					}
 				}
 
 				if (multiWebhooks) {
