@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.17.5"></a>
+## [3.17.5](https://github.com/ZengineHQ/zn-frontend-config/compare/3.17.4...3.17.5) (2020-06-22)
+
+
+### Bug Fixes
+
+* proper deletion and recreation of multiple webhooks ([d9dabf1](https://github.com/ZengineHQ/zn-frontend-config/commit/d9dabf1))
+
+
+
 <a name="3.17.4"></a>
 ## [3.17.4](https://github.com/ZengineHQ/zn-frontend-config/compare/3.17.3...3.17.4) (2020-04-13)
 
