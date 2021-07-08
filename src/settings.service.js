@@ -175,13 +175,13 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 
 			// Finally if the field has the special "belongsTo" option, validate its target exists.
 			if ('belongsTo' in def) {
-				if (def.type === 'field' || def.type === 'folder' || def.type === 'choice' || def.type === 'view' || _customTypes.indexOf(def.type) !== -1) {
-					if (_formInputs.indexOf(def.belongsTo) === -1) {
-						throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
-					}
-				} else if (def.type === 'form') {
+				if (def.type === 'form') {
 					if (_workspaceInputs.indexOf(def.belongsTo) === -1) {
 						throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no workspace field exists with id "' + def.belongsTo + '"');
+					}
+				} else if (def.type === 'field' || def.type === 'folder' || def.type === 'choice' || def.type === 'view' || _customTypes.indexOf(def.type) !== -1) {
+					if (_formInputs.indexOf(def.belongsTo) === -1) {
+						throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", no form field exists with id "' + def.belongsTo + '"');
 					}
 				} else {
 					throw new Error('Config: Invalid "belongsTo" for field "' + def.id + '", the "' + def.type + '" field type doesn\'t support it.');
