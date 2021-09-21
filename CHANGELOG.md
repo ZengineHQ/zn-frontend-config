@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="3.17.7"></a>
+## [3.17.7](https://github.com/ZengineHQ/zn-frontend-config/compare/3.17.6...3.17.7) (2021-09-21)
+
+
+
 <a name="3.17.6"></a>
 ## [3.17.6](https://github.com/ZengineHQ/zn-frontend-config/compare/3.17.4...3.17.6) (2021-07-08)
 
