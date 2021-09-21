@@ -26,6 +26,6 @@
   "devDependencies": {
     "jshint": "^2.9.6",
     "node-sass": "^4.13.0",
-    "standard-version": "^4.4.0"
+    "standard-version": "^8.0.1"
   }
 }
