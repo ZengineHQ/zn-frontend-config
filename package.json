@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "jshint --config .jshintrc ./src || true",
     "build": "node-sass src --output src --output-style compressed",
-    "release": "jshint --config .jshintrc ./src && npm run build && standard-version -t ''"
+    "release": "jshint --config .jshintrc ./src && npm run build && release-it"
   },
   "repository": {
     "type": "git",
@@ -24,8 +24,19 @@
   },
   "homepage": "https://github.com/ZengineHQ/zn-frontend-config#readme",
   "devDependencies": {
+    "@release-it/keep-a-changelog": "^2.3.0",
     "jshint": "^2.9.6",
     "node-sass": "^4.13.0",
-    "standard-version": "^4.4.0"
+    "release-it": "^14.11.6"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/keep-a-changelog": {
+        "filename": "CHANGELOG.md"
+      }
+    }
   }
 }
