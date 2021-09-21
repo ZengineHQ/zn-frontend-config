@@ -3,7 +3,7 @@ plugin.directive('wgnSecureInput', [function () {
 		scope: true,
 		restrict: 'E',
 		require: 'ngModel',
-		template: '<input type="text" class="form-control" name="{{ field.id }}" ng-model="value" ng-required="field.required" placeholder="{{placeholder}}">',
+		template: '<input type="text" class="form-control" name="{{ field.id }}" ng-model="value" ng-required="field.required" placeholder="{{placeholder}} autocomplete="off">',
 		link: function (scope, element, attrs, ngModelCtrl) {
 
 			var saved = false;
