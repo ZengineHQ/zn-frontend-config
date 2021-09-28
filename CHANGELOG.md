@@ -1,3 +1,5 @@
+### [3.18.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.18.0...3.18.1) (2021-09-28)
+
 # Change Log
 
 ## [Unreleased]
