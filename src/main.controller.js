@@ -934,6 +934,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							opts.filter = reconstructFilter(opts.filter, config);
 						}
 
+						if (opts.activityFilter) {
+							opts.activityFilter = reconstructActivityFilter(opts.activityFilter, config);
+						}
+
 						return _webhook.service.create(opts);
 					}))
 						.then(function (webhooks) {
@@ -961,6 +965,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 					if (options.filter) {
 						options.filter = reconstructFilter(options.filter, config);
+					}
+
+					if (options.activityFilter) {
+						options.activityFilter = reconstructActivityFilter(options.activityFilter, config);
 					}
 
 					promise = _webhook.service.create(options)
@@ -1155,6 +1163,48 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				return { or: newOr };
 			}
+		}
+
+		/**
+		 * This function will take an activity filter object and update the folder id property
+		 * with the data from the config object.
+		 *
+		 * @param {Object} filter The filter to update
+		 * @param {Object} config The config to reference while updating
+		 *
+		 * @returns {Object} the updated filter
+		 */
+		function reconstructActivityFilter(filter, config) {
+			if (typeof filter === 'string') {
+				return config[filter];
+			}
+
+			var newFilter = {};
+
+			if (filter.actions) {
+				newFilter.actions = filter.actions;
+			}
+
+			if (filter.folder && 'id' in filter.folder) {
+
+				if (filter.folder.id.replaceFolder) {
+					newFilter.folder = {
+						id: config[filter.folder.id.replaceFolder]
+					};
+				}
+				else {
+					newFilter.folder = {
+						id: filter.folder.id
+					};
+				}
+
+			}
+
+			if (!newFilter.actions && !newFilter.folder) {
+				return null;
+			}
+
+			return newFilter;
 		}
 
 		/**
