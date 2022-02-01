@@ -616,27 +616,33 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Fetch all results
 		 */
 		function fetchAll (znResource, params) {
-			// fetchAll may not be available in older versions of v1 plugin wrapper
 			if ('fetchAll' in znResource) {
 				return znResource.fetchAll(params);
 			}
+
+			// fetchAll may not be available in older versions of v1 plugin wrapper
 			var batchParams = angular.copy(params);
+			batchParams.page = 1;
 			if (!batchParams.limit) {
 				batchParams.limit = 100;
 			}
-			function getBatch (data, page) {
-				batchParams.page = page;
-				return znResource.query(batchParams, function(batch, meta) {
-					var results = data.concat(batch || []);
-					if (meta.totalCount > results.length) {
-						return getBatch(results, page + 1);
+
+			var data = [];
+			var done = false;
+			function getBatch() {
+				return znResource.query(batchParams, function(results, meta) {
+					data = results ? data.concat(results) : data;
+					if (meta.totalCount > data.length) {
+						batchParams.page++;
+					} else {
+						done = true;
 					}
-					else {
-						return results;
-					}
+				}).then(function() {
+					return done ? data : getBatch();
 				});
 			}
-			return getBatch([], 1);
+
+			return getBatch();
 		}
 
 		/**
