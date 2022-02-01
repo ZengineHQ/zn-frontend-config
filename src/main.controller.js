@@ -341,7 +341,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Return filter function from fieldDef
 		 *
-		  * @param {Object} fieldDef The workspace input definition.
+		  * @param {Object} fieldDef The field input definition.
 		  *
 		  * @return {function|true}
 		 */
@@ -662,7 +662,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}
 
 			function fetchFormLinks () {
-				// WorkspaceFormLinks may not be present in older versions of v1 plugin wrapper
+				// WorkspaceFormLinks may not be available in older versions of v1 plugin wrapper
 				try {
 					var res = znData('WorkspaceFormLinks');
 					return fetchAll(res, { 'workspace.id': workspaceId, 'limit': 200, 'related': 'null' });
