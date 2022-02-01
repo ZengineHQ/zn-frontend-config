@@ -1,7 +1,7 @@
 <!--Workspace picker input-->
 <script type="text/ng-template" id="wgn-config-input-workspace">
 	<select class="form-control" name="input"
-			ng-options="ws.id as ws.name for ws in wsValues"
+			ng-options="ws.id as ws.name for ws in wsValues | filter: filterOptions(field) | orderBy: field.orderBy"
 			ng-model="editing.config[field.id]"
 			ng-change="onSelectWorkspace(field.id)"
 			ng-init="initWorkspaceInput(field.id); wsValues = getWorkspaces(field)"

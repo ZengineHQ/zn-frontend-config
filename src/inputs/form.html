@@ -2,7 +2,7 @@
 <script type="text/ng-template" id="wgn-config-input-form">
 	<div ng-controller="wgnFormInputCntrl">
 		<select class="form-control" name="input"
-				ng-options="form.id as form.name for form in formValues"
+				ng-options="form.id as form.name for form in formValues | filter: filterOptions(field) | orderBy: field.orderBy"
 				ng-model="editing.config[field.id]"
 				ng-disabled="field.belongsTo && (!loaded || !editing.config[field.belongsTo])"
 				ng-required="field.required"

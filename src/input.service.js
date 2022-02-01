@@ -8,6 +8,13 @@ plugin.service('wgnConfigInputs', [function () {
 		options: {
 			exclusive: {
 				required: false
+			},
+			filter: {
+				required: false
+			},
+			orderBy: {
+				required: false,
+				default: 'id'
 			}
 		}
 	};
@@ -18,6 +25,13 @@ plugin.service('wgnConfigInputs', [function () {
 		options: {
 			exclusive: {
 				required: false
+			},
+			filter: {
+				required: false
+			},
+			orderBy: {
+				required: false,
+				default: 'order'
 			}
 		}
 	};
