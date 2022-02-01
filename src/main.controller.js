@@ -599,6 +599,33 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		}
 
 		/**
+		 * Fetch all results
+		 */
+		function fetchAll (znResource, params) {
+			// fetchAll may not be available in older versions of v1 plugin wrapper
+			if ('fetchAll' in znResource) {
+				return znResource.fetchAll(params);
+			}
+			var batchParams = angular.copy(params);
+			if (!batchParams.limit) {
+				batchParams.limit = 100;
+			}
+			function getBatch (data, page) {
+				batchParams.page = page;
+				return znResource.query(batchParams, function(batch, meta) {
+					var results = data.concat(batch || []);
+					if (meta.totalCount > results.length) {
+						return getBatch(results, page + 1);
+					}
+					else {
+						return results;
+					}
+				});
+			}
+			return getBatch([], 1);
+		}
+
+		/**
 		 * Loads data on all available workspaces.
 		 */
 		function loadWorkspaces () {
@@ -616,7 +643,36 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		function loadForms (workspaceId) {
 
-			return znData('Forms').get({ 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders,dataViews' }).then(function (forms) {
+			function fetchForms () {
+				return fetchAll(znData('Forms'), { 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders,dataViews' });
+			}
+
+			function fetchFormLinks () {
+				// WorkspaceFormLinks may not be present in older versions of v1 plugin wrapper
+				try {
+					var res = znData('WorkspaceFormLinks');
+					return fetchAll(res, { 'workspace.id': workspaceId, 'limit': 200, 'related': 'null' });
+				} catch (err) {
+					return [];
+				}
+			}
+
+			return $q.all([
+				fetchFormLinks(),
+				fetchForms()
+			]).then(function (results) {
+				var links = results[0];
+
+				var forms = results[1].map(function (form) {
+					var link = links.find(function (link) {
+						return link.form.id === form.id;
+					});
+					if (link) {
+						form.order = link.order;
+					}
+					return form;
+				});
+
 				_forms[workspaceId] = forms;
 				forms.forEach(function (form) {
 					_fields[form.id] = [];
