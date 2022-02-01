@@ -339,6 +339,20 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		};
 
 		/**
+		 * Return filter function from fieldDef
+		 *
+		  * @param {Object} fieldDef The workspace input definition.
+		  *
+		  * @return {function|true}
+		 */
+		$scope.filterOptions = function (fieldDef) {
+			if (fieldDef.filter) {
+				return fieldDef.filter;
+			}
+			return true;
+		};
+
+		/**
 		 * Loads all workspaces for a given input.
 		 *
 		 * @param {Object} fieldDef The workspace input definition.
