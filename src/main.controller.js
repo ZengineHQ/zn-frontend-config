@@ -341,9 +341,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Return filter function from fieldDef
 		 *
-		  * @param {Object} fieldDef The field input definition.
-		  *
-		  * @return {function|true}
+		 * @param {Object} fieldDef The field input definition.
+		 *
+		 * @return {function|true}
 		 */
 		$scope.filterOptions = function (fieldDef) {
 			if (fieldDef.filter) {
