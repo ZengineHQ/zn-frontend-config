@@ -1,3 +1,5 @@
+### [3.18.3](https://github.com/ZengineHQ/zn-frontend-config/compare/3.18.2...3.18.3) (2022-02-04)
+
 ### [3.18.2](https://github.com/ZengineHQ/zn-frontend-config/compare/3.18.1...3.18.2) (2021-12-01)
 
 ### [3.18.1](https://github.com/ZengineHQ/zn-frontend-config/compare/3.18.0...3.18.1) (2021-09-28)
