@@ -1,44 +1,43 @@
 {
-  "name": "@zenginehq/frontend-config",
-  "version": "3.18.3",
-  "description": "Helper module for implementing Zengine plugin configuration forms.",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "jshint --config .jshintrc ./src || true",
-    "build": "node-sass src --output src --output-style compressed",
-    "release": "jshint --config .jshintrc ./src && npm run build && release-it"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ZengineHQ/zn-frontend-config.git"
-  },
-  "keywords": [
-    "zn-plugin",
-    "zn-frontend",
-    "zn-module"
-  ],
-  "author": "Alex Weber <alex.weber@wizehive.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ZengineHQ/zn-frontend-config/issues"
-  },
-  "homepage": "https://github.com/ZengineHQ/zn-frontend-config#readme",
-  "devDependencies": {
-    "@release-it/conventional-changelog": "^3.3.0",
-    "@release-it/keep-a-changelog": "^2.3.0",
-    "jshint": "^2.9.6",
-    "node-sass": "^4.13.0",
-    "release-it": "^14.11.6"
-  },
-  "release-it": {
-    "github": {
-      "release": true
-    },
-    "plugins": {
-      "@release-it/conventional-changelog": {
-        "preset": "conventionalcommits",
-        "infile": "CHANGELOG.md"
-      }
-    }
-  }
+	"name": "@zenginehq/frontend-config",
+	"version": "3.18.3",
+	"description": "Helper module for implementing Zengine plugin configuration forms.",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"lint": "jshint --config .jshintrc ./src || true",
+		"build": "node-sass src --output src --output-style compressed",
+		"release": "jshint --config .jshintrc ./src && npm run build && release-it"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/ZengineHQ/zn-frontend-config.git"
+	},
+	"keywords": [
+		"zn-plugin",
+		"zn-frontend",
+		"zn-module"
+	],
+	"author": "Alex Weber <alex.weber@wizehive.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/ZengineHQ/zn-frontend-config/issues"
+	},
+	"homepage": "https://github.com/ZengineHQ/zn-frontend-config#readme",
+	"devDependencies": {
+		"auto-changelog": "^2.4.0",
+		"jshint": "^2.9.6",
+		"node-sass": "^4.13.0",
+		"release-it": "^14.11.6"
+	},
+	"release-it": {
+		"github": {
+			"release": true
+		}
+	},
+	"git": {
+		"changelog": "npx auto-changelog --stdout --commit-limit false --unreleased --template https://raw.githubusercontent.com/release-it/release-it/master/templates/changelog-compact.hbs"
+	},
+	"hooks": {
+		"after:bump": "npx auto-changelog -p"
+	}
 }
