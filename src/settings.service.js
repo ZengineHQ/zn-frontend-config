@@ -145,6 +145,10 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 
 			// Iterate over field type option definitions and validate the given field definition.
 			angular.forEach(Object.keys(opts), function (k) {
+				if (!(k in def) && 'default' in opts[k]) {
+					def[k] = opts[k].default;
+				}
+
 				if ('required' in opts[k] && opts[k].required && !(k in def)) {
 					throw new Error('Config: Required property "' + k + '" missing for "' + def.type + '" input with id "' + def.id + '"');
 				}
