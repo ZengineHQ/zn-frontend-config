@@ -10,6 +10,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		var _views = {};
 		var _originalConfig;
 		var _webhook = false;
+		var previousSelectedConfig = {};
+		var selectedConfig = false;
 
 		/**
 		 * Whether the plugin is loading or not, displays a throbber.
@@ -57,6 +59,21 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 */
 		$scope.display = 'grid';
 
+		/**
+		 * Whether the copy configuration button is clicked or not
+		 *
+		 * @type {boolean}
+		 */
+		$scope.copyConfigButtonSelected = false;
+
+		/**
+		 * The current text of the copy configuration button, one of 'Copy Configuration' or 'Save Configuration'.
+		 *
+		 * @type {string}
+		 */
+		$scope.copyButtonText = 'Copy Configuration';
+
+
 		// Init plugin.
 		init().then(function () {
 			$scope.loading = false;
@@ -79,6 +96,63 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				});
 			});
 		};
+
+
+		/**
+		 * Selects the configuration to copy.
+		 */
+		$scope.onSelectedConfig = function (config) {
+			if(previousSelectedConfig && Object.keys(previousSelectedConfig).length === 0){
+				config.selected = true;
+				selectedConfig = config;
+			} else {
+				if(previousSelectedConfig.name === config.name){
+					if(previousSelectedConfig.selected === true) {
+						config.selected = false;
+						selectedConfig = false;
+					} else {
+						config.selected = true;
+						selectedConfig = config;
+					}
+				} else {
+					config.selected = true;
+					selectedConfig = config;
+					if(previousSelectedConfig.selected === true) {
+						previousSelectedConfig.selected = false;
+					} 
+				}
+			}
+			previousSelectedConfig = config;
+		}
+
+		/**
+		 * Copy the current selected configuration.
+		 */
+		$scope.onCopyConfig = function () {
+			if (!selectedConfig && $scope.copyButtonText === 'Save Configuration') {
+				znMessage("Please select a configuration before saving!", "error");
+				$scope.copyButtonText = 'Copy Configuration';
+				$scope.copyConfigButtonSelected = false;
+				previousSelectedConfig.selected = false;
+			} else if (selectedConfig && $scope.copyButtonText === 'Save Configuration') {
+				$scope.copyButtonText = 'Copy Configuration';
+				$scope.copyConfigButtonSelected = false;
+				previousSelectedConfig.selected = false;
+
+				const copyConfiguration = Object.keys(selectedConfig).reduce(function (obj, key) {
+					if (key !== '$$hashKey' && key !== '$priority' && key !== '$id' && key !== 'selected' && !key.includes('webhookId') && !key.includes('webhookid') && !key.includes('WebhookId') && !key.includes('webhookKey') && !key.includes('webhookkey') && !key.includes('WebhookKey')) obj[key] = selectedConfig[key];
+					if(key === 'name') obj[key] = null;
+					if(key === 'enabled') obj[key] = false;
+					return obj;
+				}, {});
+				
+				selectedConfig = false;
+				$scope.editing.config = copyConfiguration;
+			} else {
+				$scope.copyButtonText = 'Save Configuration';
+				$scope.copyConfigButtonSelected = true;
+			}
+		}
 
 		/**
 		 * Edits an existing configuration.
