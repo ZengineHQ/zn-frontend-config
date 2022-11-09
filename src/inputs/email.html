@@ -7,5 +7,10 @@
 			placeholder="{{ field.placeholder }}"
 			ng-pattern="validation"
 		>
+		<span class="help-block danger"
+			  ng-hide="field.patternInvalidText && validation.test(editing.config[field.id])">
+			{{field.patternInvalidText}}
+		</span>
+
 	</div>
 </script>
