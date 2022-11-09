@@ -89,6 +89,12 @@ plugin.service('wgnConfigInputs', [function () {
 			},
 			maxlength: {
 				required: false
+			},
+			pattern: {
+				required:false
+			},
+			patternInvalidText: {
+				required:false
 			}
 		},
 		template: 'wgn-config-input-text'
