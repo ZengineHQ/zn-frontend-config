@@ -27,7 +27,7 @@
 		"auto-changelog": "^2.4.0",
 		"jshint": "^2.9.6",
 		"node-sass": "^4.13.0",
-		"release-it": "^14.11.6"
+		"release-it": "^15.6.0"
 	},
 	"release-it": {
 		"github": {
