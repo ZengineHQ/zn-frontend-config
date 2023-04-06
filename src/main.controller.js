@@ -119,11 +119,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					selectedConfig = config;
 					if(previousSelectedConfig.selected === true) {
 						previousSelectedConfig.selected = false;
-					} 
+					}
 				}
 			}
 			previousSelectedConfig = config;
-		}
+		};
 
 		/**
 		 * Copy the current selected configuration.
@@ -139,20 +139,32 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				$scope.copyConfigButtonSelected = false;
 				previousSelectedConfig.selected = false;
 
-				const copyConfiguration = Object.keys(selectedConfig).reduce(function (obj, key) {
-					if (key !== '$$hashKey' && key !== '$priority' && key !== '$id' && key !== 'selected' && !key.includes('webhookId') && !key.includes('webhookid') && !key.includes('WebhookId') && !key.includes('webhookKey') && !key.includes('webhookkey') && !key.includes('WebhookKey')) obj[key] = selectedConfig[key];
-					if(key === 'name') obj[key] = null;
-					if(key === 'enabled') obj[key] = false;
+				const copyConfiguration = Object.keys(selectedConfig).reduce(function(obj, key) {
+					if (key !== '$$hashKey' &&
+						key !== '$priority' &&
+						key !== '$id' &&
+						key !== 'selected' &&
+						!key.toLowerCase().includes('webhookid') &&
+						!key.toLowerCase().includes('webhookkey')
+					) {
+						obj[key] = selectedConfig[key];
+					}
+					if (key === 'name') {
+						obj[key] = null;
+					}
+					if (key === 'enabled') {
+						obj[key] = false;
+					}
 					return obj;
 				}, {});
-				
+
 				selectedConfig = false;
 				$scope.editing.config = copyConfiguration;
 			} else {
 				$scope.copyButtonText = 'Save Configuration';
 				$scope.copyConfigButtonSelected = true;
 			}
-		}
+		};
 
 		/**
 		 * Edits an existing configuration.
@@ -264,44 +276,44 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				.then(function() {
 					return doRunHook('save', $scope.editing.config).finally(function () {
 
-						if ($scope.settings.multi) {
-							doDiscardChanges();
-						} else {
-							doResetTab();
-							$scope.editing.form.$setPristine();
-						}
+							if ($scope.settings.multi) {
+								doDiscardChanges();
+							} else {
+								doResetTab();
+								$scope.editing.form.$setPristine();
+							}
 
-						znMessage('Configuration saved!', 'saved');
-						$scope.saving = false;
+							znMessage('Configuration saved!', 'saved');
+							$scope.saving = false;
+						});
 					});
-				});
 			});
 		};
 
 		/**
 		 * Disables the current configuration.
 		 */
-		$scope.onDisableConfig = function () {
+		$scope.onDisableConfig = function() {
 			$scope.saving = true;
 			$scope.editing.config.enabled = false;
 			var stateChange = true;
 
-			return doRunHook('disable', $scope.editing.config).finally(function () {
-				return doSaveConfig($scope.editing.config, stateChange).then(function () {
+			return doRunHook('disable', $scope.editing.config).finally(function() {
+				return doSaveConfig($scope.editing.config, stateChange).then(function() {
 					return _webhook
 						? Array.isArray(_webhook.options)
-							? $q.all(_webhook.options.map(function (opts, i) {
+							? $q.all(_webhook.options.map(function(opts, i) {
 								return _webhook.service.disable($scope.editing.config['webhook' + i + 'Id']);
 							}))
 							: _webhook.service.disable($scope.editing.config.webhookId)
 						: $q.when();
 				});
-			}).catch(function () {
+			}).catch(function() {
 				$scope.editing.config.enabled = true;
 				znMessage('There was an error disabling the configuration!', 'error');
-			}).then(function () {
+			}).then(function() {
 				znMessage('Configuration disabled!', 'saved');
-			}).finally(function () {
+			}).finally(function() {
 				$scope.saving = false;
 			});
 		};
@@ -309,27 +321,27 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Enables the current configuration.
 		 */
-		$scope.onEnableConfig = function () {
+		$scope.onEnableConfig = function() {
 			$scope.saving = true;
 			$scope.editing.config.enabled = true;
 			var stateChange = true;
 
-			return doRunHook('enable', $scope.editing.config).finally(function () {
-				return doSaveConfig($scope.editing.config, stateChange).then(function () {
+			return doRunHook('enable', $scope.editing.config).finally(function() {
+				return doSaveConfig($scope.editing.config, stateChange).then(function() {
 					return _webhook
 						? Array.isArray(_webhook.options)
-							? $q.all(_webhook.options.map(function (opts, i) {
+							? $q.all(_webhook.options.map(function(opts, i) {
 								return _webhook.service.enable($scope.editing.config['webhook' + i + 'Id']);
 							}))
 							: _webhook.service.enable($scope.editing.config.webhookId)
 						: $q.when();
 				});
-			}).catch(function () {
+			}).catch(function() {
 				$scope.editing.config.enabled = false;
 				znMessage('There was an error enabling the configuration!', 'error');
-			}).then(function () {
+			}).then(function() {
 				znMessage('Configuration enabled!', 'saved');
-			}).finally(function () {
+			}).finally(function() {
 				$scope.saving = false;
 			});
 		};
@@ -339,7 +351,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Promise}
 		 */
-		$scope.onDiscardChanges = function () {
+		$scope.onDiscardChanges = function() {
 			var def = $q.defer();
 
 			// Only prompt if form has been changed.
@@ -356,14 +368,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				btns: {
 					'No': {
 						primary: true,
-						action: function () {
+						action: function() {
 							def.reject();
 						}
 					},
 					'Yes': {
 						danger: true,
-						action: function () {
-							doRunHook('discard', $scope.editing.config).finally(function () {
+						action: function() {
+							doRunHook('discard', $scope.editing.config).finally(function() {
 								doDiscardChanges();
 								def.resolve();
 							});
@@ -380,7 +392,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @param {string} id
 		 */
-		$scope.onSelectPage = function (id) {
+		$scope.onSelectPage = function(id) {
 			$scope.view = id;
 		};
 
@@ -389,7 +401,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @param {string} defId The field definition id.
 		 */
-		$scope.onSelectWorkspace = function (defId) {
+		$scope.onSelectWorkspace = function(defId) {
 			var wsid = $scope.editing.config[defId];
 
 			if (wsid && (!(wsid in _forms) || !_forms[wsid].length)) {
@@ -402,9 +414,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @param {string} defId The field definition id.
 		 */
-		$scope.initWorkspaceInput = function (defId) {
+		$scope.initWorkspaceInput = function(defId) {
 			if ($scope.loading) {
-				$scope.options.on('init', function () {
+				$scope.options.on('init', function() {
 					$scope.onSelectWorkspace(defId);
 				});
 			} else {
@@ -419,7 +431,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {function|true}
 		 */
-		$scope.filterOptions = function (fieldDef) {
+		$scope.filterOptions = function(fieldDef) {
 			if (fieldDef.filter) {
 				return fieldDef.filter;
 			}
@@ -433,14 +445,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Array<Object>}
 		 */
-		$scope.getWorkspaces = function (def) {
+		$scope.getWorkspaces = function(def) {
 			if (!$scope.editing.config) {
 				return _workspaces;
 			}
 
 			var filterWorkspaces = [];
-			angular.forEach($scope.settings.pages, function (page) {
-				angular.forEach(page.fields, function (f) {
+			angular.forEach($scope.settings.pages, function(page) {
+				angular.forEach(page.fields, function(f) {
 					// Split into two if statements for legibility.
 					if (f.type === 'workspace' && f.id !== def.id && f.exclusive) {
 						if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
@@ -451,7 +463,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			});
 
 			// Filter values used in other inputs.
-			return _workspaces.filter(function (f) {
+			return _workspaces.filter(function(f) {
 				return filterWorkspaces.indexOf(f.id) === -1;
 			});
 		};
@@ -464,7 +476,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Array<Object>}
 		 */
-		$scope.getForms = function (def, workspaceId) {
+		$scope.getForms = function(def, workspaceId) {
 			// Allow overidding workspaceId but default to current one.
 			workspaceId = workspaceId || _workspaceId;
 
@@ -478,8 +490,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			}
 
 			var filterForms = [];
-			angular.forEach($scope.settings.pages, function (page) {
-				angular.forEach(page.fields, function (f) {
+			angular.forEach($scope.settings.pages, function(page) {
+				angular.forEach(page.fields, function(f) {
 					// Split into two if statements for legibility.
 					if (f.type === 'form' && f.id !== def.id && f.exclusive) {
 						if (f.id in $scope.editing.config && $scope.editing.config[f.id]) {
@@ -490,7 +502,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			});
 
 			// Filter values used in other inputs.
-			return _forms[workspaceId] ? _forms[workspaceId].filter(function (f) {
+			return _forms[workspaceId] ? _forms[workspaceId].filter(function(f) {
 				return filterForms.indexOf(f.id) === -1;
 			}) : [];
 		};
@@ -503,9 +515,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Array<Object>}
 		 */
-		$scope.getFields = function (fieldDef, formDef) {
+		$scope.getFields = function(fieldDef, formDef) {
 			// Filter by restrict key if available.
-			return getFiltered(fieldDef, formDef, _fields).filter(function (f) {
+			return getFiltered(fieldDef, formDef, _fields).filter(function(f) {
 				if (!('restrict' in fieldDef) || !fieldDef.restrict) {
 					return true;
 				}
@@ -523,7 +535,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Array<Object>}
 		 */
-		$scope.getFolders = function (fieldDef, formDef) {
+		$scope.getFolders = function(fieldDef, formDef) {
 			return getFiltered(fieldDef, formDef, _folders);
 		};
 
@@ -535,7 +547,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Array<Object>}
 		 */
-		$scope.getViews = function (fieldDef, formDef) {
+		$scope.getViews = function(fieldDef, formDef) {
 			return getFiltered(fieldDef, formDef, _views);
 		};
 
@@ -547,14 +559,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Object}
 		 */
-		$scope.getChoices = function (fieldDef) {
+		$scope.getChoices = function(fieldDef) {
 			var fieldId = $scope.editing.config[fieldDef.id + '_source'];
 
 			if (fieldId) {
 				var formId = $scope.editing.config[fieldDef.belongsTo];
 
 				if (formId && _fields[formId]) {
-					var field = _fields[formId].filter(function (f) {
+					var field = _fields[formId].filter(function(f) {
 						return f.id === fieldId;
 					})[0];
 
@@ -571,10 +583,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {fieldId} fieldDef The choice input id
 		 *
 		 */
-		$scope.resetChoiceValues = function (fieldId) {
+		$scope.resetChoiceValues = function(fieldId) {
 			delete $scope.editing.config[fieldId + '_val'];
 
-			angular.forEach($scope.editing.config, function (value, key) {
+			angular.forEach($scope.editing.config, function(value, key) {
 				if (key.indexOf(fieldId + '_opt_') === 0) {
 					delete $scope.editing.config[key];
 				}
@@ -586,16 +598,16 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @param {Object} config
 		 */
-		$scope.onConfigToggle = function (config) {
+		$scope.onConfigToggle = function(config) {
 			var stateChange = true;
 
 			if (config.enabled) {
-				doRunHook('enable', config).finally(function () {
-					return doSaveConfig(config, stateChange).then(function () {
+				doRunHook('enable', config).finally(function() {
+					return doSaveConfig(config, stateChange).then(function() {
 						znMessage('Configuration ' + config.name + ' enabled!', 'saved');
 						return _webhook
 							? Array.isArray(_webhook.options)
-								? $q.all(_webhook.options.map(function (opts, i) {
+								? $q.all(_webhook.options.map(function(opts, i) {
 									return _webhook.service.enable(config['webhook' + i + 'Id']);
 								}))
 								: _webhook.service.enable(config.webhookId)
@@ -603,12 +615,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					});
 				});
 			} else {
-				doRunHook('disable', config).finally(function () {
-					return doSaveConfig(config, stateChange).then(function () {
+				doRunHook('disable', config).finally(function() {
+					return doSaveConfig(config, stateChange).then(function() {
 						znMessage('Configuration ' + config.name + ' disabled!', 'saved');
 						return _webhook
 							? Array.isArray(_webhook.options)
-								? $q.all(_webhook.options.map(function (opts, i) {
+								? $q.all(_webhook.options.map(function(opts, i) {
 									return _webhook.service.disable(config['webhook' + i + 'Id']);
 								}))
 								: _webhook.service.disable(config.webhookId)
@@ -628,7 +640,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Array<Object>}
 		 */
-		function getFiltered (fieldDef, formDef, source) {
+		function getFiltered(fieldDef, formDef, source) {
 			if (!fieldDef.belongsTo) {
 				return [];
 			}
@@ -641,7 +653,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			// Filter values used in other inputs of the same type.
 			if (formDef) {
-				angular.forEach(formDef.fields, function (f) {
+				angular.forEach(formDef.fields, function(f) {
 					// Split into multiple if statements for legibility.
 					if (f.type === fieldDef.type && f.id !== fieldDef.id) {
 						if (f.exclusive && $scope.editing.config) {
@@ -657,7 +669,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			var formId = $scope.editing.config[fieldDef.belongsTo];
 
-			return formId in source ? source[formId].filter(function (f) {
+			return formId in source ? source[formId].filter(function(f) {
 				return filters.indexOf(f.id) === -1;
 			}) : [];
 		}
@@ -665,7 +677,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Centralize discarding config changes to avoid duplicating logic.
 		 */
-		function doDiscardChanges () {
+		function doDiscardChanges() {
 			doResetTab();
 
 			if ($scope.settings.multi) {
@@ -680,7 +692,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Switches to the first tab.
 		 */
-		function doResetTab () {
+		function doResetTab() {
 			if ($scope.settings.pages.length) {
 				$scope.view = $scope.settings.pages[0].id;
 			}
@@ -689,7 +701,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Fetch all results
 		 */
-		function fetchAll (znResource, params) {
+		function fetchAll(znResource, params) {
 			if ('fetchAll' in znResource) {
 				return znResource.fetchAll(params);
 			}
@@ -703,6 +715,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 			var data = [];
 			var done = false;
+
 			function getBatch() {
 				return znResource.query(batchParams, function(results, meta) {
 					data = results ? data.concat(results) : data;
@@ -722,10 +735,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Loads data on all available workspaces.
 		 */
-		function loadWorkspaces () {
-			return znData('Workspaces').get({ limit: 200 }).then(function (workspaces) {
+		function loadWorkspaces() {
+			return znData('Workspaces').get({limit: 200}).then(function(workspaces) {
 				_workspaces = workspaces.slice();
-			}).catch(function (err) {
+			}).catch(function(err) {
 				znMessage(err, 'error');
 			});
 		}
@@ -735,17 +748,21 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @param {number} workspaceId
 		 */
-		function loadForms (workspaceId) {
+		function loadForms(workspaceId) {
 
-			function fetchForms () {
-				return fetchAll(znData('Forms'), { 'workspace.id': workspaceId, 'limit': 200, 'related': 'fields,folders,dataViews' });
+			function fetchForms() {
+				return fetchAll(znData('Forms'), {
+					'workspace.id': workspaceId,
+					'limit': 200,
+					'related': 'fields,folders,dataViews'
+				});
 			}
 
-			function fetchFormLinks () {
+			function fetchFormLinks() {
 				// WorkspaceFormLinks may not be available in older versions of v1 plugin wrapper
 				try {
 					var res = znData('WorkspaceFormLinks');
-					return fetchAll(res, { 'workspace.id': workspaceId, 'limit': 200, 'related': 'null' });
+					return fetchAll(res, {'workspace.id': workspaceId, 'limit': 200, 'related': 'null'});
 				} catch (err) {
 					return [];
 				}
@@ -754,11 +771,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			return $q.all([
 				fetchFormLinks(),
 				fetchForms()
-			]).then(function (results) {
+			]).then(function(results) {
 				var links = results[0];
 
-				var forms = results[1].map(function (form) {
-					var link = links.find(function (link) {
+				var forms = results[1].map(function(form) {
+					var link = links.find(function(link) {
 						return link.form.id === form.id;
 					});
 					if (link) {
@@ -768,10 +785,10 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				});
 
 				_forms[workspaceId] = forms;
-				forms.forEach(function (form) {
+				forms.forEach(function(form) {
 					_fields[form.id] = [];
 
-					angular.forEach(form.fields, function (field) {
+					angular.forEach(form.fields, function(field) {
 						var f = {
 							id: field.id,
 							name: field.name,
@@ -781,7 +798,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 						if ('settings' in field && 'properties' in field.settings && 'choices' in field.settings.properties) {
 							var choices = [];
-							angular.forEach(field.settings.properties.choices, function (label, value) {
+							angular.forEach(field.settings.properties.choices, function(label, value) {
 								choices.push({
 									label: label,
 									value: value
@@ -795,7 +812,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 					_folders[form.id] = [];
 
-					angular.forEach(form.folders, function (folder) {
+					angular.forEach(form.folders, function(folder) {
 						_folders[form.id].push({
 							id: folder.id,
 							name: folder.name
@@ -804,7 +821,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 					_views[form.id] = [];
 
-					angular.forEach(form.dataViews, function (view) {
+					angular.forEach(form.dataViews, function(view) {
 						_views[form.id].push({
 							id: view.id,
 							name: view.name
@@ -813,9 +830,9 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 					$scope.formLoaded[form.id] = true;
 				});
-			}).catch(function (err) {
+			}).catch(function(err) {
 				znMessage(err, 'error');
-			}).finally(function () {
+			}).finally(function() {
 				$scope.workspaceLoaded[workspaceId] = true;
 			});
 		}
@@ -823,18 +840,18 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Processes fields and remove hidden values from the config object.
 		 */
-		function removeHiddenValues () {
+		function removeHiddenValues() {
 
 			var fieldDefs = $scope.options.getFields();
 
-			angular.forEach(fieldDefs, function (fieldDef) {
+			angular.forEach(fieldDefs, function(fieldDef) {
 
 				var hidden = fieldDef.visible && !fieldDef.visible($scope.editing.config, fieldDef);
 
 				// Remove hidden values from config
 				if (hidden) {
 
-					angular.forEach($scope.editing.config, function (value, key) {
+					angular.forEach($scope.editing.config, function(value, key) {
 						if (key.indexOf(fieldDef.id + '_') === 0 ||
 							key === fieldDef.id) {
 							delete $scope.editing.config[key];
@@ -850,23 +867,22 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Processes fields and remove secure values from the config object.
 		 */
-		function blankSecureValues () {
+		function blankSecureValues() {
 
 			var fieldDefs = $scope.options.getFields();
 
-			angular.forEach(fieldDefs, function (fieldDef) {
+			angular.forEach(fieldDefs, function(fieldDef) {
 
 				// Blank secure values from config
 				if (fieldDef.type === 'secure') {
 
-					angular.forEach($scope.editing.config, function (value, key) {
+					angular.forEach($scope.editing.config, function(value, key) {
 						if (key === fieldDef.id) {
 
 							// Store non-empty values as true so we know it was saved
 							if (value !== '') {
 								$scope.editing.config[key] = true;
-							}
-							else {
+							} else {
 								delete $scope.editing.config[key];
 							}
 
@@ -879,18 +895,18 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 		}
 
-		function getSecureValues () {
+		function getSecureValues() {
 
 			var fieldDefs = $scope.options.getFields();
 
 			var secure = {};
 
-			angular.forEach(fieldDefs, function (fieldDef) {
+			angular.forEach(fieldDefs, function(fieldDef) {
 
 				// Get secure values from config
 				if (fieldDef.type === 'secure') {
 
-					angular.forEach($scope.editing.config, function (value, key) {
+					angular.forEach($scope.editing.config, function(value, key) {
 						if (key === fieldDef.id && value !== true) {
 							secure[key] = $scope.editing.config[key];
 						}
@@ -907,18 +923,18 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		/**
 		 * Processes highlighted fields and adds additional keys to the config object.
 		 */
-		function doProcessHighlighted () {
+		function doProcessHighlighted() {
 			// Find highlighted fields.
 			var highlighted = $scope.options.getHighlighted();
 			var formatedHighligts = [];
 
 			// Extract info from each one and save it for display.
-			angular.forEach(highlighted, function (input) {
+			angular.forEach(highlighted, function(input) {
 				var inputTypeFormatted = input.type.charAt(0).toUpperCase() + input.type.substr(1);
 
 				switch (input.type) {
 					case 'workspace':
-						var workspace = $scope.getWorkspaces(input).filter(function (w) {
+						var workspace = $scope.getWorkspaces(input).filter(function(w) {
 							return w.id === $scope.editing.config[input.id];
 						})[0];
 
@@ -931,7 +947,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						break;
 
 					case 'form':
-						var form = $scope.getForms(input).filter(function (f) {
+						var form = $scope.getForms(input).filter(function(f) {
 							return f.id === $scope.editing.config[input.id];
 						})[0];
 
@@ -966,7 +982,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					case 'field':
 					case 'choice':
 						var fieldDef = $scope.options.getField(input.id);
-						var field = $scope.getFields(fieldDef, false).filter(function (f) {
+						var field = $scope.getFields(fieldDef, false).filter(function(f) {
 							var configKey = input.type === 'choice' ? input.id + '_source' : input.id;
 							return f.id === $scope.editing.config[configKey];
 						})[0];
@@ -981,7 +997,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 					case 'folder':
 						var folderDef = $scope.options.getField(input.id);
-						var folder = $scope.getFolders(folderDef, false).filter(function (f) {
+						var folder = $scope.getFolders(folderDef, false).filter(function(f) {
 							return f.id === $scope.editing.config[input.id];
 						})[0];
 
@@ -995,7 +1011,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 					case 'view':
 						var viewDef = $scope.options.getField(input.id);
-						var view = $scope.getViews(viewDef, false).filter(function (f) {
+						var view = $scope.getViews(viewDef, false).filter(function(f) {
 							return f.id === $scope.editing.config[input.id];
 						})[0];
 
@@ -1029,7 +1045,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				delete $scope.editing.config.mch2;
 			}
 
-			angular.forEach(formatedHighligts, function (h, i) {
+			angular.forEach(formatedHighligts, function(h, i) {
 				$scope.editing.config['mch' + (i + 1)] = h;
 			});
 		}
@@ -1041,13 +1057,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Promise}
 		 */
-		function doSaveConfig (config, stateChange) {
+		function doSaveConfig(config, stateChange) {
 			var promise = $q.when(config);
 			var multiWebhooks = _webhook && Array.isArray(_webhook.options);
 
 			if (_webhook && !stateChange) {
 				var options = multiWebhooks
-					? _webhook.options.map(function (opts) {
+					? _webhook.options.map(function(opts) {
 						return Object.assign({}, opts);
 					})
 					: Object.assign({}, _webhook.options);
@@ -1068,7 +1084,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 
 				if (multiWebhooks) {
-					promise = $q.all(options.map(function (opts) {
+					promise = $q.all(options.map(function(opts) {
 						if (!(opts['form.id'] in config)) {
 							throw new Error('Config: Invalid form.id for webhook');
 						}
@@ -1090,14 +1106,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 						return _webhook.service.create(opts);
 					}))
-						.then(function (webhooks) {
-							return webhooks.reduce(function (cfg, wh, i) {
+						.then(function(webhooks) {
+							return webhooks.reduce(function(cfg, wh, i) {
 								cfg['webhook' + i + 'Id'] = wh.id;
 								cfg['webhook' + i + 'Key'] = wh.secretKey;
 								return cfg;
 							}, config);
 						})
-						.catch(function (err) {
+						.catch(function(err) {
 							znMessage('There was an error creating the webhook.', 'error');
 							return config;
 						});
@@ -1122,12 +1138,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					}
 
 					promise = _webhook.service.create(options)
-						.then(function (webhook) {
+						.then(function(webhook) {
 							config.webhookId = webhook.id;
 							config.webhookKey = webhook.secretKey;
 							return config;
 						})
-						.catch(function (err) {
+						.catch(function(err) {
 							znMessage('There was an error creating the webhook.', 'error');
 							return config;
 						});
@@ -1135,34 +1151,34 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			} else if (
 				_webhook &&
 				!stateChange && (
-					_webhook.options.filter || Array.isArray(_webhook.options) && _webhook.options.some(function (opts) {
+					_webhook.options.filter || Array.isArray(_webhook.options) && _webhook.options.some(function(opts) {
 						return opts.filter;
 					})
 				)
 			) {
 				var updateOptions = multiWebhooks
-					? _webhook.options.map(function (opts) {
+					? _webhook.options.map(function(opts) {
 						return Object.assign({}, opts);
 					})
 					: Object.assign({}, _webhook.options);
 
 				if (multiWebhooks) {
-					updateOptions.forEach(function (opts) {
+					updateOptions.forEach(function(opts) {
 						if (opts.filter) {
 							opts.filter = reconstructFilter(opts.filter, config);
 						}
 					});
 
-					promise = $q.all(updateOptions.map(function (opts, i) {
+					promise = $q.all(updateOptions.map(function(opts, i) {
 						return _webhook.service.update({
 							id: config['webhook' + i + 'Id'],
 							filter: opts.filter
 						});
 					}))
-						.then(function (webhooks) {
+						.then(function(webhooks) {
 							return config;
 						})
-						.catch(function (err) {
+						.catch(function(err) {
 							znMessage('There was an error creating the webhook.', 'error');
 							return config;
 						});
@@ -1173,26 +1189,26 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						id: config.webhookId,
 						filter: updateOptions.filter
 					})
-						.then(function (webhook) {
+						.then(function(webhook) {
 							return config;
 						})
-						.catch(function (err) {
+						.catch(function(err) {
 							znMessage('There was an error creating the webhook.', 'error');
 							return config;
 						});
 				}
 			}
 
-			return promise.then(function (cfg) {
-				return configService.save(_workspaceId, $scope.settings.multi, $scope.configs, cfg).then(function () {
+			return promise.then(function(cfg) {
+				return configService.save(_workspaceId, $scope.settings.multi, $scope.configs, cfg).then(function() {
 					return cfg;
 				});
-			}).then(function (cfg) {
+			}).then(function(cfg) {
 				// Now that we know the config id, update the webhook URL to add it when using multi configs.
 				if ($scope.settings.multi && _webhook) {
 					if (Array.isArray(_webhook.options)) {
-						return $q.all(_webhook.options.map(function (opts, i) {
-							return _webhook.service.load(cfg['webhook' + i + 'Id']).then(function (wh) {
+						return $q.all(_webhook.options.map(function(opts, i) {
+							return _webhook.service.load(cfg['webhook' + i + 'Id']).then(function(wh) {
 								var separator;
 								var url = wh.url;
 
@@ -1207,12 +1223,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 								}
 
 								if (url !== wh.url) {
-									return _webhook.service.update({ id: wh.id, url: url });
+									return _webhook.service.update({id: wh.id, url: url});
 								}
 							});
 						}));
 					} else {
-						return _webhook.service.load(cfg.webhookId).then(function (wh) {
+						return _webhook.service.load(cfg.webhookId).then(function(wh) {
 							var separator;
 							var url = wh.url;
 
@@ -1227,7 +1243,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 							}
 
 							if (url !== wh.url) {
-								return _webhook.service.update({ id: wh.id, url: url });
+								return _webhook.service.update({id: wh.id, url: url});
 							}
 						});
 					}
@@ -1235,11 +1251,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			});
 		}
 
-		function doSaveSecure (secureConfig) {
+		function doSaveSecure(secureConfig) {
 
 			var configId = $scope.settings.multi && $scope.editing.config.$id;
 
-			return configService.saveSecure($scope.settings.secureEndpoint, _workspaceId, configId, secureConfig).then(function () {
+			return configService.saveSecure($scope.settings.secureEndpoint, _workspaceId, configId, secureConfig).then(function() {
 				return secureConfig;
 			});
 
@@ -1254,7 +1270,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @returns {Object} the updated (and now valid) filter
 		 */
-		function reconstructFilter (filter, config) {
+		function reconstructFilter(filter, config) {
 			if (typeof filter === 'string') {
 				return config[filter];
 			}
@@ -1301,17 +1317,17 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				// If all of the props were strings/numbers, no update would be necessary
 				return newFilter;
 			} else if (filter.and) {
-				var newAnd = newFilter.and.map(function (nextFilter) {
+				var newAnd = newFilter.and.map(function(nextFilter) {
 					return reconstructFilter(nextFilter, config);
 				});
 
-				return { and: newAnd };
+				return {and: newAnd};
 			} else if (filter.or) {
-				var newOr = newFilter.or.map(function (nextFilter) {
+				var newOr = newFilter.or.map(function(nextFilter) {
 					return reconstructFilter(nextFilter, config);
 				});
 
-				return { or: newOr };
+				return {or: newOr};
 			}
 		}
 
@@ -1341,8 +1357,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					newFilter.folder = {
 						id: config[filter.folder.id.replaceFolder]
 					};
-				}
-				else {
+				} else {
 					newFilter.folder = {
 						id: filter.folder.id
 					};
@@ -1365,11 +1380,11 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 *
 		 * @return {Object}
 		 */
-		function shallowCopy (obj) {
+		function shallowCopy(obj) {
 			var newObj = {};
 
 			if (angular.isObject(obj)) {
-				angular.forEach(Object.keys(obj), function (key) {
+				angular.forEach(Object.keys(obj), function(key) {
 					if (key.indexOf('$') === -1 || key === '$id') {
 						newObj[key] = obj[key];
 					}
@@ -1385,14 +1400,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * @param {string} hook
 		 * @param {Objecg} data
 		 */
-		function doRunHook (hook, data) {
+		function doRunHook(hook, data) {
 			return $scope.options.run(hook, data);
 		}
 
 		/**
 		 * Bootstraps plugin.
 		 */
-		function init () {
+		function init() {
 			// Sanity.
 			if (!angular.isObject($scope.options) || !('getConfig' in $scope.options) || typeof $scope.options.getConfig !== "function") {
 				throw new Error('Config: Missing or invalid options object');
@@ -1405,7 +1420,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 			doResetTab();
 
 			// Load settings.
-			return configService.load(_workspaceId, $scope.settings.multi, $scope.settings.id).then(function (configs) {
+			return configService.load(_workspaceId, $scope.settings.multi, $scope.settings.id).then(function(configs) {
 				var def = $q.defer();
 
 				if (!$scope.settings.multi) {
@@ -1415,12 +1430,12 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 
 				$scope.configs = configs;
 
-				doRunHook('init', $scope.configs).finally(function () {
+				doRunHook('init', $scope.configs).finally(function() {
 					def.resolve();
 				});
 
 				return def.promise;
-			}).then(function () {
+			}).then(function() {
 				if ($scope.options.hasWorkspaceField()) {
 					return loadWorkspaces();
 				} else if ($scope.options.hasFormField()) {
