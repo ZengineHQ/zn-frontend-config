@@ -51,6 +51,9 @@
 						<span class="on">Enabled</span>
 						<span class="off">Disabled</span>
 					</label>
+					<div ng-click="onSelectedConfig(config)" class="icon-container" ng-if="copyConfigButtonSelected">
+						<i ng-class="{'icon-check-empty': !config.selected, 'icon-check green-check-icon': config.selected}" />
+					</div>
 				</div>
 			</li>
 		</ul>

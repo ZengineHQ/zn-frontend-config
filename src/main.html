@@ -7,6 +7,11 @@
 				<i class="icon-plus"></i> Create Configuration
 			</button>
 
+			<button ng-click="onCopyConfig()" type="button" class="btn btn-primary copy-config-button"
+					ng-hide="!settings.multi || loading" ng-disabled="editing.config">
+				<i class="icon-clone"></i> {{ copyButtonText }}
+			</button>
+
 			<h2><i class="icon-{{ settings.icon }}"></i> {{ settings.title }}</h2>
 
 			<p class="config-intro">{{ settings.help }}</p>
