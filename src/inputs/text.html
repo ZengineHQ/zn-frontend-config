@@ -1,9 +1,15 @@
 <!--Textfield input-->
 <script type="text/ng-template" id="wgn-config-input-text">
 	<input type="text" class="form-control" name="{{ field.id }}"
-		ng-model="editing.config[field.id]"
-		ng-required="field.required"
-		placeholder="{{ field.placeholder }}"
-		ng-minlength="{{ field.minlength }}"
-		ng-maxlength="{{ field.maxlength }}">
+		   ng-model="editing.config[field.id]"
+		   ng-required="field.required"
+		   placeholder="{{ field.placeholder }}"
+		   ng-pattern="field.pattern"
+		   ng-minlength="{{ field.minlength }}"
+		   ng-maxlength="{{ field.maxlength }}">
+	<span class="help-block danger"
+		  ng-hide="field.patternInvalidText && field.pattern.test(editing.config[field.id])">
+		{{field.patternInvalidText}}
+	</span>
+
 </script>

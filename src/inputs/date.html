@@ -9,7 +9,10 @@
 
 	<div ng-controller="wgnDateInputCtrl">
 
-		<div zn-datetimepicker-wrapper ng-if="!field.options" ng-model="editing.config[field.id]">
+		<div zn-datetimepicker-wrapper ng-if="!field.options"
+			 ng-required="field.required"
+			 ng-model="editing.config[field.id]"
+		>
 			<input
 				class="form-control"
 				datepicker-options="dateOptions"
