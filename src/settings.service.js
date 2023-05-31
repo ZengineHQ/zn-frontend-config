@@ -6,6 +6,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			icon: 'icon-puzzle',
 			help: 'This is some instructional text describing what this plugin is and how to use it. Please customize it.',
 			multi: false,
+			disableDelete:false,
 			secure: false,
 			secureEndpoint: '/settings',
 			toggle: true,
@@ -394,6 +395,16 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 */
 		srv.multi = function (multi) {
 			_settings.multi = !!multi;
+			return srv;
+		};
+
+		/**
+		 * Sets whether to disable deleting configs
+		 *
+		 * @param {boolean} disableDelete
+		 */
+		srv.disableDelete = function (disableDelete) {
+			_settings.disableDelete = !!disableDelete;
 			return srv;
 		};
 
