@@ -296,6 +296,13 @@ $color-success: #3c763d;
 	padding: .4em .6em;
 }
 
+.copy-config-button {
+	color: #eee;
+	float: right;
+	font-size: 1.3em;
+	padding: .4em .6em;
+}
+
 .config-enable-message {
 	p {
 		font-size: 1.2em;
@@ -402,4 +409,30 @@ $toggle-orange: #ff9900;
 
 .inputs-nav {
 	max-width: 90%;
+}
+
+.icon-container {
+	display: flex;
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	right: 0;
+	top: 0;
+	align-items: center;
+	justify-content: flex-end;
+	padding: 10px;
+	i { 
+		font-size: 20px;
+		margin-right: -5px;
+		position: relative;
+		justify-self: center;
+	}
+	.green-check-icon {
+		color: $toggle-green;
+	}
+}
+
+.list .icon-container i{
+	font-size: 20px;
+    margin-right: 105px;
 }
