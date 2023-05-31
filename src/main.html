@@ -41,7 +41,7 @@
 							Disable
 						</button>
 
-						<button type="button" class="btn btn-danger pull-right" ng-click="onDeleteConfig()"
+						<button type="button" class="btn btn-danger pull-right" ng-if="!settings.disableDelete" ng-click="onDeleteConfig()"
 								ng-disabled="editing.form.$dirty || saving"
 								ng-show="settings.multi && editing.config.$id">
 							Delete
