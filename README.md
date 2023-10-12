@@ -34,3 +34,16 @@ npm i @zenginehq/frontend-config@latest --save
 ### Usage ###
 
 Please refer to the [Wiki](https://github.com/ZengineHQ/zn-frontend-config/wiki) for detailed documentation.
+
+## Releasing
+
+This uses release-it to do releases. It will handle creating the release tag, updating the README and creating the github and npm releases.
+
+To do a dry run:
+
+    npx release-it -d
+
+To do the real thing:
+
+    npx release-it
+
