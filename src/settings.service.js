@@ -6,7 +6,7 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 			icon: 'icon-puzzle',
 			help: 'This is some instructional text describing what this plugin is and how to use it. Please customize it.',
 			multi: false,
-			copy: false,
+			copyConfig: false,
 			disableDelete:false,
 			secure: false,
 			secureEndpoint: '/settings',
@@ -404,8 +404,8 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 *
 		 * @param {boolean} copy
 		 */
-		srv.copy = function (copy) {
-			_settings.copy = !!copy && _settings.multi;
+		srv.copyConfig = function (copyConfig) {
+			_settings.copyConfig = !!copyConfig && _settings.multi;
 			return srv;
 		};
 		/**
