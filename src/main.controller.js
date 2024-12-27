@@ -162,7 +162,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					}
 
 					//exclude fields that may need to be manually configured after copy per plugin
-					if (fieldDefs.find(field => 'notCopyable' in field && field.notCopyable)) {
+					if (fieldDefs.find(field => field.id === key && 'notCopyable' in field && field.notCopyable)) {
 						obj[key] = null;
 					}
 
