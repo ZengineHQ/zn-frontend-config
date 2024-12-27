@@ -139,6 +139,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				$scope.copyConfigButtonSelected = false;
 				previousSelectedConfig.selected = false;
 
+				var fieldDefs = $scope.options.getFields();
 				const copyConfiguration = Object.keys(selectedConfig).reduce(function(obj, key) {
 					if (key !== '$$hashKey' &&
 						key !== '$priority' &&
@@ -155,6 +156,16 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					if (key === 'enabled') {
 						obj[key] = false;
 					}
+					//handles fields added after configuration changed or additions like webhook keys, secrets etc.
+					if (!fieldDefs.find(field => field.id === key)) {
+						obj[key] = null;
+					}
+
+					//exclude fields that may need to be manually configured after copy per plugin
+					if (fieldDefs.find(field => 'notCopyable' in field && field.notCopyable)) {
+						obj[key] = null;
+					}
+
 					return obj;
 				}, {});
 
