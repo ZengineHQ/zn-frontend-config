@@ -294,6 +294,7 @@ $color-success: #3c763d;
 	float: right;
 	font-size: 1.3em;
 	padding: .4em .6em;
+	margin-right: 5em;
 }
 
 .copy-config-button {
@@ -421,7 +422,7 @@ $toggle-orange: #ff9900;
 	align-items: center;
 	justify-content: flex-end;
 	padding: 10px;
-	i { 
+	i {
 		font-size: 20px;
 		margin-right: -5px;
 		position: relative;

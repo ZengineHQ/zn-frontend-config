@@ -2,12 +2,12 @@
 
 	<div>
 		<div class="section">
-			<button ng-click="onNewConfig()" type="button" class="btn btn-success create-config-button"
+			<button ng-click="onNewConfig()" type="button" tooltip="Create Configuration" title="Create Configuration" class="btn btn-success create-config-button"
 					ng-hide="!settings.multi || loading" ng-disabled="editing.config">
-				<i class="icon-plus"></i> Create Configuration
+				<i class="icon-plus"></i> Create
 			</button>
 
-			<button ng-click="onCopyConfig()" type="button" class="btn btn-primary copy-config-button"
+			<button ng-click="onCopyConfig()" type="button" class="btn btn-primary copy-config-button" tooltip="Copy Configuration" title="Copy Configuration"
 					ng-hide="!settings.multi || !settings.copyConfig || loading" ng-disabled="editing.config">
 				<i class="icon-clone"></i> {{ copyButtonText }}
 			</button>

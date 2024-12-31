@@ -12,6 +12,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		var _webhook = false;
 		var previousSelectedConfig = {};
 		var selectedConfig = false;
+		const excludeKeys = ['$$hashKey', '$priority', '$id', 'selected'];
 
 		/**
 		 * Whether the plugin is loading or not, displays a throbber.
@@ -60,18 +61,18 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		$scope.display = 'grid';
 
 		/**
-		 * Whether the copy configuration button is clicked or not
+		 * Whether the Copy button is clicked or not
 		 *
 		 * @type {boolean}
 		 */
 		$scope.copyConfigButtonSelected = false;
 
 		/**
-		 * The current text of the copy configuration button, one of 'Copy Configuration' or 'Save Configuration'.
+		 * The current text of the Copy button, one of 'Copy' or 'Save'.
 		 *
 		 * @type {string}
 		 */
-		$scope.copyButtonText = 'Copy Configuration';
+		$scope.copyButtonText = 'Copy';
 
 
 		// Init plugin.
@@ -129,24 +130,19 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Copy the current selected configuration.
 		 */
 		$scope.onCopyConfig = function () {
-			if (!selectedConfig && $scope.copyButtonText === 'Save Configuration') {
+			if (!selectedConfig && $scope.copyButtonText === 'Save') {
 				znMessage("Please select a configuration before saving!", "error");
-				$scope.copyButtonText = 'Copy Configuration';
+				$scope.copyButtonText = 'Copy';
 				$scope.copyConfigButtonSelected = false;
 				previousSelectedConfig.selected = false;
-			} else if (selectedConfig && $scope.copyButtonText === 'Save Configuration') {
-				$scope.copyButtonText = 'Copy Configuration';
+			} else if (selectedConfig && $scope.copyButtonText === 'Save') {
+				$scope.copyButtonText = 'Copy';
 				$scope.copyConfigButtonSelected = false;
 				previousSelectedConfig.selected = false;
-
 				var fieldDefs = $scope.options.getFields();
 				const copyConfiguration = Object.keys(selectedConfig).reduce(function(obj, key) {
-					if (key !== '$$hashKey' &&
-						key !== '$priority' &&
-						key !== '$id' &&
-						key !== 'selected' &&
-						!key.toLowerCase().includes('webhookid') &&
-						!key.toLowerCase().includes('webhookkey')
+					if (!excludeKeys.includes(key) &&
+						fieldDefs.find(field => field.id === key && !field.notCopyable)
 					) {
 						obj[key] = selectedConfig[key];
 					}
@@ -156,15 +152,6 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					if (key === 'enabled') {
 						obj[key] = false;
 					}
-					//handles fields added after configuration changed or additions like webhook keys, secrets etc.
-					if (!fieldDefs.find(field => field.id === key)) {
-						obj[key] = null;
-					}
-
-					//exclude fields that may need to be manually configured after copy per plugin
-					if (fieldDefs.find(field => field.id === key && 'notCopyable' in field && field.notCopyable)) {
-						obj[key] = null;
-					}
 
 					return obj;
 				}, {});
@@ -172,7 +159,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				selectedConfig = false;
 				$scope.editing.config = copyConfiguration;
 			} else {
-				$scope.copyButtonText = 'Save Configuration';
+				$scope.copyButtonText = 'Save';
 				$scope.copyConfigButtonSelected = true;
 			}
 		};
