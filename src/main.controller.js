@@ -734,13 +734,24 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Loads data on all available workspaces.
 		 */
 		function loadWorkspaces() {
-			return fetchAll(znData('Workspaces'),{limit: 200})
-				.then(function(workspaces) {
-					_workspaces = workspaces.slice();
+			return znData('Users').get({ id: 'me', related:'WorkspaceMemberships' }, function (user) {
+				if (user.workspaceMemberships && user.workspaceMemberships.length < 20) {
+					return $q.when(user.workspaceMemberships);
+				}
+				return fetchAll(znData('UserMemberships'), {
+					'id': user.id,
+					'limit': 200,
+				})
+				.then(function(memberships) {
+					return fetchAll(znData('Workspace1s'), {limit:200, id: memberships.map(_ => _.workspace.id).join('|')})
+						.then(function(workspaces) {
+							return _workspaces = workspaces.slice();
+						})
 				})
 				.catch(function(err) {
-					znMessage(err, 'error');
+					znMessage(err.message, 'error');
 				});
+			});
 		}
 
 		/**
