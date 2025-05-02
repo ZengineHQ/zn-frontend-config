@@ -734,11 +734,13 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 		 * Loads data on all available workspaces.
 		 */
 		function loadWorkspaces() {
-			return znData('Workspaces').get({limit: 200}).then(function(workspaces) {
-				_workspaces = workspaces.slice();
-			}).catch(function(err) {
-				znMessage(err, 'error');
-			});
+			return fetchAll(znData('Workspaces'),{limit: 200})
+				.then(function(workspaces) {
+					_workspaces = workspaces.slice();
+				})
+				.catch(function(err) {
+					znMessage(err, 'error');
+				});
 		}
 
 		/**
