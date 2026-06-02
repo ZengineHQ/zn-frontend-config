@@ -266,6 +266,19 @@ plugin.service('wgnConfigInputs', [function () {
 		template: 'wgn-config-input-date'
 	};
 
+	var dynamicInput = {
+		type: 'dynamic',
+		options: {
+			restrict: {
+				required: false,
+				validate: function (r) {
+					return checkAllowedItems(r, ['radio', 'checkbox', 'dropdown', 'numeric', 'text-area', 'date-picker', 'text-input', 'state-select', 'country-select', 'year' ]);
+				}
+			},
+		},
+		template: 'wgn-config-input-dynamic'
+	};
+
 	/**
 	 * Returns all internal input types.
 	 *
@@ -289,7 +302,8 @@ plugin.service('wgnConfigInputs', [function () {
 			checkboxInput,
 			radioInput,
 			dateInput,
-			secureInput
+			secureInput,
+			dynamicInput
 		];
 	};
 

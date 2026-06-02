@@ -1,0 +1,111 @@
+<script type="text/ng-template" id="wgn-config-input-dynamic">
+	<div ng-controller="wgnDynamicInputCntrl">
+
+		<div>
+			<label>
+				<select name="field.name"
+				        ng-model="selectedField"
+				        class="form-control"
+				        ng-change="onFieldChange(selectedField)"
+						ng-options="option as option.label for option in form.fields">
+<!--						ng-options="option as option.label for option in filteredFields">-->
+				</select>
+			</label>
+		</div>
+
+		<div ng-if="selectedField.type" ng-switch="selectedField.type">
+
+			<!-- checkbox -->
+			<div ng-switch-when="checkbox">
+				<div ng-repeat="option in selectedField.settings.properties.advancedChoices" class="checkbox-group">
+					<label>
+						<input type="checkbox" ng-model="editing.config[fieldConfigId + 'Value'][option.value]">
+						{{option.label}}
+					</label>
+				</div>
+			</div>
+
+			<!-- radio -->
+			<div ng-switch-when="radio">
+				<div ng-repeat="option in selectedField.settings.properties.advancedChoices" >
+					<label>
+						<input type="radio"
+								   ng-model="editing.config[fieldConfigId + 'Value']"
+								   value="{{option.value}}"
+								   name="selectedField.name">
+							{{option.label}}
+					</label>
+				</div>
+			</div>
+
+			<!-- select -->
+			<div ng-switch-when="dropdown">
+				<label>
+					<select name="field.name" ng-model="editing.config[fieldConfigId + 'Value']" class="form-control">
+						<option ng-repeat="option in selectedField.settings.properties.advancedChoices" value="{{option.value}}">{{option.label}}</option>
+					</select>
+				</label>
+			</div>
+
+			<!-- textarea -->
+			<div ng-switch-when="text-area">
+				<label>
+					<textarea class="form-control" ng-model="editing.config[fieldConfigId + 'Value']"></textarea>
+				</label>
+			</div>
+
+			<!-- number -->
+			<div ng-switch-when="numeric">
+				<label>
+					<input type="number"
+					       ng-model="editing.config[fieldConfigId + 'Value']"
+					       name="field.name"
+					       class="form-control">
+				</label>
+			</div>
+
+			<!-- date -->
+			<div ng-switch-when="date-picker">
+				<label>
+					<input type="date"
+					       ng-model="editing.config[fieldConfigId + 'Value']"
+					       name="field.name"
+					       class="form-control">
+				</label>
+			</div>
+
+			<!-- country select -->
+			<div ng-switch-when="country-select">
+				<label>
+					<select name="field.name"
+					        class="form-control"
+					        ng-model="editing.config[fieldConfigId + 'Value']"
+					        ng-options="option.id as option.country for option in countries">
+					</select>
+				</label>
+			</div>
+
+			<!-- state select-->
+			<div ng-switch-when="state-select">
+				<label>
+					<select name="field.name"
+					        class="form-control"
+					        ng-model="editing.config[fieldConfigId + 'Value']"
+					        ng-options="option.id as option.state for option in states">
+					</select>
+				</label>
+			</div>
+
+			<!-- default - text box -->
+			<div ng-switch-default>
+				<label>
+					<input type="text"
+					       ng-model="editing.config[fieldConfigId + 'Value']"
+					       class="form-control">
+				</label>
+			</div>
+
+		</div>
+	</div>
+</script>
+
