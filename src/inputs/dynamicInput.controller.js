@@ -38,14 +38,16 @@ plugin.controller('wgnDynamicInputCntrl', [
 		$scope.selectedField = $scope.form.fields.find(function (field) {return field.id === dbFieldId; });
 
 		// watching the form id and updating form field options based on it
-		$scope.$watch("editing.config.formId", function (data) {
+		$scope.$watch("editing.config.formId", function (data, oldData) {
 			$scope.form = $rootScope.workspace.forms.find(function (form) {return form.id === data;});
 
 			// get updated filtered fields
 			$scope.getFilteredFields();
 
 			// resetting field when form changes
-			$scope.editing.config[$scope.fieldConfigId] = null;
+			if(data !== oldData) {
+				$scope.editing.config[$scope.fieldConfigId] = null;
+			}
 		});
 
 		// when the field changes, update the type and value
