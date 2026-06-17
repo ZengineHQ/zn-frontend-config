@@ -275,6 +275,12 @@ plugin.service('wgnConfigInputs', [function () {
 					return checkAllowedItems(r, ['radio', 'checkbox', 'dropdown', 'numeric', 'text-area', 'date-picker', 'text-input', 'state-select', 'country-select', 'year' ]);
 				}
 			},
+			belongsTo: {
+				required: true
+			},
+			value: {
+				required: true
+			}
 		},
 		template: 'wgn-config-input-dynamic'
 	};
