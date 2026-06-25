@@ -17,7 +17,7 @@
 			<div ng-switch-when="checkbox">
 				<div ng-repeat="option in selectedField.settings.properties.advancedChoices" class="checkbox-group">
 					<label>
-						<input type="checkbox" ng-model="editing.config[fieldConfigId + 'Value'][option.value]">
+						<input type="checkbox" ng-model="editing.config[fieldValueConfigId][option.value]">
 						{{option.label}}
 					</label>
 				</div>
@@ -28,7 +28,7 @@
 				<div ng-repeat="option in selectedField.settings.properties.advancedChoices" >
 					<label>
 						<input type="radio"
-								   ng-model="editing.config[fieldConfigId + 'Value']"
+								   ng-model="editing.config[fieldValueConfigId]"
 								   ng-value="option.value"
 								   name="selectedField.name">
 							{{option.label}}
@@ -39,7 +39,7 @@
 			<!-- select -->
 			<div ng-switch-when="dropdown">
 				<label>
-					<select name="field.name" ng-model="editing.config[fieldConfigId + 'Value']" class="form-control">
+					<select name="field.name" ng-model="editing.config[fieldValueConfigId]" class="form-control">
 						<option ng-repeat="option in selectedField.settings.properties.advancedChoices" value="{{option.value}}">{{option.label}}</option>
 					</select>
 				</label>
@@ -48,7 +48,7 @@
 			<!-- textarea -->
 			<div ng-switch-when="text-area">
 				<label>
-					<textarea class="form-control" ng-model="editing.config[fieldConfigId + 'Value']"></textarea>
+					<textarea class="form-control" ng-model="editing.config[fieldValueConfigId]"></textarea>
 				</label>
 			</div>
 
@@ -56,7 +56,7 @@
 			<div ng-switch-when="numeric">
 				<label>
 					<input type="number"
-					       ng-model="editing.config[fieldConfigId + 'Value']"
+					       ng-model="editing.config[fieldValueConfigId]"
 					       name="field.name"
 					       class="form-control">
 				</label>
@@ -66,9 +66,16 @@
 			<div ng-switch-when="date-picker">
 				<label>
 					<input type="date"
-					       ng-model="editing.config[fieldConfigId + 'Value']"
+					       ng-model="editing.config[fieldValueConfigId]"
 					       name="field.name"
 					       class="form-control">
+				</label>
+				<label>
+					Select to use NOW for the date
+					<input type="checkbox"
+						   ng-model="editing.config[fieldValueConfigId]"
+						   ng-true-value='NOW'
+						   name="field.name">
 				</label>
 			</div>
 
@@ -77,7 +84,7 @@
 				<label>
 					<select name="field.name"
 					        class="form-control"
-					        ng-model="editing.config[fieldConfigId + 'Value']"
+					        ng-model="editing.config[fieldValueConfigId]"
 					        ng-options="option.id as option.country for option in countries">
 					</select>
 				</label>
@@ -88,7 +95,7 @@
 				<label>
 					<select name="field.name"
 					        class="form-control"
-					        ng-model="editing.config[fieldConfigId + 'Value']"
+					        ng-model="editing.config[fieldValueConfigId]"
 					        ng-options="option.id as option.state for option in states">
 					</select>
 				</label>
@@ -98,7 +105,7 @@
 			<div ng-switch-default>
 				<label>
 					<input type="text"
-					       ng-model="editing.config[fieldConfigId + 'Value']"
+					       ng-model="editing.config[fieldValueConfigId]"
 					       class="form-control">
 				</label>
 			</div>
