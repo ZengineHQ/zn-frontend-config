@@ -749,7 +749,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						});
 				})
 				.catch(function(err) {
-					znMessage(err.message, 'error');
+					console.error('failed to load workspace Memberships fully');
+					return user.workspaceMemberships;
 				});
 			});
 		}
