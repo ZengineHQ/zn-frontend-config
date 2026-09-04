@@ -4,9 +4,10 @@
 	"description": "Helper module for implementing Zengine plugin configuration forms.",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
-		"lint": "jshint --config .jshintrc ./src || true",
-		"build": "node-sass src --output src --output-style compressed",
-		"release": "jshint --config .jshintrc ./src && npm run build && release-it"
+		"lint": "eslint ./src || true",
+		"fix": "eslint ./src --fix",
+		"build": "sass src:src --style=compressed",
+		"release": "eslint --config .eslintrc.json ./src && npm run build && release-it"
 	},
 	"repository": {
 		"type": "git",
@@ -38,6 +39,8 @@
 		"@parcel/watcher@2.6.0": true
 	},
 	"devDependencies": {
+		"@eslint/eslintrc": "^3.3.7",
+		"@eslint/js": "^10.0.1",
 		"auto-changelog": "^2.6.0",
 		"eslint": "^10.9.1",
 		"release-it": "^21.0.2",
