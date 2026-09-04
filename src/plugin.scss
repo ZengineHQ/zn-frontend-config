@@ -1,5 +1,9 @@
+@use "sass:color";
+
 $color-error: #a94442;
 $color-success: #3c763d;
+$color-bg: #ec971f;
+$light-bg: color.adjust($color-bg, $lightness: 10%, $space: hsl);
 
 @mixin field-state($color) {
 	.form-label {
@@ -26,7 +30,7 @@ $color-success: #3c763d;
 		color: white;
 
 		&:hover {
-			background-color: lighten(#ec971f, 10%);
+			background-color: $light-bg;
 		}
 	}
 

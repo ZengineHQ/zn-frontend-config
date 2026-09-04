@@ -6,7 +6,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"lint": "eslint ./src || true",
 		"fix": "eslint ./src --fix",
-		"build": "sass src:src --style=compressed",
+		"build": "sass src/plugin.scss src/plugin.css --style=compressed",
 		"release": "eslint --config .eslintrc.json ./src && npm run build && release-it"
 	},
 	"repository": {
