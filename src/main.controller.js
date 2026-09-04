@@ -264,15 +264,15 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						});
 					}
 				})
-				.then(function() {
+					.then(function() {
 
-					if (secureValues) {
-						return doSaveSecure(secureValues);
-					}
+						if (secureValues) {
+							return doSaveSecure(secureValues);
+						}
 
-				})
-				.then(function() {
-					return doRunHook('save', $scope.editing.config).finally(function () {
+					})
+					.then(function() {
+						return doRunHook('save', $scope.editing.config).finally(function () {
 
 							if ($scope.settings.multi) {
 								doDiscardChanges();
@@ -742,16 +742,16 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					'id': user.id,
 					'limit': 200,
 				})
-				.then(function(memberships) {
-					return fetchAll(znData('Workspaces'), {limit:200, id: memberships.map(_ => _.workspace.id).join('|')})
-						.then(function(workspaces) {
-							_workspaces = workspaces.slice();
-						});
-				})
-				.catch(function(err) {
-					console.error('failed to load workspace Memberships fully');
-					return user.workspaceMemberships;
-				});
+					.then(function(memberships) {
+						return fetchAll(znData('Workspaces'), {limit:200, id: memberships.map(_ => _.workspace.id).join('|')})
+							.then(function(workspaces) {
+								_workspaces = workspaces.slice();
+							});
+					})
+					.catch(function(err) {
+						console.error('failed to load workspace Memberships fully');
+						return user.workspaceMemberships;
+					});
 			});
 		}
 

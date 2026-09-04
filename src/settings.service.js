@@ -588,10 +588,10 @@ plugin.service('wgnConfigSettings', ['$q', 'wgnConfigInputs', function ($q, conf
 		 */
 		function slugify(text) {
 			var slug = text.toString().trim()
-				.replace(/(\-|\_)/g, '')        // remove hipens and underscores
-				.replace(/^\s+|\s+$/g, '')		// remove spaces
-				.replace(/&/g, '-and-')         // replace & with 'and'
-				.replace(/[^\w\-]+/g, '');       // remove all non-word chars
+				.replace(/(\-|\_)/g, '')    // remove hipens and underscores
+				.replace(/^\s+|\s+$/g, '')  // remove spaces
+				.replace(/&/g, '-and-')     // replace & with 'and'
+				.replace(/[^\w\-]+/g, '');  // remove all non-word chars
 
 			// remove accents, swap ñ for n, etc
 			var from = "àáäâèéëêìíïîòóöôùúüûñç·/_,:;";
