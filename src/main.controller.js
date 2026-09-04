@@ -749,7 +749,8 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 						});
 				})
 				.catch(function(err) {
-					znMessage(err.message, 'error');
+					console.error('failed to load workspace Memberships fully');
+					return user.workspaceMemberships;
 				});
 			});
 		}
@@ -765,7 +766,7 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				return fetchAll(znData('Forms'), {
 					'workspace.id': workspaceId,
 					'limit': 200,
-					'related': 'fields,folders,dataViews'
+					'related': 'fields,folders'
 				});
 			}
 
@@ -779,11 +780,26 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 				}
 			}
 
+			// getting all form views associated with selected workspace
+			function fetchDataViews() {
+				try {
+					var res = znData('DataViews');
+					return fetchAll(res, {
+						'workspace.id': workspaceId,
+					});
+				} catch (err) {
+					return [];
+				}
+			}
+
 			return $q.all([
 				fetchFormLinks(),
-				fetchForms()
+				fetchForms(),
+				fetchDataViews()
 			]).then(function(results) {
 				var links = results[0];
+
+				var views = results[2];
 
 				var forms = results[1].map(function(form) {
 					var link = links.find(function(link) {
@@ -792,6 +808,14 @@ plugin.controller('wgnConfigCtrl', ['$scope', '$q', '$routeParams', 'znData', 'z
 					if (link) {
 						form.order = link.order;
 					}
+					form.dataViews = views.filter(function (view) {
+						return view.form.id === form.id;
+					}).map(function (view) {
+						return {
+							id: view.id,
+							name: view.name
+						};
+					});
 					return form;
 				});
 
