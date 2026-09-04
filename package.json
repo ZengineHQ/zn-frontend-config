@@ -22,12 +22,6 @@
 		"url": "https://github.com/ZengineHQ/zn-frontend-config/issues"
 	},
 	"homepage": "https://github.com/ZengineHQ/zn-frontend-config#readme",
-	"devDependencies": {
-		"auto-changelog": "^2.5.0",
-		"jshint": "^2.13.6",
-		"node-sass": "^9.0.0",
-		"release-it": "^20.0.0"
-	},
 	"release-it": {
 		"github": {
 			"release": true
@@ -38,5 +32,15 @@
 	},
 	"hooks": {
 		"after:bump": "npx auto-changelog -p"
+	},
+	"allowScripts": {
+		"node-sass@9.0.0": true,
+		"@parcel/watcher@2.6.0": true
+	},
+	"devDependencies": {
+		"auto-changelog": "^2.6.0",
+		"eslint": "^10.9.1",
+		"release-it": "^21.0.2",
+		"sass": "^1.103.1"
 	}
 }
