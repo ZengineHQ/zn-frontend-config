@@ -118,15 +118,15 @@ plugin.service('wgnConfigSrv', ['$q', '$firebase', 'znData', 'znPluginData', fun
 		}
 
 		znData('Plugins').get({
-				namespace: 'wgn'
-			},
-			function (resp) {
-				currentPlugin = resp[0];
-				q.resolve(currentPlugin);
-			},
-			function (resp) {
-				q.reject(resp);
-			}
+			namespace: 'wgn'
+		},
+		function (resp) {
+			currentPlugin = resp[0];
+			q.resolve(currentPlugin);
+		},
+		function (resp) {
+			q.reject(resp);
+		}
 		);
 
 		return q.promise;

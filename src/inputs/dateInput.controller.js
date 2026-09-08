@@ -18,7 +18,7 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 
 	/**
 	 *  Add the provided settings to the default datepicker configuration.
-	 * 	Verify that the settings align with any previously stored value.
+	 *  Verify that the settings align with any previously stored value.
 	 */
 	var configureOptions = function configureOptions() {
 		var field = $scope.editing.config[$scope.field.id];
@@ -109,7 +109,7 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 					month: '2-digit',
 					year: 'numeric'
 				}) :
-				null;
+					null;
 			},
 			'M/d/yyyy': function() {
 				return date ? date.toLocaleDateString('en-us', {
@@ -117,7 +117,7 @@ plugin.controller('wgnDateInputCtrl', ['$scope', function ($scope) {
 					month: 'numeric',
 					year: 'numeric'
 				}) :
-				null;
+					null;
 			},
 			'yyyy': function() {
 				return date ? date.getFullYear().toString() : null;
