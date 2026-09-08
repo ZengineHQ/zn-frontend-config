@@ -7,7 +7,7 @@
 		"lint": "eslint ./src || true",
 		"fix": "eslint ./src --fix",
 		"build": "sass src/plugin.scss src/plugin.css --style=compressed",
-		"release": "eslint --config .eslintrc.json ./src && npm run build && release-it"
+		"release": "eslint ./src && npm run build && release-it"
 	},
 	"repository": {
 		"type": "git",
